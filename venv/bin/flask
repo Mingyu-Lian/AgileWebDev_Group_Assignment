@@ -1,6 +1,4 @@
-#!/bin/sh
-'''exec' "/Users/yangchensu/Course/CITS5505 Agile Web Development/Project_2/flaskProject/venv/bin/python3" "$0" "$@"
-' '''
+#!/Users/lianmingyu/Desktop/CITS5505/CITS5505_Group/venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys
