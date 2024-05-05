@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, flash, redirect, url_for
 from flask_login import login_user, current_user, logout_user
 from .forms import LoginForm, SignUpForm
-from .models import db, User
+from .models import db, User, UserDetails
 
 main = Blueprint('main', __name__)
 
@@ -30,6 +30,11 @@ def signup():
         new_user = User(username=form.username.data, email=form.email.data)
         new_user.set_password(form.password.data)
         db.session.add(new_user)
+        db.session.flush()
+
+        new_user_details = UserDetails(id=new_user.id)
+        db.session.add(new_user_details)
+
         db.session.commit()
         flash('Successfully registered!')
         return redirect(url_for('main.login'))
