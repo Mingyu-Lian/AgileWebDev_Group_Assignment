@@ -43,6 +43,18 @@ def home():
 def profile():
     return render_template('profile.html', title='Profile')
 
-@main.route('/market')
-def market():
-    return render_template('market.html', title='Home')
+@main.route('/upload')
+def upload():
+    return render_template('upload.html', title='Upload')
+
+@main.route('/post')
+def post():
+    return render_template('home.html', title='Post')
+
+@main.route('/channel')
+def channel():
+    return render_template('channel.html', title='Channel')
+
+@main.route('/search')
+def search():
+    return render_template('search.html', title='Search')
