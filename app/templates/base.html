@@ -17,6 +17,9 @@
             {% endif %}
             <a href="{{ url_for('main.channel') }}">Channel </a>
             <a href="{{ url_for('main.post') }}">Post </a>
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('main.profile') }}">Profile </a>
+            {% endif %}
         </div>
         <hr>
         {% with messages = get_flashed_messages() %}
