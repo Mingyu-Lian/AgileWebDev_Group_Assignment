@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, flash, redirect, url_for
-from flask_login import login_user, current_user
+from flask_login import login_user, current_user, logout_user
 from .forms import LoginForm, SignUpForm
 from .models import db, User
 
@@ -34,6 +34,12 @@ def signup():
         flash('Successfully registered!')
         return redirect(url_for('main.login'))
     return render_template('signup.html', title='Sign Up', form=form)
+
+@main.route('/logout')
+def logout():
+    logout_user()
+    flash('You have been logged out.')
+    return redirect(url_for('main.login'))
 
 @main.route('/')
 @main.route('/home')
