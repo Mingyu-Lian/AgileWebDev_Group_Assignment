@@ -18,7 +18,7 @@
             Project 2:
             <a href="{{ url_for('main.home') }}">Home</a>
             <a href="{{ url_for('main.login') }}">Log in/Sign up</a> <!-- 登陆后显示成log out-->
-            <a href="{{ url_for('main.market') }}">Market </a> <!--这个是不是要直接删除，我们没有markt， 我会在我的Home侧边增加发帖， 个人channel 界面， 个人profile界面的入口-->
+            <a href="{{ url_for('main.post') }}">Post</a>
         </div>
         <hr>
         {% with messages = get_flashed_messages() %}
