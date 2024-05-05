@@ -35,3 +35,5 @@ def create_app():
         db.create_all()  # 创建或更新数据库表
 
     return app
+
+#我看到有的需要migrate， 我们是不是也需要这个

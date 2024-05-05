@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, flash, redirect, url_for
-from flask_login import login_user, current_user
+from flask_login import login_user, current_user, logout_user
 from .forms import LoginForm, SignUpForm
 from .models import db, User
 
@@ -27,12 +27,19 @@ def signup():
         if user:
             flash('The email is already registered')
             return redirect(url_for('main.signup'))
-        new_user = User(username=form.username.data, email=form.email.data, password=form.password.data)
+        new_user = User(username=form.username.data, email=form.email.data)
+        new_user.set_password(form.password.data)
         db.session.add(new_user)
         db.session.commit()
         flash('Successfully registered!')
         return redirect(url_for('main.login'))
     return render_template('signup.html', title='Sign Up', form=form)
+
+@main.route('/logout')
+def logout():
+    logout_user()
+    flash('You have been logged out.')
+    return redirect(url_for('main.login'))
 
 @main.route('/')
 @main.route('/home')
@@ -43,6 +50,18 @@ def home():
 def profile():
     return render_template('profile.html', title='Profile')
 
-@main.route('/market')
-def market():
-    return render_template('market.html', title='Home')
+@main.route('/upload')
+def upload():
+    return render_template('upload.html', title='Upload')
+
+@main.route('/post')
+def post():
+    return render_template('home.html', title='Post')
+
+@main.route('/channel')
+def channel():
+    return render_template('channel.html', title='Channel')
+
+@main.route('/search')
+def search():
+    return render_template('search.html', title='Search')
