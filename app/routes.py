@@ -27,7 +27,8 @@ def signup():
         if user:
             flash('The email is already registered')
             return redirect(url_for('main.signup'))
-        new_user = User(username=form.username.data, email=form.email.data, password=form.password.data)
+        new_user = User(username=form.username.data, email=form.email.data)
+        new_user.set_password(form.password.data)
         db.session.add(new_user)
         db.session.commit()
         flash('Successfully registered!')
