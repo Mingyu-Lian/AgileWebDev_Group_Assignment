@@ -1,9 +1,9 @@
 <html>
     <head>
         {% if title %}
-        <title>{{ title }} - market place</title>
+        <title>{{ title }} - Job Hunting</title>
         {% else %}
-        <title>market place</title>
+        <title>Job Hunting</title>
         {% endif %}
     </head>
     <body>
@@ -11,7 +11,10 @@
             Project 2:
             <a href="{{ url_for('main.home') }}">Home</a>
             <a href="{{ url_for('main.login') }}">Login</a>
-            <a href="{{ url_for('main.market') }}">Market </a>
+            <a href="{{ url_for('main.search') }}">Search </a>
+            <a href="{{ url_for('main.channel') }}">Channel </a>
+            <a href="{{ url_for('main.post') }}">Post </a>
+
         </div>
         <hr>
         {% with messages = get_flashed_messages() %}
