@@ -7,9 +7,9 @@
 
 
         {% if title %}
-        <title>{{ title }} - market place</title>
+        <title>{{ title }} - Job Insight</title>
         {% else %}
-        <title>market place</title>
+        <title>Job Insight</title>
         {% endif %}
 
     </head>
@@ -17,8 +17,8 @@
         <div>
             Project 2:
             <a href="{{ url_for('main.home') }}">Home</a>
-            <a href="{{ url_for('main.login') }}">Login</a>
-            <a href="{{ url_for('main.market') }}">Market </a>
+            <a href="{{ url_for('main.login') }}">Log in/Sign up</a> <!-- 登陆后显示成log out-->
+            <a href="{{ url_for('main.market') }}">Market </a> <!--这个是不是要直接删除，我们没有markt， 我会在我的Home侧边增加发帖， 个人channel 界面， 个人profile界面的入口-->
         </div>
         <hr>
         {% with messages = get_flashed_messages() %}
