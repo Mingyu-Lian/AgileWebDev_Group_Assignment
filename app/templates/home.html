@@ -1,42 +1,57 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Home Page</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <a href="{{ url_for('main.home', filter='all') }}" class=" {{ 'active' if filter == 'all' else '' }}">All Posts</a> <br>
+                <a href="{{ url_for('main.home', filter='following') }}" class="requires-auth{{ 'active' if filter == 'following' else '' }}">Following Posts</a>  <br>  <br>
+                <!-- Add Post button -->
+                <a href="{{ url_for('main.post') }}" class="requires-auth" id="addPostButton">
+                    <i class="material-icons" style="font-size:36px">add_box</i>
+                </a>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3">
+                {% for post in posts %}
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="{{ post.img }}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title"><strong>{{ post.title }}</strong></h5>
+                            <p class="card-text">{{ post.description }}</p>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted"><i class="bi bi-heart"></i> {{ post.likes }}</small>
+                            <small class="text-muted"><i class="bi bi-chat-dots"></i> {{ post.comments | length }}</small>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <!-- Pagination -->
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                    <!-- Dynamic Pagination Links -->
+                    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+<h1>home </h1>
+<h1>home </h1><h1>home </h1>
+<h1>home </h1>
 
-    <h1>Home Page</h1>
-    <h1>Home Page</h1>
-    <h1>Home Page</h1>
-    <h1>Home Page</h1>
-    <h1>Home Page</h1>
-    <h1>Home Page</h1>
-    <h1>Home Page</h1>
-    <h1>Home Page</h1>
-    <h1>Home Page</h1>
-    <h1>Home Page</h1>
-    <h1>Home Page</h1>
-    <h1>Home Page</h1>
-    <h1>Home Page</h1>
-    <h1>Home Page</h1>
-    <h1>Home Page</h1>
-    <h1>Home Page</h1>
-    <h1>Home Page</h1>
-    <h1>Home Page</h1>
-    <h1>Home Page</h1>
-    <h1>Home Page</h1>
-    <h1>Home Page</h1>
-    <h1>Home Page</h1>
-    <h1>Home Page</h1>
-    <h1>Home Page</h1>
-    <h1>Home Page</h1>
-    <h1>Home Page</h1>
-    <h1>Home Page</h1>
-    <h1>Home Page</h1>
-    <h1>Home Page</h1>
-    <h1>Home Page</h1>
-    <h1>Home Page</h1>
-
-
-
+<h1>home </h1>
+<h1>home </h1>
+<h1>home </h1>
+<h1>home </h1>
+<h1>home </h1>
 
 
 

@@ -7,7 +7,8 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         <link rel="icon" href="{{ url_for('static', filename='img/logo.png') }}" type="image/x-icon">
         <link rel="stylesheet" href="{{url_for ('static', filename= 'styles.css')}}">
-        <script src="static/script.js"></script>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        
 
         {% if title %}
         <title>{{ title }} - Job Insight</title>
@@ -15,7 +16,7 @@
         <title>Job Insight</title>
         {% endif %}
     </head>
-    <body>
+    <body data-user-authenticated="{{ current_user.is_authenticated }}">
         <div id="top"></div>
         <nav class="navbar navbar-expand-lg navbar-dark bg-light">
             <div class="container-fluid">
@@ -31,10 +32,10 @@
                             style = "font-weight: bolder !important;">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-black-50" href="{{ url_for('main.channel') }}">Channel</a>
+                            <a class="nav-link text-black-50 requires-auth" href="{{ url_for('main.channel') }}">Channel</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-black-50" href="{{ url_for('main.profile') }}">Profile</a>
+                            <a class="nav-link text-black-50 requires-auth" href="{{ url_for('main.profile') }}">Profile</a>
                         </li>
                         <li class="nav-item">
                             {% if current_user.is_authenticated %}
@@ -55,8 +56,10 @@
             </div>
         </nav>
 
-        
-        <hr>
+        <br>
+        <br>
+        <br>
+     
         {% with messages = get_flashed_messages() %}
         {% if messages %}
         <ul class="flashmessage">
@@ -68,8 +71,26 @@
         {% endwith %}
         {% block content %}{% endblock %}
 
+        <!-- Modal -->
+        <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="loginModalLabel">Please Login</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                    You need to log in to view details.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Stay Logout</button>
+                        <a href="{{ url_for('main.login') }}" class="btn btn-primary" "><span class="spinner-grow spinner-grow-sm"></span> Login/Sign In</a>
+                    </div>
+            </div>
+            </div>
+        </div>
 
-
+        <script src="static/myScript.js"></script>
         <footer>
             <div class="container">
                 <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">

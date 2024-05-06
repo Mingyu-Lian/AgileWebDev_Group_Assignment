@@ -61,3 +61,38 @@ in the university of Western Australia (2024 S1) */
 .navbar .btn:active {
     background-color: rgb(55, 64, 73) !important;
 }
+
+/*Hoem page*/
+.card-img-top {
+    width: 100%; /* 设置图片宽度为100% */
+    object-fit: cover; /* 覆盖整个内容区域，但保持内容的宽高比 */
+    height: 250px; /* 设置图片的固定高度 */
+}
+.card-title {
+    font-size: 1.2em; /* 增大标题字体大小 */
+}
+.card-footer {
+    background-color: #f8f9fa; /* 设置页脚背景颜色 */
+}
+.btn-light.active, .btn-light:active {
+    background-color: #f8f9fa; /* 激活状态下的按钮背景色 */
+    border-color: #dae0e5; /* 边框颜色 */
+}
+
+#addPostButton {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+}
+
+#addPostButton:hover::after {
+    content: "Add Post";
+    position: absolute;
+    left: 100%;
+    top: 0;
+    background-color: #f8f9fa;
+    color: black;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-left: none;
+}
