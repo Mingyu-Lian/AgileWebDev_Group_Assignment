@@ -57,6 +57,9 @@ class UserDetails(db.Model):
     phone = db.Column(db.Integer)
     job_title = db.Column(db.String(100))
     job_description = db.Column(db.Text)
+    education_level = db.Column(db)
+    academic_institution = db.Column(db)
+
 
     user = db.relationship('User', back_populates='details')
 
