@@ -54,16 +54,19 @@ def market():
 def upload_product():
     form = UploadForm()
     if form.validate_on_submit():
-        # 处理文件上传逻辑
         title = form.title.data
         description = form.description.data
-        file = form.image.data
+        image_file = form.image.data
 
-        # 保存文件到指定路径，假设保存到静态文件夹中的 uploads 文件夹
-        if file:
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            flash('File uploaded successfully!', 'success')
+        if image_file:
+            filename = secure_filename(image_file.filename)
+            image_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+            new_post = Post(title=title, description=description, image_filename=filename)
+            db.session.add(new_post)
+            db.session.commit()
+
+            flash('Product uploaded successfully!', 'success')
             return redirect(url_for('main.home'))
 
     return render_template('upload.html', title='Upload Post', form=form)
