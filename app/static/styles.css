@@ -1,4 +1,63 @@
 /*This css file is an assignment of CITS5505 unit 
 in the university of Western Australia (2024 S1) */
-/*This is a part of the indivisual assingment*/
+/*This is a part of the Group assingment*/
 
+
+.navbar .navbar-nav .nav-link {
+    color: black !important;
+    font-family:Verdana, Geneva, Tahoma, sans-serif; 
+    font-size: 18px !important; 
+    font-weight: 500 !important;
+    padding: 10px;
+    border-radius: 10px !important;
+    margin-top: 4px;
+    transition: all 0.3S;
+}
+
+.navbar .navbar-nav .nav-link:hover {
+    color: white !important;
+    background-color: rgb(34, 95, 155); 
+    padding: 10px;
+    border-radius: 10px; 
+}
+
+.navbar .navbar-nav .login:hover {
+    padding: 15px;
+    font-size: 120% !important;
+}
+
+
+.navbar .navbar-nav .nav-item {
+    margin-right: 10px !important;
+    margin-left: 40px !important;
+    border-right: 70px !important;
+}
+
+.flashmessage{
+    border-radius: 20px;
+    background-color: antiquewhite;
+    color: rgb(223, 58, 58);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 200%;
+    font-weight: bold;
+    padding: 10px;
+    text-align: center;
+    margin: auto;
+}
+
+.navbar .btn {
+    background-color: rgb(34, 95, 155);
+    transition: all 0.3s;
+}
+
+.navbar .navbar-toggler {
+    background-color: rgb(34, 95, 155) !important;
+}
+
+.navbar .btn:hover {
+    background-color: rgb(99, 152, 206) !important;
+    font-size: larger !important;
+}
+.navbar .btn:active {
+    background-color: rgb(55, 64, 73) !important;
+}
