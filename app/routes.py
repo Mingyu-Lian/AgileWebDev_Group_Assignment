@@ -1,6 +1,8 @@
+import os
+from werkzeug.utils import secure_filename
 from flask import Blueprint, render_template, flash, redirect, url_for
 from flask_login import login_user, current_user
-from .forms import LoginForm, SignUpForm
+from .forms import LoginForm, SignUpForm,UploadForm
 from .models import db, User
 
 main = Blueprint('main', __name__)
@@ -46,3 +48,22 @@ def profile():
 @main.route('/market')
 def market():
     return render_template('market.html', title='Home')
+
+
+@main.route('/upload/product', methods=['GET', 'POST'])
+def upload_product():
+    form = UploadForm()
+    if form.validate_on_submit():
+        # 处理文件上传逻辑
+        title = form.title.data
+        description = form.description.data
+        file = form.image.data
+
+        # 保存文件到指定路径，假设保存到静态文件夹中的 uploads 文件夹
+        if file:
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            flash('File uploaded successfully!', 'success')
+            return redirect(url_for('main.home'))
+
+    return render_template('upload.html', title='Upload Post', form=form)

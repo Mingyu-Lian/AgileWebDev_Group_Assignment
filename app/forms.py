@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField,TextAreaField,FileField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
 from wtforms.fields import EmailField
 from app.models import User
@@ -26,3 +26,9 @@ class SignUpForm(FlaskForm):
         user = User.query.filter_by(email=email.data).first()
         if user:
             raise ValidationError('That email is already used. Please use a different email address.')
+        
+class UploadForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    description = TextAreaField('Description', validators=[DataRequired()])
+    image = FileField('Image', validators=[DataRequired()])
+    submit = SubmitField('Submit')
