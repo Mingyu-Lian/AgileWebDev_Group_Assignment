@@ -20,6 +20,16 @@
                     <small id="descriptionHelp" class="form-text text-muted">Characters left: <span id="descriptionCounter">500</span></small>
                 </div>
 
+                <div class="mb-3">
+                    <label for="tag" class="form-label">Tag</label>
+                    <div class="btn-group" role="group" aria-label="Tag Selection">
+                        <button type="button" class="btn btn-secondary tag-btn" onclick="selectTag('interview')">Interview</button>
+                        <button type="button" class="btn btn-secondary tag-btn" onclick="selectTag('recruitment')">Recruitment</button>
+                        <button type="button" class="btn btn-secondary tag-btn" onclick="selectTag('job_search')">Job Search</button>
+                        <input type="hidden" id="tag" name="tag"> <!-- Hidden input to store selected tag -->
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <label for="image">Image</label>
                     <input type="file" id="image" name="image" class="form-control-file" accept="image/*" required>
@@ -30,5 +40,6 @@
         </div>
     </div>
 </div>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/upload.css') }}">
 <script src="{{ url_for('static', filename='js/upload.js') }}"></script>
 {% endblock %}

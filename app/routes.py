@@ -56,13 +56,14 @@ def upload_product():
     if form.validate_on_submit():
         title = form.title.data
         description = form.description.data
+        tag = form.tag.data
         image_file = form.image.data
 
         if image_file:
             filename = secure_filename(image_file.filename)
             image_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-            new_post = Post(title=title, description=description, image_filename=filename)
+            new_post = Post(title=title, description=description, tag=tag, image_filename=filename)
             db.session.add(new_post)
             db.session.commit()
 

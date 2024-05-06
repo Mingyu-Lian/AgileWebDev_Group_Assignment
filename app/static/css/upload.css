@@ -1,0 +1,12 @@
+.tag-btn {
+    margin-right: 10px;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.selected {
+    background-color: red;
+    color: white;
+    font-weight: bold;
+}

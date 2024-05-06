@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed, FileRequired
-from wtforms import StringField, PasswordField, BooleanField, SubmitField,TextAreaField,FileField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField,TextAreaField,FileField,SelectField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, Length
 from wtforms.fields import EmailField
 from app.models import User
@@ -31,5 +31,6 @@ class SignUpForm(FlaskForm):
 class UploadForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired(message='Title is required.'),Length(max=50)])
     description = TextAreaField('Description', validators=[DataRequired(message='Description is required.'),Length(max=500)])
+    tag = SelectField('Tag', choices=[('interview', 'Interview'), ('recruitment', 'Recruitment'), ('job_search', 'Job Search')], validators=[DataRequired()])
     image = FileField('Image', validators=[DataRequired(message='Image is required.'),FileAllowed(['jpg', 'jpeg', 'png', 'gif'])])
     submit = SubmitField('Submit')

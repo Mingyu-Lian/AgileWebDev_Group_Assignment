@@ -14,23 +14,10 @@ document.getElementById('description').addEventListener('input', function() {
     document.getElementById('descriptionCounter').innerText = remaining;
 });
 
-// JavaScript function to validate form before submission
-function validateForm() {
-    var titleInput = document.getElementById('title');
-    var titleLength = titleInput.value.length;
-    if (titleLength > 20) {
-        alert('Title cannot exceed 20 characters!');
-        titleInput.focus();
-        return false;
-    }
+const buttons = document.querySelectorAll('.tag-btn');
 
-    var descriptionInput = document.getElementById('description');
-    var descriptionLength = descriptionInput.value.length;
-    if (descriptionLength > 500) {
-        alert('Description cannot exceed 500 characters!');
-        descriptionInput.focus();
-        return false;
-    }
-
-    return true;
-}
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                button.classList.toggle('selected');
+            });
+        });
