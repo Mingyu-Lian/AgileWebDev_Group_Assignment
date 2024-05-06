@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id="setProfile">
+    <h1>Edit Profile</h1>
+    <form method="POST" action="{{ url_for('main.set_profile') }}">
+        {{ form.hidden_tag() }}
+        <div>{{ form.address.label }} {{ form.address() }}</div>
+        <div>{{ form.company.label }} {{ form.company() }}</div>
+        <div>{{ form.city.label }} {{ form.city() }}</div>
+        <div>{{ form.country.label }} {{ form.country() }}</div>
+        <div>{{ form.phone.label }} {{ form.phone() }}</div>
+        <div>{{ form.job_title.label }} {{ form.job_title() }}</div>
+        <div>{{ form.job_description.label }} {{ form.job_description() }}</div>
+        <div>{{ form.education_level.label }} {{ form.education_level() }}</div>
+        <div>{{ form.academic_institution.label }} {{ form.academic_institution() }}</div>
+        <div>{{ form.submit() }}</div>
+    </form>
+</div>
+{% endblock %}

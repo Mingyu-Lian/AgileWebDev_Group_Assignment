@@ -2,8 +2,21 @@
 
 {% block content %}
     <div id="Profile">
-
-    </div>
+    <h1>User Profile</h1>
+    <p>Address: {{ user_profile.address }}</p>
+    <p>Company: {{ user_profile.company }}</p>
+    <p>City: {{ user_profile.city }}</p>
+    <p>Country: {{ user_profile.country }}</p>
+    <p>Phone: {{ user_profile.phone }}</p>
+    <p>Job Title: {{ user_profile.job_title }}</p>
+    <p>Job Description: {{ user_profile.job_description }}</p>
+    <p>Education Level: {{ user_profile.education_level }}</p>
+    <p>Academic Institution: {{ user_profile.academic_institution }}</p>
+    <a href="{{ url_for('main.set_profile') }}">Edit Profile</a>
+    <a href="{{ url_for('main.set_icon') }}">Change Icon</a>
+</div>
 
 
 {% endblock %}
+
+

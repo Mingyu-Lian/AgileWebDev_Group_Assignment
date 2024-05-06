@@ -26,3 +26,20 @@ class SignUpForm(FlaskForm):
         user = User.query.filter_by(email=email.data).first()
         if user:
             raise ValidationError('That email is already used. Please use a different email address.')
+
+
+class ProfileForm(FlaskForm):
+    address = StringField('Address')
+    company = StringField('Company')
+    city = StringField('City')
+    country = StringField('Country')
+    phone = StringField('Phone')
+    job_title = StringField('Job Title')
+    job_description = StringField('Job Description')
+    education_level = StringField('Education Level')
+    academic_institution = StringField('Academic Institution')
+    submit = SubmitField('Set Profile')
+
+class IconForm(FlaskForm):
+    img = StringField('Image')
+    submit = SubmitField('Set Icon')
