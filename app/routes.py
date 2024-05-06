@@ -5,6 +5,7 @@ from .models import db, User, UserDetails
 
 main = Blueprint('main', __name__)
 
+
 @main.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -18,6 +19,7 @@ def login():
         login_user(user, remember=form.remember_me.data)
         return redirect(url_for('main.home'))
     return render_template('login.html', title='Sign In', form=form)
+
 
 @main.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -40,16 +42,19 @@ def signup():
         return redirect(url_for('main.login'))
     return render_template('signup.html', title='Sign Up', form=form)
 
+
 @main.route('/logout')
 def logout():
     logout_user()
     flash('You have been logged out.')
     return redirect(url_for('main.login'))
 
+
 @main.route('/')
 @main.route('/home')
 def home():
     return render_template('home.html', title='Home')
+
 
 @main.route('/profile', methods=['GET', 'POST'])
 def profile():
@@ -59,11 +64,12 @@ def profile():
         return redirect(url_for('main.home'))
     return render_template('profile.html', user_profile=user_profile)
 
+
 @main.route('/profile/set_profile', methods=['GET', 'POST'])
 def set_profile():
     form = ProfileForm()
+    user_profile = UserDetails.query.filter_by(id=current_user.id).first()
     if form.validate_on_submit():
-        user_profile = UserDetails.query.filter_by(id=current_user.id).first()
         if user_profile:
             user_profile.address = form.address.data
             user_profile.company = form.company.data
@@ -79,36 +85,40 @@ def set_profile():
             return redirect(url_for('main.profile'))
         db.session.commit()
         flash('Profile updated successfully!', 'success')
-        return redirect(url_for('profile'))
-    return render_template('profile.html', title='Profile', form=form)
+        return redirect(url_for('main.profile'))
+    return render_template('set_profile.html', title='Profile', form=form, user_profile=user_profile)
 
 
 @main.route('/profile/set_icon', methods=['GET', 'POST'])
 def set_icon():
     form = IconForm()
+    user_profile = UserDetails.query.filter_by(id=current_user.id).first()
     if form.validate_on_submit():
-        user_detail = UserDetails.query.filter_by(id=current_user.id).first()
-        if user_detail:
-            user_detail.img = form.img.data
+        if user_profile:
+            user_profile.img = form.img.data
         else:
             flash('Got problems processing the data, please inform the web dev')
             return redirect(url_for('main.profile'))
         db.session.commit()
         flash('Icon updated successfully!', 'success')
-        return redirect(url_for('profile'))
-    return render_template('profile.html', title='Profile', form=form)
+        return redirect(url_for('main.profile'))
+    return render_template('set_icon.html', title='Profile', form=form, user_profile=user_profile)
+
 
 @main.route('/upload')
 def upload():
     return render_template('upload.html', title='Upload')
 
+
 @main.route('/post')
 def post():
     return render_template('home.html', title='Post')
 
+
 @main.route('/channel')
 def channel():
     return render_template('channel.html', title='Channel')
+
 
 @main.route('/search')
 def search():
