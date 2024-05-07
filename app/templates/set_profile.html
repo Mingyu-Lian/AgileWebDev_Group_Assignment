@@ -1,21 +1,61 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div id="setProfile">
-    <h1>Edit Profile</h1>
-    <form method="POST" action="{{ url_for('main.set_profile') }}">
-        {{ form.hidden_tag() }}
-        <div>{{ form.name.label }}{{ form.name() }}</div>
-        <div>{{ form.address.label }} {{ form.address() }}</div>
-        <div>{{ form.company.label }} {{ form.company() }}</div>
-        <div>{{ form.city.label }} {{ form.city() }}</div>
-        <div>{{ form.country.label }} {{ form.country() }}</div>
-        <div>{{ form.phone.label }} {{ form.phone() }}</div>
-        <div>{{ form.job_title.label }} {{ form.job_title() }}</div>
-        <div>{{ form.job_description.label }} {{ form.job_description() }}</div>
-        <div>{{ form.education_level.label }} {{ form.education_level() }}</div>
-        <div>{{ form.academic_institution.label }} {{ form.academic_institution() }}</div>
-        <div>{{ form.submit() }}</div>
-    </form>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <h5 class="card-header">Edit Profile</h5>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('main.set_profile') }}">
+                        {{ form.hidden_tag() }}
+                        <div class="form-group">
+                            {{ form.name.label(class="form-label") }}
+                            {{ form.name(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.address.label(class="form-label") }}
+                            {{ form.address(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.company.label(class="form-label") }}
+                            {{ form.company(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.city.label(class="form-label") }}
+                            {{ form.city(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.country.label(class="form-label") }}
+                            {{ form.country(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.phone.label(class="form-label") }}
+                            {{ form.phone(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.job_title.label(class="form-label") }}
+                            {{ form.job_title(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.job_description.label(class="form-label") }}
+                            {{ form.job_description(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.education_level.label(class="form-label") }}
+                            {{ form.education_level(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.academic_institution.label(class="form-label") }}
+                            {{ form.academic_institution(class="form-control") }}
+                        </div>
+                        <div class="d-grid gap-2">
+                            {{ form.submit(class="btn btn-primary") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
