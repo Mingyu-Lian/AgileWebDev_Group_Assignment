@@ -57,7 +57,7 @@ class UserDetails(db.Model):
     phone = db.Column(db.Integer)
     job_title = db.Column(db.String(100))
     job_description = db.Column(db.Text)
-    education_level = db.Column(db)
+    education_level = db.Column(db.String(50))
     academic_institution = db.Column(db)
 
 
