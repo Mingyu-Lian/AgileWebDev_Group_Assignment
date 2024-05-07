@@ -71,7 +71,6 @@ class UserDetails(db.Model):
 
 
 class Post(db.Model):
-
     __tablename__ = 'post'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -84,12 +83,11 @@ class Post(db.Model):
     likes = db.Column(db.Integer, default=0)
     following = db.Column(db.Integer, default=0)
 
-    comments = db.relationship('Comment', backref='post', lazy='dynamic')
+    # 在 Post 类中定义 relationship 和 backref
+    comments = db.relationship('Comment', back_populates='post', lazy='dynamic')
 
-
-class Comments(db.Model):
-
-    __tablename__ = 'comments'
+class Comment(db.Model):
+    __tablename__ = 'comment'
 
     id = db.Column(db.Integer, primary_key=True)
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -98,7 +96,9 @@ class Comments(db.Model):
     body = db.Column(db.Text)
     likes = db.Column(db.Integer, default=0)
 
+    # 在 Comment 类中只使用 back_populates 指回 Post 类的 relationship
     post = db.relationship('Post', back_populates='comments')
+
 
 class Category(db.Model):
 
