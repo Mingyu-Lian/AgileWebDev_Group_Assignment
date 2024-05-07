@@ -43,8 +43,11 @@ class ProfileForm(FlaskForm):
     submit = SubmitField('Set Profile')
 
 class IconForm(FlaskForm):
-    img = StringField('Image')
-    submit = SubmitField('Set Icon')
+    img = FileField('Choose an icon', validators=[
+        FileRequired(),
+        FileAllowed(['jpg', 'png', 'jpeg', 'gif'], 'Images only!')
+    ])
+    submit = SubmitField('Upload')
 
         
 class UploadForm(FlaskForm):

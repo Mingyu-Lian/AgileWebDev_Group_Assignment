@@ -2,7 +2,7 @@
 
 import os
 from werkzeug.utils import secure_filename
-from flask import Blueprint, render_template, flash, redirect, url_for, request
+from flask import Blueprint, render_template, flash, redirect, url_for, request, current_app
 from flask_login import login_user, current_user,logout_user
 from .forms import LoginForm, SignUpForm,UploadForm, IconForm, ProfileForm
 from .models import db, User,UserDetails,Post
@@ -111,13 +111,18 @@ def set_icon():
     user_profile = UserDetails.query.filter_by(id=current_user.id).first()
     if form.validate_on_submit():
         if user_profile:
-            user_profile.img = form.img.data
-        else:
-            flash('Got problems processing the data, please inform the web dev')
+            file = form.img.data
+            filename = secure_filename(file.filename)
+            file_path = os.path.join(filename)
+            file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], file_path))
+            user_profile.img = file_path
+            db.session.commit()
+            flash('Icon updated successfully!', 'success')
             return redirect(url_for('main.profile'))
-        db.session.commit()
-        flash('Icon updated successfully!', 'success')
-        return redirect(url_for('main.profile'))
+        else:
+            flash('User profile not found.', 'error')
+            return redirect(url_for('main.profile'))
+
     return render_template('set_icon.html', title='Profile', form=form, user_profile=user_profile)
 
 
