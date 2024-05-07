@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id="setIcon">
+    <h1>Change Icon</h1>
+    <form method="POST" action="{{ url_for('main.set_icon') }}">
+        {{ form.hidden_tag() }}
+        <div>{{ form.img.label }} {{ form.img() }}</div>
+        <div>{{ form.submit() }}</div>
+    </form>
+</div>
+{% endblock %}
