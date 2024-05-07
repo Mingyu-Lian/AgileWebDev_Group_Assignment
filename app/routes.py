@@ -1,7 +1,10 @@
+
+import os
+from werkzeug.utils import secure_filename
 from flask import Blueprint, render_template, flash, redirect, url_for, request
-from flask_login import login_user, current_user, logout_user
-from .forms import LoginForm, SignUpForm
-from .models import db, User, UserDetails, Post
+from flask_login import login_user, current_user
+from .forms import LoginForm, SignUpForm,UploadForm
+from .models import db, User,UserDetails,Post
 
 
 main = Blueprint('main', __name__)
@@ -66,9 +69,29 @@ def home():
 def profile():
     return render_template('profile.html', title='Profile')
 
-@main.route('/upload')
-def upload():
-    return render_template('upload.html', title='Upload')
+
+@main.route('/upload/product', methods=['GET', 'POST'])
+def upload_product():
+    form = UploadForm()
+    if form.validate_on_submit():
+        title = form.title.data
+        description = form.description.data
+        tag = form.tag.data
+        image_file = form.image.data
+
+        if image_file:
+            filename = secure_filename(image_file.filename)
+            image_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+            new_post = Post(title=title, description=description, tag=tag, image_filename=filename)
+            db.session.add(new_post)
+            db.session.commit()
+
+            flash('Post uploaded successfully!', 'success')
+            return redirect(url_for('main.home'))
+
+    return render_template('upload.html', title='Upload Post', form=form)
+
 
 @main.route('/post')
 def post():
@@ -81,3 +104,4 @@ def channel():
 @main.route('/search')
 def search():
     return render_template('search.html', title='Search')
+
