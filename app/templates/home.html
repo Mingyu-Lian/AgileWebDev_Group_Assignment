@@ -5,13 +5,14 @@
     <div class="row">
         <div class="col-md-3">
             <!-- Sidebar -->
-            <div class="sidebar">
-                <a href="{{ url_for('main.home', filter='all') }}" class=" {{ 'active' if filter == 'all' else '' }}">All Posts</a> <br>
-                <a href="{{ url_for('main.home', filter='following') }}" class="requires-auth{{ 'active' if filter == 'following' else '' }}">Following Posts</a>  <br>  <br>
+            <div class="homesidebar">
+                <a href="{{ url_for('main.home', filter='all') }}" class=" top2 {{'active' if filter == 'all' else '' }}">All Posts</a> <br>
+                <a href="{{ url_for('main.home', filter='following') }}" class=" top2 requires-auth {{'active' if filter == 'following' else '' }}">Following Posts</a>  <br>  <br>
                 <!-- Add Post button -->
-                <a href="{{ url_for('main.post') }}" class="requires-auth" id="addPostButton">
-                    <i class="material-icons" style="font-size:36px">add_box</i>
+                <a href="{{ url_for('main.post') }}" class="requires-auth add-post-btn" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Add New Post" id="addPostButton">
+                    <i class="material-icons add-icon" style="font-size:60px">add_box</i>
                 </a>
+                <br>
             </div>
         </div>
         <div class="col-md-9">
@@ -33,6 +34,11 @@
                 {% endfor %}
             </div>
             <!-- Pagination -->
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
                     <li class="page-item"><a class="page-link" href="#">Previous</a></li>
@@ -43,6 +49,12 @@
         </div>
     </div>
 </div>
+<script>
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+</script>
 <h1>home </h1>
 <h1>home </h1><h1>home </h1>
 <h1>home </h1>
