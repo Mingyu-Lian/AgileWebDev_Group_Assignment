@@ -1,7 +1,13 @@
-from flask import Blueprint, render_template, flash, redirect, url_for
-from flask_login import login_user, current_user, logout_user
-from .forms import LoginForm, SignUpForm, IconForm, ProfileForm
-from .models import db, User, UserDetails
+
+
+import os
+from werkzeug.utils import secure_filename
+from flask import Blueprint, render_template, flash, redirect, url_for, request
+from flask_login import login_user, current_user
+from .forms import LoginForm, SignUpForm,UploadForm, IconFrom, ProfileForm
+from .models import db, User,UserDetails,Post
+
+
 
 main = Blueprint('main', __name__)
 
@@ -53,7 +59,17 @@ def logout():
 @main.route('/')
 @main.route('/home')
 def home():
-    return render_template('home.html', title='Home')
+    filter_type = request.args.get('filter', 'all')
+
+    if filter_type == 'following':
+        if not current_user.is_authenticated:
+            return redirect(url_for('main.login'))
+        followed_users = [followed.id for followed in current_user.followed]
+        posts = Post.query.filter(Post.author_id.in_(followed_users)).order_by(Post.created_at.desc()).all()
+    else:
+        posts = Post.query.order_by(Post.created_at.desc()).all()
+
+    return render_template('home.html', title='Home', posts=posts, filter=filter_type)
 
 
 @main.route('/profile', methods=['GET', 'POST'])
@@ -105,9 +121,29 @@ def set_icon():
     return render_template('set_icon.html', title='Profile', form=form, user_profile=user_profile)
 
 
-@main.route('/upload')
-def upload():
-    return render_template('upload.html', title='Upload')
+
+@main.route('/upload/product', methods=['GET', 'POST'])
+def upload_product():
+    form = UploadForm()
+    if form.validate_on_submit():
+        title = form.title.data
+        description = form.description.data
+        tag = form.tag.data
+        image_file = form.image.data
+
+        if image_file:
+            filename = secure_filename(image_file.filename)
+            image_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+            new_post = Post(title=title, description=description, tag=tag, image_filename=filename)
+            db.session.add(new_post)
+            db.session.commit()
+
+            flash('Post uploaded successfully!', 'success')
+            return redirect(url_for('main.home'))
+
+    return render_template('upload.html', title='Upload Post', form=form)
+
 
 
 @main.route('/post')
@@ -123,3 +159,4 @@ def channel():
 @main.route('/search')
 def search():
     return render_template('search.html', title='Search')
+
