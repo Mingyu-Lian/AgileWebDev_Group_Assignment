@@ -49,6 +49,7 @@ class UserDetails(db.Model):
     __tablename__ = 'user_details'
 
     id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    name = db.Column(db.String(80))
     address = db.Column(db.Text)
     img = db.Column(db.String(200))
     company = db.Column(db.String(100))

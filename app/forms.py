@@ -31,6 +31,7 @@ class SignUpForm(FlaskForm):
 
 
 class ProfileForm(FlaskForm):
+    name = StringField('Name')
     address = StringField('Address')
     company = StringField('Company')
     city = StringField('City')

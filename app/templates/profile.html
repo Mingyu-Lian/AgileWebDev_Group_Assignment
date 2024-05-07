@@ -4,7 +4,7 @@
     <div id="Profile">
     <h1>User Profile</h1>
     <img src="{{ url_for('static', filename='user_icon/uploads/' + user_profile.img)  if user_profile.img else url_for('static', filename='user_icon/default_user_icon.jpg') }}" alt="User Icon" style="width: 200px; height: 200px; border-radius: 50%; object-fit: cover;">
-
+    <p>Name: {{ user_profile.name }}</p>
     <p>Address: {{ user_profile.address }}</p>
     <p>Company: {{ user_profile.company }}</p>
     <p>City: {{ user_profile.city }}</p>

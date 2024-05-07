@@ -80,13 +80,27 @@ def profile():
         return redirect(url_for('main.home'))
     return render_template('profile.html', user_profile=user_profile)
 
-
 @main.route('/profile/set_profile', methods=['GET', 'POST'])
 def set_profile():
     form = ProfileForm()
     user_profile = UserDetails.query.filter_by(id=current_user.id).first()
+
+    # Pre-populate the form with existing data when the form is loaded, not submitted
+    if request.method == 'GET' and user_profile:
+        form.name.data = user_profile.name
+        form.address.data = user_profile.address
+        form.company.data = user_profile.company
+        form.city.data = user_profile.city
+        form.country.data = user_profile.country
+        form.phone.data = user_profile.phone
+        form.job_title.data = user_profile.job_title
+        form.job_description.data = user_profile.job_description
+        form.education_level.data = user_profile.education_level
+        form.academic_institution.data = user_profile.academic_institution
+
     if form.validate_on_submit():
         if user_profile:
+            user_profile.name = form.name.data
             user_profile.address = form.address.data
             user_profile.company = form.company.data
             user_profile.city = form.city.data
@@ -102,8 +116,8 @@ def set_profile():
         db.session.commit()
         flash('Profile updated successfully!', 'success')
         return redirect(url_for('main.profile'))
-    return render_template('set_profile.html', title='Profile', form=form, user_profile=user_profile)
 
+    return render_template('set_profile.html', title='Profile', form=form, user_profile=user_profile)
 
 @main.route('/profile/set_icon', methods=['GET', 'POST'])
 def set_icon():

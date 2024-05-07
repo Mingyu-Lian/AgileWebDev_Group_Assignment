@@ -5,6 +5,7 @@
     <h1>Edit Profile</h1>
     <form method="POST" action="{{ url_for('main.set_profile') }}">
         {{ form.hidden_tag() }}
+        <div>{{ form.name.label }}{{ form.name() }}</div>
         <div>{{ form.address.label }} {{ form.address() }}</div>
         <div>{{ form.company.label }} {{ form.company() }}</div>
         <div>{{ form.city.label }} {{ form.city() }}</div>
