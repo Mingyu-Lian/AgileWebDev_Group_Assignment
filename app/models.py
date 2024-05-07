@@ -80,11 +80,25 @@ class Post(db.Model):
     img = db.Column(db.String(200))
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    comments = db.Column(db.Text)
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
     likes = db.Column(db.Integer, default=0)
     following = db.Column(db.Integer, default=0)
 
+    comments = db.relationship('Comment', backref='post', lazy='dynamic')
+
+
+class Comments(db.Model):
+
+    __tablename__ = 'comments'
+
+    id = db.Column(db.Integer, primary_key=True)
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    body = db.Column(db.Text)
+    likes = db.Column(db.Integer, default=0)
+
+    post = db.relationship('Post', back_populates='comments')
 
 class Category(db.Model):
 
