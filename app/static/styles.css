@@ -14,10 +14,20 @@ in the university of Western Australia (2024 S1) */
     transition: all 0.3S;
 }
 
+.navbar .nav-logo img {
+    transition: all 0.3s ease; /* 设置过渡效果，阴影变化更平滑 */
+}
+.navbar .nav-logo img:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(1px 0px 15px rgb(125, 121, 121));
+}
+
 .navbar .navbar-nav .nav-link:hover {
     color: white !important;
     background-color: rgb(34, 95, 155); 
     padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
     border-radius: 10px; 
 }
 
@@ -74,13 +84,27 @@ in the university of Western Australia (2024 S1) */
     text-align: center;
 }
 
+@media (max-width: 768px) { 
+    .homesidebar {
+        flex-direction: row; 
+        justify-content: space-around;
+        align-items: center;
+    }
+    .homesidebar top2 {
+        margin: 0 10px; 
+    }
+}
+
 .homesidebar .top2{
-    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     text-decoration: none;
     color: rgb(34, 95, 155);
+
     padding: 10px;
     border-radius: 20px;
-    margin: 5px 0;
+    justify-content: center; 
+    transition: all 0.4s ease;
+    margin: 5px 5px;
     display: inline-block;
     transition: all 0.4s ease; 
 }
@@ -93,7 +117,7 @@ in the university of Western Australia (2024 S1) */
 .add-post-btn {
     display: inline-block;
     position: relative;
-    color: rgb(34, 95, 155);
+    color: rgba(34, 94, 155, 0.858);
     text-align: center;
     transition: transform 0.4s; 
     z-index: 10; 
@@ -104,6 +128,13 @@ in the university of Western Australia (2024 S1) */
     transform-origin: center; 
 }
 
+.homesidebar .active {
+    background-color: rgb(219, 221, 223);
+    color: rgb(34, 95, 155);
+    border-radius: 20px;
+    font-weight: bold;
+}
+---------
 
 .card-img-top {
     width: 100%; /* 设置图片宽度为100% */
@@ -115,26 +146,4 @@ in the university of Western Australia (2024 S1) */
 }
 .card-footer {
     background-color: #f8f9fa; /* 设置页脚背景颜色 */
-}
-.btn-light.active, .btn-light:active {
-    background-color: #f8f9fa; /* 激活状态下的按钮背景色 */
-    border-color: #dae0e5; /* 边框颜色 */
-}
-
-#addPostButton {
-    position: relative;
-    display: inline-block;
-    overflow: hidden;
-}
-
-#addPostButton:hover::after {
-    content: "Add Post";
-    position: absolute;
-    left: 100%;
-    top: 0;
-    background-color: #f8f9fa;
-    color: black;
-    padding: 6px 12px;
-    border: 1px solid #ccc;
-    border-left: none;
 }

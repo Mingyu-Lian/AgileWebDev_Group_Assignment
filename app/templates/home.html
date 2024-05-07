@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container">
+<div class="container-fluid">
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-2">
             <!-- Sidebar -->
             <div class="homesidebar">
-                <a href="{{ url_for('main.home', filter='all') }}" class=" top2 {{'active' if filter == 'all' else '' }}">All Posts</a> <br>
-                <a href="{{ url_for('main.home', filter='following') }}" class=" top2 requires-auth {{'active' if filter == 'following' else '' }}">Following Posts</a>  <br>  <br>
+                <a href="{{ url_for('main.home', filter='all') }}" class=" top2 {{'active' if filter == 'all' else '' }}">All Posts</a> 
+                <a href="{{ url_for('main.home', filter='following') }}" class=" top2 requires-auth {{'active' if filter == 'following' else '' }}">Follow Posts</a> <br><br>
                 <!-- Add Post button -->
                 <a href="{{ url_for('main.post') }}" class="requires-auth add-post-btn" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Add New Post" id="addPostButton">
                     <i class="material-icons add-icon" style="font-size:60px">add_box</i>
@@ -15,7 +15,9 @@
                 <br>
             </div>
         </div>
-        <div class="col-md-9">
+        
+        <div class="col-md-10">
+            <!-- Post Board -->
             <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3">
                 {% for post in posts %}
                 <div class="col">
