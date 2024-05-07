@@ -1,7 +1,8 @@
-from flask import Blueprint, render_template, flash, redirect, url_for
+from flask import Blueprint, render_template, flash, redirect, url_for, request
 from flask_login import login_user, current_user, logout_user
 from .forms import LoginForm, SignUpForm
-from .models import db, User, UserDetails
+from .models import db, User, UserDetails, Post
+
 
 main = Blueprint('main', __name__)
 
@@ -49,7 +50,17 @@ def logout():
 @main.route('/')
 @main.route('/home')
 def home():
-    return render_template('home.html', title='Home')
+    filter_type = request.args.get('filter', 'all')
+
+    if filter_type == 'following':
+        if not current_user.is_authenticated:
+            return redirect(url_for('main.login'))
+        followed_users = [followed.id for followed in current_user.followed]
+        posts = Post.query.filter(Post.author_id.in_(followed_users)).order_by(Post.created_at.desc()).all()
+    else:
+        posts = Post.query.order_by(Post.created_at.desc()).all()
+
+    return render_template('home.html', title='Home', posts=posts, filter=filter_type)
 
 @main.route('/profile')
 def profile():
