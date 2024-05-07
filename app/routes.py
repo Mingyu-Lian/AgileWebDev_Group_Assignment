@@ -4,6 +4,8 @@ from flask import Blueprint, render_template, flash, redirect, url_for
 from flask_login import login_user, current_user
 from .forms import LoginForm, SignUpForm,UploadForm
 from .models import db, User
+from app.models import Post, Comment
+from app.forms import CommentForm
 
 main = Blueprint('main', __name__)
 
@@ -67,7 +69,25 @@ def upload_product():
             db.session.add(new_post)
             db.session.commit()
 
-            flash('Product uploaded successfully!', 'success')
+            flash('Post uploaded successfully!', 'success')
             return redirect(url_for('main.home'))
 
     return render_template('upload.html', title='Upload Post', form=form)
+
+@app.route('/post/<int:post_id>', methods=['GET', 'POST'])
+def show_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    form = CommentForm()
+
+    if form.validate_on_submit():
+        # 处理提交的评论表单
+        comment_text = form.comment.data
+        new_comment = Comment(text=comment_text, post_id=post.id)
+        db.session.add(new_comment)
+        db.session.commit()
+
+        # 清空表单
+        form.comment.data = ''
+
+    comments = Comment.query.filter_by(post_id=post_id).all()
+    return render_template('post.html', title=post.title, post=post, form=form, comments=comments)

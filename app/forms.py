@@ -34,3 +34,9 @@ class UploadForm(FlaskForm):
     tag = SelectField('Tag', choices=[('interview', 'Interview'), ('recruitment', 'Recruitment'), ('job_search', 'Job Search')], validators=[DataRequired()])
     image = FileField('Image', validators=[DataRequired(message='Image is required.'),FileAllowed(['jpg', 'jpeg', 'png', 'gif'])])
     submit = SubmitField('Submit')
+    
+class CommentForm(FlaskForm):
+    comment = TextAreaField('Comment', validators=[DataRequired(), Length(max=500)])
+    submit = SubmitField('Post Comment')
+    
+    
