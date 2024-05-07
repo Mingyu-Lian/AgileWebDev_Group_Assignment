@@ -1,9 +1,10 @@
+
 import os
 from werkzeug.utils import secure_filename
-from flask import Blueprint, render_template, flash, redirect, url_for
+from flask import Blueprint, render_template, flash, redirect, url_for, request
 from flask_login import login_user, current_user
 from .forms import LoginForm, SignUpForm,UploadForm
-from .models import db, User
+from .models import db, User,UserDetails,Post
 
 
 main = Blueprint('main', __name__)
@@ -30,25 +31,43 @@ def signup():
         if user:
             flash('The email is already registered')
             return redirect(url_for('main.signup'))
-        new_user = User(username=form.username.data, email=form.email.data, password=form.password.data)
+        new_user = User(username=form.username.data, email=form.email.data)
+        new_user.set_password(form.password.data)
         db.session.add(new_user)
+        db.session.flush()
+
+        new_user_details = UserDetails(id=new_user.id)
+        db.session.add(new_user_details)
+
         db.session.commit()
         flash('Successfully registered!')
         return redirect(url_for('main.login'))
     return render_template('signup.html', title='Sign Up', form=form)
 
+@main.route('/logout')
+def logout():
+    logout_user()
+    flash('You have been logged out.')
+    return redirect(url_for('main.login'))
+
 @main.route('/')
 @main.route('/home')
 def home():
-    return render_template('home.html', title='Home')
+    filter_type = request.args.get('filter', 'all')
+
+    if filter_type == 'following':
+        if not current_user.is_authenticated:
+            return redirect(url_for('main.login'))
+        followed_users = [followed.id for followed in current_user.followed]
+        posts = Post.query.filter(Post.author_id.in_(followed_users)).order_by(Post.created_at.desc()).all()
+    else:
+        posts = Post.query.order_by(Post.created_at.desc()).all()
+
+    return render_template('home.html', title='Home', posts=posts, filter=filter_type)
 
 @main.route('/profile')
 def profile():
     return render_template('profile.html', title='Profile')
-
-@main.route('/market')
-def market():
-    return render_template('market.html', title='Home')
 
 
 @main.route('/upload/product', methods=['GET', 'POST'])
@@ -72,4 +91,17 @@ def upload_product():
             return redirect(url_for('main.home'))
 
     return render_template('upload.html', title='Upload Post', form=form)
+
+
+@main.route('/post')
+def post():
+    return render_template('home.html', title='Post')
+
+@main.route('/channel')
+def channel():
+    return render_template('channel.html', title='Channel')
+
+@main.route('/search')
+def search():
+    return render_template('search.html', title='Search')
 

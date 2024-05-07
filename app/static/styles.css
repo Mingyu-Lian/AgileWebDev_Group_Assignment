@@ -1,0 +1,149 @@
+/*This css file is an assignment of CITS5505 unit 
+in the university of Western Australia (2024 S1) */
+/*This is a part of the Group assingment*/
+
+
+.navbar .navbar-nav .nav-link {
+    color: black !important;
+    font-family:Verdana, Geneva, Tahoma, sans-serif; 
+    font-size: 18px !important; 
+    font-weight: 500 !important;
+    padding: 10px;
+    border-radius: 10px !important;
+    margin-top: 4px;
+    transition: all 0.3S;
+}
+
+.navbar .nav-logo img {
+    transition: all 0.3s ease; /* 设置过渡效果，阴影变化更平滑 */
+}
+.navbar .nav-logo img:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(1px 0px 15px rgb(125, 121, 121));
+}
+
+.navbar .navbar-nav .nav-link:hover {
+    color: white !important;
+    background-color: rgb(34, 95, 155); 
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 10px; 
+}
+
+.navbar .navbar-nav .login:hover {
+    padding: 15px;
+    font-size: 120% !important;
+}
+
+
+.navbar .navbar-nav .nav-item {
+    margin-right: 10px !important;
+    margin-left: 40px !important;
+    border-right: 70px !important;
+}
+
+.flashmessage{
+    border-radius: 20px;
+    background-color: antiquewhite;
+    color: rgb(223, 58, 58);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 200%;
+    font-weight: bold;
+    padding: 10px;
+    text-align: center;
+    margin: auto;
+}
+
+.navbar .btn {
+    background-color: rgb(34, 95, 155);
+    transition: all 0.3s;
+}
+
+.navbar .navbar-toggler {
+    background-color: rgb(34, 95, 155) !important;
+}
+
+.navbar .btn:hover {
+    background-color: rgb(99, 152, 206) !important;
+    font-size: larger !important;
+}
+.navbar .btn:active {
+    background-color: rgb(55, 64, 73) !important;
+}
+
+/*Homepage*/
+/*Home Sidebar*/
+.homesidebar {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    border-radius: 15px;
+    background-color:rgb(246, 246, 246);
+    height: 100%;
+    text-align: center;
+}
+
+@media (max-width: 768px) { 
+    .homesidebar {
+        flex-direction: row; 
+        justify-content: space-around;
+        align-items: center;
+    }
+    .homesidebar top2 {
+        margin: 0 10px; 
+    }
+}
+
+.homesidebar .top2{
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-decoration: none;
+    color: rgb(34, 95, 155);
+
+    padding: 10px;
+    border-radius: 20px;
+    justify-content: center; 
+    transition: all 0.4s ease;
+    margin: 5px 5px;
+    display: inline-block;
+    transition: all 0.4s ease; 
+}
+
+.homesidebar .top2:hover {
+    background-color: rgb(34, 95, 155);
+    color: white;
+}
+
+.add-post-btn {
+    display: inline-block;
+    position: relative;
+    color: rgba(34, 94, 155, 0.858);
+    text-align: center;
+    transition: transform 0.4s; 
+    z-index: 10; 
+}
+
+.add-post-btn:hover {
+    transform:  scale(1.2) rotate(90deg); 
+    transform-origin: center; 
+}
+
+.homesidebar .active {
+    background-color: rgb(219, 221, 223);
+    color: rgb(34, 95, 155);
+    border-radius: 20px;
+    font-weight: bold;
+}
+---------
+
+.card-img-top {
+    width: 100%; /* 设置图片宽度为100% */
+    object-fit: cover; /* 覆盖整个内容区域，但保持内容的宽高比 */
+    height: 250px; /* 设置图片的固定高度 */
+}
+.card-title {
+    font-size: 1.2em; /* 增大标题字体大小 */
+}
+.card-footer {
+    background-color: #f8f9fa; /* 设置页脚背景颜色 */
+}
