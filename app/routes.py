@@ -3,7 +3,7 @@
 import os
 from werkzeug.utils import secure_filename
 from flask import Blueprint, render_template, flash, redirect, url_for, request
-from flask_login import login_user, current_user
+from flask_login import login_user, current_user,logout_user
 from .forms import LoginForm, SignUpForm,UploadForm, IconForm, ProfileForm
 from .models import db, User,UserDetails,Post
 
