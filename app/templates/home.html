@@ -9,7 +9,7 @@
                 <a href="{{ url_for('main.home', filter='all') }}" class=" top2 {{'active' if filter == 'all' else '' }}">All Posts</a> 
                 <a href="{{ url_for('main.home', filter='following') }}" class=" top2 requires-auth {{'active' if filter == 'following' else '' }}">Follow Posts</a> <br><br>
                 <!-- Add Post button -->
-                <a href="{{ url_for('main.post') }}" class="requires-auth add-post-btn" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Add New Post" id="addPostButton">
+                <a href="{{ url_for('main.upload product') }}" class="requires-auth add-post-btn" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Add New Post" id="addPostButton">
                     <i class="material-icons add-icon" style="font-size:60px">add_box</i>
                 </a>
                 <br>
