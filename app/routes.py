@@ -74,7 +74,7 @@ def home():
 
 @main.route('/profile', methods=['GET', 'POST'])
 def profile():
-    user_profile = UserDetails.query.filter_by(id=current_user.id).first()
+    user_profile = UserDetails.query.filter_by(id=current_user.id).first()    
     if not user_profile:
         flash('User not found and please inform this error to dev.', 'error')
         return redirect(url_for('main.home'))
@@ -169,10 +169,12 @@ def upload_product():
 def post():
     return render_template('home.html', title='Post')
 
-
-@main.route('/channel')
-def channel():
-    return render_template('channel.html', title='Channel')
+@main.route('/channel/<int:user_id>', methods=['GET', 'POST'])
+def channel(user_id):
+    user = User.query.get_or_404(user_id)
+    is_own_channel = (current_user.is_authenticated and current_user.id == user_id)
+    user_profile = UserDetails.query.filter_by(id=user_id).first()
+    return render_template('channel.html', user=user, is_own_channel=is_own_channel, user_id=user_id, user_profile=user_profile)
 
 
 @main.route('/search')
