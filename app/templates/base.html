@@ -34,18 +34,16 @@
                             style = "font-weight: bolder !important;">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-black-50 requires-auth" href="{{ url_for('main.channel') }}">Channel</a>
+                            <a class="nav-link text-black-50 requires-auth" href="{{ url_for('main.channel') }}"> My Channel </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-black-50 requires-auth" href="{{ url_for('main.profile') }}">Profile</a>
+                            <a class="nav-link text-black-50 requires-auth" href="{{ url_for('main.profile') }}"> My Profile </a>
                         </li>
                         <li class="nav-item">
                             {% if current_user.is_authenticated %}
-                            <a class="nav-link login text-black-50" href="{{ url_for('main.logout') }}">Logout</a>
+                            <a class="nav-link login " href="{{ url_for('main.logout') }}">Logout</a>
                             {% else %}
-                            <a class="nav-link login text-black-50" href="{{ url_for('main.login') }}" 
-                            style="color: white !important; background-color: rgb(48, 110, 173) !important; border-radius: 10px !important; 
-                            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: bolder !important; width: 150px;  text-align: center;">Login</a>
+                            <a class="nav-link login " href="{{ url_for('main.login') }}" >Login</a>
                             {% endif %}
                         </li>
                     </ul>

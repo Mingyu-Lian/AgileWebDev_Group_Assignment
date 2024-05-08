@@ -1,11 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container mt-5">
+<div class="profile container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card">
-                <h5 class="card-header">Edit Profile</h5>
+
+            <div class="card profile-card">
+                <h1 class="card-header text-center">Edit Profile</h1>
                 <div class="card-body">
                     <form method="POST" action="{{ url_for('main.set_profile') }}">
                         {{ form.hidden_tag() }}
@@ -57,5 +58,5 @@
             </div>
         </div>
     </div>
-</div>
+</div> <br> <br> <br> <br>
 {% endblock %}
