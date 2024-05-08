@@ -39,13 +39,19 @@
                         <li class="nav-item">
                             <a class="nav-link text-black-50 requires-auth" href="{{ url_for('main.profile') }}"> My Profile </a>
                         </li>
-                        <li class="nav-item">
-                            {% if current_user.is_authenticated %}
-                            <a class="nav-link login " href="{{ url_for('main.logout') }}">Logout</a>
-                            {% else %}
-                            <a class="nav-link login " href="{{ url_for('main.login') }}" >Login</a>
-                            {% endif %}
+                        
+                        {% if current_user.is_authenticated %}
+                        <li class="nav-item mt-3">
+                            <span style="color: rgb(101, 93, 93); font-family:  Haettenschweiler;font-size: large; ">Hi, {{ current_user.username }}!</span> 
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link login" href="{{ url_for('main.logout') }}">Logout</a>
+                        </li>
+                        {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link login" href="{{ url_for('main.login') }}">Login</a>
+                        </li>
+                        {% endif %}
                     </ul>
 
                     <form class="d-flex centered-content mt-3 px-2">
