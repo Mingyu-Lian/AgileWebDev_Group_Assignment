@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-2">
@@ -9,7 +10,7 @@
                 <a href="{{ url_for('main.home', filter='all') }}" class=" top2 {{'active' if filter == 'all' else '' }}">All Posts</a> 
                 <a href="{{ url_for('main.home', filter='following') }}" class=" top2 requires-auth {{'active' if filter == 'following' else '' }}">Follow Posts</a> <br><br>
                 <!-- Add Post button -->
-                <a href="{{ url_for('main.post') }}" class="requires-auth add-post-btn" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Add New Post" id="addPostButton">
+                <a href="{{ url_for('main.upload_product') }}" class="requires-auth add-post-btn" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Add New Post" id="addPostButton">
                     <i class="material-icons add-icon" style="font-size:60px">add_box</i>
                 </a>
                 <br>
@@ -22,14 +23,14 @@
                 {% for post in posts %}
                 <div class="col">
                     <div class="card h-100">
-                        <img src="{{ post.img }}" class="card-img-top" alt="...">
+                        <img src="{{ post.img }}" class="card-img-top" alt="Post image">
                         <div class="card-body">
                             <h5 class="card-title"><strong>{{ post.title }}</strong></h5>
                             <p class="card-text">{{ post.description }}</p>
                         </div>
                         <div class="card-footer">
                             <small class="text-muted"><i class="bi bi-heart"></i> {{ post.likes }}</small>
-                            <small class="text-muted"><i class="bi bi-chat-dots"></i> {{ post.comments | length }}</small>
+                            <small class="text-muted"><i class="bi bi-chat-dots"></i> {{ post.comments.count() }}</small>
                         </div>
                     </div>
                 </div>

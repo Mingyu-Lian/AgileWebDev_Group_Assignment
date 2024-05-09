@@ -59,17 +59,8 @@ def logout():
 @main.route('/')
 @main.route('/home')
 def home():
-    filter_type = request.args.get('filter', 'all')
-
-    if filter_type == 'following':
-        if not current_user.is_authenticated:
-            return redirect(url_for('main.login'))
-        followed_users = [followed.id for followed in current_user.followed]
-        posts = Post.query.filter(Post.author_id.in_(followed_users)).order_by(Post.created_at.desc()).all()
-    else:
-        posts = Post.query.order_by(Post.created_at.desc()).all()
-
-    return render_template('home.html', title='Home', posts=posts, filter=filter_type)
+    posts = Post.query.order_by(Post.created_at.desc()).all()
+    return render_template('home.html', posts=posts, filter='all')
 
 
 @main.route('/profile', methods=['GET', 'POST'])
