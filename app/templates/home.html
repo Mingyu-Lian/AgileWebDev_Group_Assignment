@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-2">
@@ -22,14 +23,15 @@
                 {% for post in posts %}
                 <div class="col">
                     <div class="card h-100">
-                        <img src="{{ post.img }}" class="card-img-top" alt="...">
+                        <img src="{{ post.img }}" class="card-img-top" alt="Post image">
                         <div class="card-body">
                             <h5 class="card-title"><strong>{{ post.title }}</strong></h5>
                             <p class="card-text">{{ post.description }}</p>
                         </div>
                         <div class="card-footer">
                             <small class="text-muted"><i class="bi bi-heart"></i> {{ post.likes }}</small>
-                            <small class="text-muted"><i class="bi bi-chat-dots"></i> {{ post.comments.count()}}</small>
+                            <small class="text-muted"><i class="bi bi-chat-dots"></i> {{ post.comments.count() }}</small>
+
                         </div>
                     </div>
                 </div>

@@ -15,7 +15,7 @@ in the university of Western Australia (2024 S1) */
 }
 
 .navbar .nav-logo img {
-    transition: all 0.3s ease; /* 设置过渡效果，阴影变化更平滑 */
+    transition: all 0.3s ease;
 }
 .navbar .nav-logo img:hover {
     transform: scale(1.1);
@@ -31,10 +31,35 @@ in the university of Western Australia (2024 S1) */
     border-radius: 10px; 
 }
 
-.navbar .navbar-nav .login:hover {
-    padding: 15px;
-    font-size: 120% !important;
+.navbar .navbar-nav .nav-link:active {
+    background-color: black !important;
+    color: aliceblue !important;
 }
+
+.navbar .navbar-nav .login{
+    color: white !important;
+    background-color: rgb(48, 110, 173) !important;
+    border-radius: 20px !important; 
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    font-weight: bolder !important;  
+    text-align: center;
+    width: 150px;
+    transition: all 0.4s ease !important;
+    outline: none;
+}
+
+.navbar .navbar-nav .login:hover {
+    background-color: rgb(250, 252, 253) !important;
+    color: rgb(34, 95, 155) !important;
+    font-weight: 900 !important;
+    box-shadow:  0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.navbar .navbar-nav .login:active {
+    background-color: black !important;
+    color: aliceblue !important;
+}
+
 
 
 .navbar .navbar-nav .nav-item {
@@ -126,6 +151,7 @@ in the university of Western Australia (2024 S1) */
 .add-post-btn:hover {
     transform:  scale(1.2) rotate(90deg); 
     transform-origin: center; 
+    color: rgba(34, 94, 155, 0.858);
 }
 
 .homesidebar .active {
@@ -146,4 +172,96 @@ in the university of Western Australia (2024 S1) */
 }
 .card-footer {
     background-color: #f8f9fa; /* 设置页脚背景颜色 */
+}
+
+/* Profile Card 样式 */
+/* Profile Card 样式 */
+/* Profile Card 样式 */
+
+.profile .profile-card {
+    background-color: white  !important;
+    border-radius: 30px !important;
+}
+
+/* Card Header 样式 */
+.profile .card-header {
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: rgb(250, 250, 251);
+    background-color: rgb(34, 95, 155) !important;
+    border-top-left-radius: 30px !important ;
+    border-top-right-radius: 30px !important;
+    height: 120px;
+    justify-content: center !important;
+    align-content: center !important;
+}
+
+/* Profile Name 样式 */
+.profile .profile-name {
+    font-family:  Arial, sans-serif;
+    font-size: 200%;
+    color:rgb(34, 95, 155);
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.profile-name:hover {
+    font-size: 230%;
+    color:rgb(26, 81, 136);
+    font-weight: 1000;
+}
+/* Profile Label 样式 */
+.profile .profile-label {
+    padding-top: 7px !important;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    color: rgba(124, 125, 127, 0.866);
+    padding-left: 40px !important;
+    padding-bottom: 17px !important;
+    font-weight:300 ;
+}
+
+
+/* 头像放大和阴影 */
+.profile .profile-img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    transition: all 0.3s ease;
+}
+
+.profile .profile-img:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); 
+}
+
+.profile .profile-value{
+    text-align: center;
+    font-family: "Georgia", serif;
+    color: rgba(20, 55, 89, 0.945);
+    font-weight: 600;
+    padding-top: 7px !important;
+    transition: all 0.3s ease;
+}
+
+.profile .profile-value:hover{
+    background-color: rgb(239, 247, 255);
+    font-size: large !important;
+}
+
+.profile .btn  {
+    background-color: rgb(233, 233, 233) !important;
+    color: rgb(34, 95, 155) !important;
+    padding: 15px !important;
+    font-weight: 700;
+    transition: all 0.3s;
+    border-color: transparent;
+}
+
+.profile .btn:hover {
+    background-color: rgb(34, 95, 155) !important;
+    color: white !important;
+    padding-left: 25px !important;
+    padding-right: 25px !important;
+}
+.profile .btn:active {
+    background-color: rgb(4, 8, 12) !important;
 }

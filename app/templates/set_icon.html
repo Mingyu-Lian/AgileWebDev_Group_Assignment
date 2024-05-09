@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container mt-5">
+<div class="profile container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <h1>Change Icon</h1>
+            <div class="card profile-card">
+                <div class="card-header text-center">
+                    <h1 > <i class='fas fa-user-edit' style='font-size:40px'></i> Change Icon</h1>
                 </div>
                 <div class="card-body">
                     <form method="POST" action="{{ url_for('main.set_icon') }}" enctype="multipart/form-data">
@@ -23,5 +23,5 @@
             </div>
         </div>
     </div>
-</div>
+</div><br><br><br>
 {% endblock %}

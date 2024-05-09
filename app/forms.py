@@ -55,5 +55,7 @@ class UploadForm(FlaskForm):
     tag = SelectField('Tag', choices=[('', ''),('1', 'Interview'), ('2', 'Recruitment'), ('3', 'Job Search')], validators=[Optional()])
     image = FileField('Image', validators=[FileAllowed(['jpg', 'jpeg', 'png', 'gif'], 'Only image files allowed.'), Optional()])
     submit = SubmitField('Submit')
+
+
     
 

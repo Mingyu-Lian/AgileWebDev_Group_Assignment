@@ -3,9 +3,9 @@
 import os
 from werkzeug.utils import secure_filename
 from flask import Blueprint, render_template, flash, redirect, url_for, request, current_app
-from flask_login import login_user, current_user,logout_user
+from flask_login import login_user, current_user,logout_user,login_required
 from .forms import LoginForm, SignUpForm,UploadForm, IconForm, ProfileForm
-from .models import db, User,UserDetails,Post
+from .models import db, User,UserDetails,Post,Follow
 
 
 
@@ -59,22 +59,14 @@ def logout():
 @main.route('/')
 @main.route('/home')
 def home():
-    filter_type = request.args.get('filter', 'all')
-
-    if filter_type == 'following':
-        if not current_user.is_authenticated:
-            return redirect(url_for('main.login'))
-        followed_users = [followed.id for followed in current_user.followed]
-        posts = Post.query.filter(Post.author_id.in_(followed_users)).order_by(Post.created_at.desc()).all()
-    else:
-        posts = Post.query.order_by(Post.created_at.desc()).all()
-
-    return render_template('home.html', title='Home', posts=posts, filter=filter_type)
+    posts = Post.query.order_by(Post.created_at.desc()).all()
+    return render_template('home.html', posts=posts, filter='all')
 
 
 @main.route('/profile', methods=['GET', 'POST'])
+@login_required
 def profile():
-    user_profile = UserDetails.query.filter_by(id=current_user.id).first()
+    user_profile = UserDetails.query.filter_by(id=current_user.id).first()    
     if not user_profile:
         flash('User not found and please inform this error to dev.', 'error')
         return redirect(url_for('main.home'))
@@ -172,13 +164,52 @@ def upload_product():
 def post():
     return render_template('home.html', title='Post')
 
-
-@main.route('/channel')
-def channel():
-    return render_template('channel.html', title='Channel')
+@main.route('/channel/<int:user_id>', methods=['GET', 'POST'])
+def channel(user_id):
+    user = User.query.get_or_404(user_id)
+    is_own_channel = (current_user.is_authenticated and current_user.id == user_id)
+    user_profile = UserDetails.query.filter_by(id=user_id).first()
+    return render_template('channel.html', user=user, is_own_channel=is_own_channel, user_id=user_id, user_profile=user_profile)
 
 
 @main.route('/search')
 def search():
     return render_template('search.html', title='Search')
+
+@main.route('/follow/<int:user_id>', methods=['GET', 'POST'])
+@login_required
+def follow(user_id):
+    user_to_follow = User.query.get_or_404(user_id)
+    if current_user == user_to_follow:
+        flash('You cannot follow yourself!', 'warning')
+        return redirect(url_for('profile', user_id=user_id))
+
+    if current_user.is_following(user_to_follow):
+        flash('You are already following this user!', 'warning')
+        return redirect(url_for('profile', user_id=user_id))
+
+    follow = Follow(follower_id=current_user.id, followed_id=user_to_follow.id)
+    db.session.add(follow)
+    db.session.commit()
+    flash(f'You are now following {user_to_follow.username}', 'success')
+    return redirect(url_for('main.channel', user_id=user_id))
+
+@main.route('/unfollow/<int:user_id>', methods=['GET', 'POST'])
+@login_required
+def unfollow(user_id):
+    user_to_unfollow = User.query.get_or_404(user_id)
+
+    # to check if following or not
+    if current_user.is_following(user_to_unfollow):
+    
+        current_user.following.filter_by(followed_id=user_id).delete()
+        db.session.commit()
+        flash(f'You have unfollowed {user_to_unfollow.username}', 'success')
+    else:
+        
+        flash(f'You are not following {user_to_unfollow.username}', 'warning')
+
+    
+    return redirect(url_for('main.channel', user_id=user_id))
+
 
