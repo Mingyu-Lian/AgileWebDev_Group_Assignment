@@ -140,7 +140,6 @@ def set_icon():
     return render_template('set_icon.html', title='Profile', form=form, user_profile=user_profile)
 
 
-
 @main.route('/upload/product', methods=['GET', 'POST'])
 def upload_product():
     form = UploadForm()
@@ -152,9 +151,9 @@ def upload_product():
 
         if image_file:
             filename = secure_filename(image_file.filename)
-            image_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            image_file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
 
-            new_post = Post(title=title, description=description, tag=tag, image_filename=filename)
+            new_post = Post(title=title, description=description, author_id=current_user.id ,category_id=tag,img=filename)
             db.session.add(new_post)
             db.session.commit()
 
