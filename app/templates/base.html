@@ -35,8 +35,11 @@
                             <a class="nav-link text-black-50" href="{{ url_for('main.home') }}" 
                             style = "font-weight: bolder !important;">Home</a>
                         </li>
+                        {% if current_user.is_authenticated%}
                         <li class="nav-item">
-                            <a class="nav-link text-black-50 requires-auth" href="{{ url_for('main.channel') }}"> My Channel </a>
+
+                            <a class="nav-link text-black-50 requires-auth" href="{{ url_for('main.channel', user_id=current_user.id) }}"> My Channel </a>
+
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-black-50 requires-auth" href="{{ url_for('main.profile') }}"> My Profile </a>
@@ -46,6 +49,8 @@
                         <li class="nav-item mt-3">
                             <span style="color: rgb(101, 93, 93); font-family:  Haettenschweiler;font-size: large; ">Hi, {{ current_user.username }}!</span> 
                         </li>
+                        {% else %}
+                        {% endif %}
                         <li class="nav-item">
                             <a class="nav-link login" href="{{ url_for('main.logout') }}">Logout</a>
                         </li>
