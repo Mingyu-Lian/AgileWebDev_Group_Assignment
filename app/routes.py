@@ -132,7 +132,6 @@ def set_icon():
     return render_template('set_icon.html', title='Profile', form=form, user_profile=user_profile)
 
 
-
 @main.route('/upload/product', methods=['GET', 'POST'])
 def upload_product():
     form = UploadForm()
@@ -144,14 +143,18 @@ def upload_product():
 
         if image_file:
             filename = secure_filename(image_file.filename)
-            image_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            file_path = os.path.join(filename)
+            image_file.save(os.path.join(current_app.config['UPLOAD_POST_IMG'], file_path))
+        else:
+            # 如果没有上传图片，则使用默认图片路径
+            file_path = current_app.config['DEFAULT_POST_IMAGE_PATH']
 
-            new_post = Post(title=title, description=description, tag=tag, image_filename=filename)
-            db.session.add(new_post)
-            db.session.commit()
+        new_post = Post(title=title, description=description, author_id=current_user.id, category_id=tag, img=file_path)
+        db.session.add(new_post)
+        db.session.commit()
 
-            flash('Post uploaded successfully!', 'success')
-            return redirect(url_for('main.home'))
+        flash('Post uploaded successfully!', 'success')
+        return redirect(url_for('main.home'))
 
     return render_template('upload.html', title='Upload Post', form=form)
 

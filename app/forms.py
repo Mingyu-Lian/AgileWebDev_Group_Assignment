@@ -1,8 +1,7 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed, FileRequired
-from wtforms import StringField, PasswordField, BooleanField, SubmitField,TextAreaField,FileField,SelectField
-from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, Length
-from wtforms.fields import EmailField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField,TextAreaField,FileField,SelectField,EmailField
+from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, Length, Optional
 from app.models import User
 
 class LoginForm(FlaskForm):
@@ -50,12 +49,11 @@ class IconForm(FlaskForm):
     ])
     submit = SubmitField('Upload')
 
-        
 class UploadForm(FlaskForm):
-    title = StringField('Title', validators=[DataRequired(message='Title is required.'),Length(max=50)])
-    description = TextAreaField('Description', validators=[DataRequired(message='Description is required.'),Length(max=500)])
-    tag = SelectField('Tag', choices=[('interview', 'Interview'), ('recruitment', 'Recruitment'), ('job_search', 'Job Search')], validators=[DataRequired()])
-    image = FileField('Image', validators=[DataRequired(message='Image is required.'),FileAllowed(['jpg', 'jpeg', 'png', 'gif'])])
+    title = StringField('Title', validators=[DataRequired(message='Title is required.'), Length(max=50)])
+    description = TextAreaField('Description', validators=[Length(max=500), Optional()])
+    tag = SelectField('Tag', choices=[('', ''),('1', 'Interview'), ('2', 'Recruitment'), ('3', 'Job Search')], validators=[Optional()])
+    image = FileField('Image', validators=[FileAllowed(['jpg', 'jpeg', 'png', 'gif'], 'Only image files allowed.'), Optional()])
     submit = SubmitField('Submit')
 
 
