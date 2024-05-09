@@ -1,47 +1,66 @@
-<!-- upload.html -->
-
 {% extends "base.html" %}
+
 {% block content %}
 <div class="container">
     <h2 class="mt-4 mb-4">Upload Post</h2>
-    <form method="POST" enctype="multipart/form-data">
-        {{ form.hidden_tag() }}
-        <div class="form-group">
-            {{ form.title.label(class="form-control-label") }}
-            {% if form.title.errors %}
-                {{ form.title(class="form-control is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.title.errors %}
-                        <span>{{ error }}</span><br>
-                    {% endfor %}
+    <div class="row">
+        <div class="col-md-6">
+            <form method="POST" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+
+                <div class="form-group">
+                    {{ form.title.label(class="form-control-label") }}
+                    {% if form.title.errors %}
+                        {{ form.title(class="form-control is-invalid", maxlength=50) }}
+                        <div class="invalid-feedback">
+                            {% for error in form.title.errors %}
+                                <span>{{ error }}</span><br>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.title(class="form-control", maxlength=50) }}
+                    {% endif %}
+                    <small class="form-text text-muted">Characters left: <span id="titleCounter">50</span></small>
                 </div>
-            {% else %}
-                {{ form.title(class="form-control") }}
-            {% endif %}
-        </div>
-        <div class="form-group">
-            {{ form.description.label(class="form-control-label") }}
-            {{ form.description(class="form-control") }}
-        </div>
-        <div class="form-group">
-            {{ form.tag.label(class="form-control-label") }}
-            {{ form.tag(class="form-control") }}
-        </div>
-        <div class="form-group">
-            {{ form.image.label(class="form-control-label") }}
-            {% if form.image.errors %}
-                {{ form.image(class="form-control is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.image.errors %}
-                        <span>{{ error }}</span><br>
-                    {% endfor %}
+
+                <div class="form-group">
+                    {{ form.description.label(class="form-control-label") }}
+                    {% if form.description.errors %}
+                        {{ form.description(class="form-control is-invalid", maxlength=500) }}
+                        <div class="invalid-feedback">
+                            {% for error in form.description.errors %}
+                                <span>{{ error }}</span><br>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.description(class="form-control", maxlength=500) }}
+                    {% endif %}
+                    <small class="form-text text-muted">Characters left: <span id="descriptionCounter">500</span></small>
                 </div>
-            {% else %}
-                {{ form.image(class="form-control-file") }}
-            {% endif %}
+
+                <div class="form-group">
+                    {{ form.tag.label(class="form-control-label") }}
+                    {{ form.tag(class="form-control") }}
+                </div>
+                
+                <div class="form-group">
+                    {{ form.image.label(class="form-control-label") }}
+                    {% if form.image.errors %}
+                        {{ form.image(class="form-control is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.image.errors %}
+                                <span>{{ error }}</span><br>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.image(class="form-control-file") }}
+                    {% endif %}
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+    </div>
 </div>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/upload.css') }}">
 <script src="{{ url_for('static', filename='js/upload.js') }}"></script>
