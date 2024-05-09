@@ -29,7 +29,7 @@
                         </div>
                         <div class="card-footer">
                             <small class="text-muted"><i class="bi bi-heart"></i> {{ post.likes }}</small>
-                            <small class="text-muted"><i class="bi bi-chat-dots"></i> {{ post.comments | length }}</small>
+                            <small class="text-muted"><i class="bi bi-chat-dots"></i> {{ post.comments.count()}}</small>
                         </div>
                     </div>
                 </div>
