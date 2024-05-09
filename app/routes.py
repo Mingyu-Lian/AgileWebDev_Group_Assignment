@@ -155,7 +155,7 @@ def upload_product():
             image_file.save(os.path.join(current_app.config['UPLOAD_POST_IMG'], file_path))
         else:
             # 如果没有上传图片，则使用默认图片路径
-            file_path = current_app.config['UPLOAD_POST_IMG']
+            file_path = current_app.config['DEFAULT_POST_IMAGE_PATH']
 
         new_post = Post(title=title, description=description, author_id=current_user.id, category_id=tag, img=file_path)
         db.session.add(new_post)
