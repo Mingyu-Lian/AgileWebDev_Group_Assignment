@@ -3,6 +3,13 @@
 {% block content %}
     <div class="row py-lg-5">
         <div class="col-lg-6 col-md-8 mx-auto">
+          {% if is_own_channel %}
+            <a href="{{ url_for('main.profile') }}">
+              <img src="{{ url_for('static', filename='user_icon/uploads/' + user_profile.img) if user_profile.img else url_for('static', filename='user_icon/default_user_icon.jpg') }}" alt="User Icon" class="profile-img rounded-circle" width="80" height="80">
+            </a>
+          {% else %}
+            <img src="{{ url_for('static', filename='user_icon/uploads/' + user_profile.img) if user_profile.img else url_for('static', filename='user_icon/default_user_icon.jpg') }}" alt="User Icon" class="profile-img rounded-circle me-3" width="80" height="80">
+          {% endif %}
           <h1 class="fw-light">{{ user.username }}'s Channel</h1>
           <p><strong>Company:</strong> {{ user_profile.company }}</p>
           <p><strong>City:</strong> {{ user_profile.city }}</p>
@@ -13,22 +20,22 @@
           <p><strong>Academic Institution:</strong> {{ user_profile.academic_institution }}</p>
           <p class="lead text-body-secondary">Something tirely.</p>
           <p>
-            {% if is_own_channel %}
-                <a href="{{ url_for('main.set_profile') }}" class="btn btn-primary my-2">Edit Profile</a>
+
+            {% if current_user.is_authenticated %}
+            {% if current_user == user %}
+                <a href="{{ url_for('main.set_profile') }}" class="btn btn-primary my-2">Edit</a>
             {% else %}
-                {% if current_user.is_authenticated %}
-                    {% if current_user.is_following(user) %}
-                        <a href="{{ url_for('main.unfollow', user_id=user.id) }}" class="btn btn-danger my-2">Unfollow</a>
-                    {% else %}
-                        <a href="{{ url_for('main.follow', user_id=user.id) }}" class="btn btn-primary my-2">Follow</a>
-                    {% endif %}
+                {% if current_user.is_following(user) %}
+                    <a href="{{ url_for('main.unfollow', user_id=user.id) }}" class="btn btn-danger my-2">Unfollow</a>
                 {% else %}
-                    <!-- if not login -->
-                    <a href="{{ url_for('main.login') }}" class="btn btn-primary my-2">Follow</a>
+                    <a href="{{ url_for('main.follow', user_id=user.id) }}" class="btn btn-primary my-2">Follow</a>
                 {% endif %}
             {% endif %}
+        {% else %}
+                <!-- if not login -->
+                <a href="{{ url_for('main.login') }}" class="btn btn-primary my-2">Follow</a>
+            {% endif %}
         </p>
-
 
         </div>
       </div>

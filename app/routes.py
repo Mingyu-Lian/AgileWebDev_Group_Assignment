@@ -6,6 +6,8 @@ from flask import Blueprint, render_template, flash, redirect, url_for, request,
 from flask_login import login_user, current_user,logout_user,login_required
 from .forms import LoginForm, SignUpForm,UploadForm, IconForm, ProfileForm
 from .models import db, User,UserDetails,Post,Follow
+from sqlalchemy import or_
+
 
 
 
@@ -172,9 +174,21 @@ def channel(user_id):
     return render_template('channel.html', user=user, is_own_channel=is_own_channel, user_id=user_id, user_profile=user_profile)
 
 
-@main.route('/search')
+@main.route('/search', methods=['GET', 'POST'])
 def search():
-    return render_template('search.html', title='Search')
+    query = request.form['query'] # 获取搜索关键词
+    # 调用搜索函数执行搜索操作
+    results = perform_search(query)
+    return render_template('search_results.html', query=query, results=results)
+
+def perform_search(query):
+    # Perform a database query to find users whose username contains the search query
+    results = User.query.filter(or_(User.username.ilike(f"%{query}%"), UserDetails.name.ilike(f"%{query}%"))).all()
+
+    # Extract usernames from the results
+    usernames = [user.username for user in results]
+
+    return usernames
 
 @main.route('/follow/<int:user_id>', methods=['GET', 'POST'])
 @login_required
@@ -211,5 +225,4 @@ def unfollow(user_id):
 
     
     return redirect(url_for('main.channel', user_id=user_id))
-
 
