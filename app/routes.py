@@ -3,7 +3,7 @@
 import os
 from werkzeug.utils import secure_filename
 from flask import Blueprint, render_template, flash, redirect, url_for, request, current_app
-from flask_login import login_user, current_user,logout_user
+from flask_login import login_user, current_user,logout_user,login_required
 from .forms import LoginForm, SignUpForm,UploadForm, IconForm, ProfileForm
 from .models import db, User,UserDetails,Post
 
@@ -73,6 +73,7 @@ def home():
 
 
 @main.route('/profile', methods=['GET', 'POST'])
+@login_required
 def profile():
     user_profile = UserDetails.query.filter_by(id=current_user.id).first()    
     if not user_profile:
