@@ -20,10 +20,21 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 Migrate(app, db)
 
-followers = db.Table('followers',
-    db.Column('follower_id', db.Integer, db.ForeignKey('user_details.id'), primary_key=True),
-    db.Column('followed_id', db.Integer, db.ForeignKey('user_details.id'), primary_key=True)
+followers = db.Table(
+    'followers',
+    db.Column('follower_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+    db.Column('followed_id', db.Integer, db.ForeignKey('user.id'), primary_key=True)
 )
+
+class Follow(db.Model):
+    __tablename__ = 'follow'
+
+    follower_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    followed_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+
+    follower = db.relationship('User', foreign_keys=[follower_id], backref=db.backref('following', lazy='dynamic'))
+    followed = db.relationship('User', foreign_keys=[followed_id], backref=db.backref('followers', lazy='dynamic'))
+
 
 
 class User(UserMixin, db.Model):
@@ -37,6 +48,9 @@ class User(UserMixin, db.Model):
 
     details = db.relationship('UserDetails', back_populates='user', uselist=False, cascade='all, delete-orphan')
 
+    def is_following(self, user):
+        return self.following.filter_by(followed_id=user.id).first() is not None
+    
     def set_password(self, password):
         self.password_hash = generate_password_hash(password, method='pbkdf2:sha256')
 
@@ -64,12 +78,6 @@ class UserDetails(db.Model):
 
     user = db.relationship('User', back_populates='details')
 
-    followed = db.relationship(
-        'UserDetails', secondary=followers,
-        primaryjoin=(followers.c.follower_id == id),
-        secondaryjoin=(followers.c.followed_id == id),
-        backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
-
 
 class Post(db.Model):
     __tablename__ = 'post'
@@ -84,7 +92,7 @@ class Post(db.Model):
     likes = db.Column(db.Integer, default=0)
     following = db.Column(db.Integer, default=0)
 
-    # 在 Post 类中定义 relationship 和 backref
+    
     comments = db.relationship('Comment', back_populates='post', lazy='dynamic')
 
 class Comment(db.Model):

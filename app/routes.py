@@ -5,7 +5,7 @@ from werkzeug.utils import secure_filename
 from flask import Blueprint, render_template, flash, redirect, url_for, request, current_app
 from flask_login import login_user, current_user,logout_user,login_required
 from .forms import LoginForm, SignUpForm,UploadForm, IconForm, ProfileForm
-from .models import db, User,UserDetails,Post
+from .models import db, User,UserDetails,Post,Follow
 
 
 
@@ -172,4 +172,41 @@ def channel(user_id):
 @main.route('/search')
 def search():
     return render_template('search.html', title='Search')
+
+@main.route('/follow/<int:user_id>', methods=['GET', 'POST'])
+@login_required
+def follow(user_id):
+    user_to_follow = User.query.get_or_404(user_id)
+    if current_user == user_to_follow:
+        flash('You cannot follow yourself!', 'warning')
+        return redirect(url_for('profile', user_id=user_id))
+
+    if current_user.is_following(user_to_follow):
+        flash('You are already following this user!', 'warning')
+        return redirect(url_for('profile', user_id=user_id))
+
+    follow = Follow(follower_id=current_user.id, followed_id=user_to_follow.id)
+    db.session.add(follow)
+    db.session.commit()
+    flash(f'You are now following {user_to_follow.username}', 'success')
+    return redirect(url_for('main.channel', user_id=user_id))
+
+@main.route('/unfollow/<int:user_id>', methods=['GET', 'POST'])
+@login_required
+def unfollow(user_id):
+    user_to_unfollow = User.query.get_or_404(user_id)
+
+    # to check if following or not
+    if current_user.is_following(user_to_unfollow):
+    
+        current_user.following.filter_by(followed_id=user_id).delete()
+        db.session.commit()
+        flash(f'You have unfollowed {user_to_unfollow.username}', 'success')
+    else:
+        
+        flash(f'You are not following {user_to_unfollow.username}', 'warning')
+
+    
+    return redirect(url_for('main.channel', user_id=user_id))
+
 

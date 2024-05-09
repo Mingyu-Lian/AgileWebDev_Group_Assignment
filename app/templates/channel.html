@@ -12,12 +12,20 @@
           <p><strong>Education Level:</strong> {{ user_profile.education_level }}</p>
           <p><strong>Academic Institution:</strong> {{ user_profile.academic_institution }}</p>
           <p class="lead text-body-secondary">Something tirely.</p>
-        <p>
+          <p>
             {% if is_own_channel %}
                 <a href="{{ url_for('main.set_profile') }}" class="btn btn-primary my-2">Edit Profile</a>
             {% else %}
-            {# <a href="{{ url_for('follow_user', user_id=user.id) }}" class="btn btn-primary my-2">Follow</a> #}
-                
+                {% if current_user.is_authenticated %}
+                    {% if current_user.is_following(user) %}
+                        <a href="{{ url_for('main.unfollow', user_id=user.id) }}" class="btn btn-danger my-2">Unfollow</a>
+                    {% else %}
+                        <a href="{{ url_for('main.follow', user_id=user.id) }}" class="btn btn-primary my-2">Follow</a>
+                    {% endif %}
+                {% else %}
+                    <!-- if not login -->
+                    <a href="{{ url_for('main.login') }}" class="btn btn-primary my-2">Follow</a>
+                {% endif %}
             {% endif %}
         </p>
 
