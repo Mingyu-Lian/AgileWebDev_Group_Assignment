@@ -162,17 +162,23 @@ in the university of Western Australia (2024 S1) */
 }
 ---------
 
-.card-img-top {
-    width: 100%; /* 设置图片宽度为100% */
-    object-fit: cover; /* 覆盖整个内容区域，但保持内容的宽高比 */
-    height: 250px; /* 设置图片的固定高度 */
-}
-.card-title {
-    font-size: 1.2em; /* 增大标题字体大小 */
-}
-.card-footer {
-    background-color: #f8f9fa; /* 设置页脚背景颜色 */
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* Profile Card 样式 */
 /* Profile Card 样式 */

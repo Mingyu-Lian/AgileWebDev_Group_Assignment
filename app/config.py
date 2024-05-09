@@ -9,5 +9,5 @@ class Config:
         'sqlite:///' + os.path.join(basedir, 'app.db')
     UPLOAD_FOLDER = os.path.join(basedir, 'static', 'user_icon', 'uploads')
     UPLOAD_POST_IMG = os.path.join(basedir, 'static', 'post_image')
-    DEFAULT_POST_IMAGE_PATH = os.path.join(basedir, 'static', 'post_image', 'default.JPG')
+    DEFAULT_POST_IMAGE_PATH = os.path.join(basedir, 'static', 'post_image', 'default.jpg')
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024
