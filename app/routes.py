@@ -61,8 +61,16 @@ def logout():
 @main.route('/')
 @main.route('/home')
 def home():
-    posts = Post.query.order_by(Post.created_at.desc()).all()
-    return render_template('home.html', posts=posts, filter='all')
+    filter_type = request.args.get('filter', 'all')
+    if filter_type == 'following' and current_user.is_authenticated:
+        # 获取用户关注的帖子
+        followed_users = [followed.id for followed in current_user.following]
+        posts = Post.query.filter(Post.author_id.in_(followed_users)).order_by(Post.created_at.desc()).limit(24).all()
+    else:
+        # 获取所有帖子
+        posts = Post.query.order_by(Post.created_at.desc()).limit(24).all()
+
+    return render_template('home.html', posts=posts, filter=filter_type)
 
 
 @main.route('/profile', methods=['GET', 'POST'])
@@ -149,7 +157,7 @@ def upload_product():
             image_file.save(os.path.join(current_app.config['UPLOAD_POST_IMG'], file_path))
         else:
             # 如果没有上传图片，则使用默认图片路径
-            file_path = current_app.config['DEFAULT_POST_IMAGE_PATH']
+            file_path = 'default.JPG'
 
         new_post = Post(title=title, description=description, author_id=current_user.id, category_id=tag, img=file_path)
         db.session.add(new_post)

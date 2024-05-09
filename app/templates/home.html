@@ -19,21 +19,25 @@
         
         <div class="col-md-10">
             <!-- Post Board -->
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
                 {% for post in posts %}
                 <div class="col">
-                    <div class="card h-100">
-                        <img src="{{ post.img }}" class="card-img-top" alt="Post image">
-                        <div class="card-body">
-                            <h5 class="card-title"><strong>{{ post.title }}</strong></h5>
-                            <p class="card-text">{{ post.description }}</p>
+                    <a href="{{ url_for('main.post', post_id=post.id) }}" class="post-card-link">
+                        <div class="card h-100 post-card">
+                            {% if post.img %}
+                            <img src="{{ url_for('static', filename='post_image/' + post.img) }}" class="card-img-top" alt="{{ post.title }}" style="height: 200px; object-fit: cover;">
+                            {% else %}
+                            <img src="{{ url_for('static', filename='post_image/default.jpg') }}" class="card-img-top" alt="Default Image" style="height: 200px; object-fit: cover;">
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title">{{ post.title }}</h5>
+                            </div>
+                            <div class="card-footer d-flex justify-content-between">
+                                <small class="text-muted"><i class="bi bi-heart"></i> {{ post.likes }}</small>
+                                <small class="text-muted"><i class="bi bi-chat-dots"></i> {{ post.comments.count() }}</small>
+                            </div>
                         </div>
-                        <div class="card-footer">
-                            <small class="text-muted"><i class="bi bi-heart"></i> {{ post.likes }}</small>
-                            <small class="text-muted"><i class="bi bi-chat-dots"></i> {{ post.comments.count() }}</small>
-
-                        </div>
-                    </div>
+                    </a>
                 </div>
                 {% endfor %}
             </div>
