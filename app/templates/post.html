@@ -8,6 +8,20 @@
         <img src="{{ url_for('static', filename='post_image/' + post.img) }}" alt="Post Image" class="img-fluid">
     {% endif %}
 
+     <!-- 帖子喜欢按钮 -->
+     {% if current_user.is_authenticated %}
+     {% if post in current_user.liked_posts %}
+       <form action="{{ url_for('main.like_post', post_id=post.id) }}" method="POST">
+         <button type="submit" class="btn btn-danger">Unlike</button>
+       </form>
+     {% else %}
+       <form action="{{ url_for('main.like_post', post_id=post.id) }}" method="POST">
+         <button type="submit" class="btn btn-primary">Like</button>
+       </form>
+     {% endif %}
+   {% endif %}
+
+
     <hr>
 
     <h3>Comments</h3>
@@ -23,6 +37,19 @@
                     {% endif %}
                     <p><strong>{{ comment.author.username }}</strong> - {{ comment.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
                     <p>{{ comment.body }}</p>
+
+                     <!-- 评论喜欢按钮 -->
+                     {% if current_user.is_authenticated %}
+                        {% if comment in current_user.liked_comments %}
+                            <form action="{{ url_for('main.like_comment', comment_id=comment.id) }}" method="POST">
+                                <button type="submit" class="btn btn-danger">Unlike</button>
+                            </form>
+                        {% else %}
+                            <form action="{{ url_for('main.like_comment', comment_id=comment.id) }}" method="POST">
+                                <button type="submit" class="btn btn-primary">Like</button>
+                            </form>
+                        {% endif %}
+                    {% endif %}
                 </div>
             </li>
         {% endfor %}

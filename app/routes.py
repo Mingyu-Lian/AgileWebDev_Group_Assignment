@@ -223,6 +223,28 @@ def add_comment(post_id):
     # If the form did not validate, redirect back to the post page
     return redirect(url_for('main.show_post', post_id=post_id))
 
+@main.route('/like_post/<int:post_id>', methods=['POST'])
+@login_required
+def like_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    if post in current_user.liked_posts:
+        current_user.liked_posts.remove(post)
+    else:
+        current_user.liked_posts.append(post)
+    db.session.commit()
+    return redirect(url_for('main.show_post', post_id=post_id))
+
+@main.route('/like_comment/<int:comment_id>', methods=['POST'])
+@login_required
+def like_comment(comment_id):
+    comment = Comment.query.get_or_404(comment_id)
+    if comment in current_user.liked_comments:
+        current_user.liked_comments.remove(comment)
+    else:
+        current_user.liked_comments.append(comment)
+    db.session.commit()
+    return redirect(url_for('main.show_post', post_id=comment.post_id))
+
 
 @main.route('/channel/<int:user_id>', methods=['GET', 'POST'])
 def channel(user_id):
