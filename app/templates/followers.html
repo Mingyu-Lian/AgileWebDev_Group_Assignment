@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>{{ user.username }}的关注者</h1>
+    <h1>{{ user.username }}'s followers</h1>
     <ul>
         {% for follower in followers %}
             <li>{{ follower.username }}</li>

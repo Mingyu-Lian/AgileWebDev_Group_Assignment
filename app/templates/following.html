@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>{{ user.username }}正在关注的用户</h1>
+    <h1>{{ user.username }}is following</h1>
     <ul>
         {% for followed_user in following %}
             <li>{{ followed_user.username }}</li>
