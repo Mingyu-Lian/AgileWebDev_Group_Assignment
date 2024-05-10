@@ -176,14 +176,14 @@ def add_comment(post_id):
     post = Post.query.get_or_404(post_id)
 
     if form.validate_on_submit():
-        comment_body = form.body.data
+        comment_body = form.content.data
 
         new_comment = Comment(body=comment_body, author_id=current_user.id, post_id=post_id)
         db.session.add(new_comment)
         db.session.commit()
 
         flash('Your comment has been added!', 'success')
-        return redirect(url_for('post.show_post', post_id=post_id))
+        return redirect(url_for('main.show_post', post_id=post_id))
 
     # If the form did not validate, redirect back to the post page
     return redirect(url_for('main.show_post', post_id=post_id))

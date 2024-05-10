@@ -23,9 +23,19 @@
     <form method="POST" action="{{ url_for('main.add_comment', post_id=post.id) }}">
         {{ comment_form.hidden_tag() }}
         <div class="form-group">
-            <label for="content">Add a Comment:</label>
-            <textarea class="form-control" id="content" name="content" rows="3" required></textarea>
+            <label for="content" class="form-control-label">Add a Comment:</label>
+            {% if comment_form.content.errors %}
+                {{ comment_form.content(class="form-control is-invalid", maxlength=500) }}
+                <div class="invalid-feedback">
+                    {% for error in comment_form.content.errors %}
+                        <span>{{ error }}</span><br>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ comment_form.content(class="form-control", maxlength=500) }}
+            {% endif %}
         </div>
+        
         <button type="submit" class="btn btn-primary">Submit Comment</button>
     </form>
 </div>
