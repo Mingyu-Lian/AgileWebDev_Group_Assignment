@@ -64,15 +64,28 @@ def logout():
 @main.route('/home')
 def home():
     filter_type = request.args.get('filter', 'all')
-    if filter_type == 'following' and current_user.is_authenticated:
-        # 获取用户关注的帖子
-        followed_users = [followed.id for followed in current_user.following]
-        posts = Post.query.filter(Post.author_id.in_(followed_users)).order_by(Post.created_at.desc()).limit(24).all()
-    else:
-        # 获取所有帖子
-        posts = Post.query.order_by(Post.created_at.desc()).limit(24).all()
+    page = request.args.get('page', 1, type=int)
+    per_page = 8
+    offset = (page - 1) * per_page
 
-    return render_template('home.html', posts=posts, filter=filter_type)
+    if filter_type == 'following' and current_user.is_authenticated:
+        followed_users = [followed.id for followed in current_user.following]
+        total_posts = Post.query.filter(Post.author_id.in_(followed_users)).count()
+        posts = Post.query.filter(Post.author_id.in_(followed_users)).order_by(Post.created_at.desc()).limit(per_page).offset(offset).all()
+    else:
+        total_posts = Post.query.count()
+        posts = Post.query.order_by(Post.created_at.desc()).limit(per_page).offset(offset).all()
+
+    total_pages = (total_posts + per_page - 1) // per_page
+
+    return render_template(
+        'home.html',
+        posts=posts,
+        filter=filter_type,
+        page=page,
+        total_pages=total_pages
+    )
+
 
 
 @main.route('/profile', methods=['GET', 'POST'])
