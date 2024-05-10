@@ -4,9 +4,11 @@ import os
 from werkzeug.utils import secure_filename
 from flask import Blueprint, render_template, flash, redirect, url_for, request, current_app
 from flask_login import login_user, current_user,logout_user,login_required
-from .forms import LoginForm, SignUpForm,UploadForm, IconForm, ProfileForm
-from .models import db, User,UserDetails,Post,Follow
+
+from .forms import LoginForm, SignUpForm,UploadForm, IconForm, ProfileForm, CommentForm
+from .models import db, User,UserDetails,Post,Follow, Comment
 from sqlalchemy import or_
+
 
 
 
@@ -170,9 +172,44 @@ def upload_product():
 
 
 
-@main.route('/post')
-def post():
-    return render_template('home.html', title='Post')
+@main.route('/post/<int:post_id>', methods=['GET', 'POST'])
+def show_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    comments = Comment.query.filter_by(post_id=post_id).all()
+    comment_form = CommentForm()
+
+    if comment_form.validate_on_submit():
+        comment_body = comment_form.body.data
+        new_comment = Comment(body=comment_body, author_id=current_user.id, post_id=post_id)
+        db.session.add(new_comment)
+        db.session.commit()
+
+    # 查询每条评论的作者信息
+    for comment in comments:
+        comment.author = User.query.get(comment.author_id)
+
+    return render_template('post.html', post=post, comments=comments, comment_form=comment_form)
+
+
+@main.route('/post/<int:post_id>/comment', methods=['POST'])
+@login_required
+def add_comment(post_id):
+    form = CommentForm()
+    post = Post.query.get_or_404(post_id)
+
+    if form.validate_on_submit():
+        comment_body = form.content.data
+
+        new_comment = Comment(body=comment_body, author_id=current_user.id, post_id=post_id)
+        db.session.add(new_comment)
+        db.session.commit()
+
+        flash('Your comment has been added!', 'success')
+        return redirect(url_for('main.show_post', post_id=post_id))
+
+    # If the form did not validate, redirect back to the post page
+    return redirect(url_for('main.show_post', post_id=post_id))
+
 
 @main.route('/channel/<int:user_id>', methods=['GET', 'POST'])
 def channel(user_id):
