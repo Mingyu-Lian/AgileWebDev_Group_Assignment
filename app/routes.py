@@ -147,7 +147,7 @@ def upload_product():
             image_file.save(os.path.join(current_app.config['UPLOAD_POST_IMG'], file_path))
         else:
             # 如果没有上传图片，则使用默认图片路径
-            file_path = current_app.config['DEFAULT_POST_IMAGE_PATH']
+            file_path = 'default.JPG'
 
         new_post = Post(title=title, description=description, author_id=current_user.id, category_id=tag, img=file_path)
         db.session.add(new_post)
@@ -186,7 +186,7 @@ def add_comment(post_id):
         return redirect(url_for('post.show_post', post_id=post_id))
 
     # If the form did not validate, redirect back to the post page
-    return redirect(url_for('post.show_post', post_id=post_id))
+    return redirect(url_for('main.show_post', post_id=post_id))
 
 
 @main.route('/channel/<int:user_id>', methods=['GET', 'POST'])
