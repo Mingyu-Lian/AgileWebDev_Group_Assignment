@@ -4,8 +4,12 @@ import os
 from werkzeug.utils import secure_filename
 from flask import Blueprint, render_template, flash, redirect, url_for, request, current_app
 from flask_login import login_user, current_user,logout_user,login_required
+
 from .forms import LoginForm, SignUpForm,UploadForm, IconForm, ProfileForm, CommentForm
 from .models import db, User,UserDetails,Post,Follow, Comment
+from sqlalchemy import or_
+
+
 
 
 
@@ -59,8 +63,16 @@ def logout():
 @main.route('/')
 @main.route('/home')
 def home():
-    posts = Post.query.order_by(Post.created_at.desc()).all()
-    return render_template('home.html', posts=posts, filter='all')
+    filter_type = request.args.get('filter', 'all')
+    if filter_type == 'following' and current_user.is_authenticated:
+        # 获取用户关注的帖子
+        followed_users = [followed.id for followed in current_user.following]
+        posts = Post.query.filter(Post.author_id.in_(followed_users)).order_by(Post.created_at.desc()).limit(24).all()
+    else:
+        # 获取所有帖子
+        posts = Post.query.order_by(Post.created_at.desc()).limit(24).all()
+
+    return render_template('home.html', posts=posts, filter=filter_type)
 
 
 @main.route('/profile', methods=['GET', 'POST'])
@@ -207,9 +219,21 @@ def channel(user_id):
     return render_template('channel.html', user=user, is_own_channel=is_own_channel, user_id=user_id, user_profile=user_profile)
 
 
-@main.route('/search')
+@main.route('/search', methods=['GET', 'POST'])
 def search():
-    return render_template('search.html', title='Search')
+    query = request.form['query'] # 获取搜索关键词
+    # 调用搜索函数执行搜索操作
+    results = perform_search(query)
+    return render_template('search_results.html', query=query, results=results)
+
+def perform_search(query):
+    # Perform a database query to find users whose username contains the search query
+    results = User.query.filter(or_(User.username.ilike(f"%{query}%"), UserDetails.name.ilike(f"%{query}%"))).all()
+
+    # Extract usernames from the results
+    usernames = [user.username for user in results]
+
+    return usernames
 
 @main.route('/follow/<int:user_id>', methods=['GET', 'POST'])
 @login_required
@@ -246,5 +270,4 @@ def unfollow(user_id):
 
     
     return redirect(url_for('main.channel', user_id=user_id))
-
 

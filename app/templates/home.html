@@ -19,10 +19,12 @@
         
         <div class="col-md-10">
             <!-- Post Board -->
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
                 {% for post in posts %}
                 <div class="col">
+
                     <a href="{{ url_for('main.show_post', post_id=post.id) }}" class="post-card-link">
+
                         <div class="card h-100 post-card">
                             {% if post.img %}
                             <img src="{{ url_for('static', filename='post_image/' + post.img) }}" class="card-img-top" alt="{{ post.title }}" style="height: 200px; object-fit: cover;">
