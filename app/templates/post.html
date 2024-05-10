@@ -12,18 +12,20 @@
 
     {% for comment in comments %}
     <div class="comment">
-        {% if comment.author.details %}
-            {% if comment.author.details.avatar %}
-                <!-- 显示用户设置的头像，使用内联样式来调整样式 -->
-                <img src="{{ url_for('static', filename='user_icon/uploads/' + comment.author.details.avatar) }}" alt="User Avatar" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
+        <a href="{{ url_for('main.user_channel', username=comment.author.username) }}">
+            {% if comment.author.details %}
+                {% if comment.author.details.avatar %}
+                    <!-- 显示用户设置的头像，使用内联样式来调整样式 -->
+                    <img src="{{ url_for('static', filename='user_icon/uploads/' + comment.author.details.avatar) }}" alt="User Avatar" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
+                {% else %}
+                    <!-- 如果用户详情存在但没有头像，则显示默认头像 -->
+                    <img src="{{ url_for('static', filename='user_icon/default_user_icon.jpg') }}" alt="Default Avatar" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
+                {% endif %}
             {% else %}
-                <!-- 如果用户详情存在但没有头像，则显示默认头像 -->
+                <!-- 用户详情对象不存在的情况下，使用默认头像 -->
                 <img src="{{ url_for('static', filename='user_icon/default_user_icon.jpg') }}" alt="Default Avatar" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
             {% endif %}
-        {% else %}
-            <!-- 用户详情对象不存在的情况下，使用默认头像 -->
-            <img src="{{ url_for('static', filename='user_icon/default_user_icon.jpg') }}" alt="Default Avatar" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
-        {% endif %}
+        </a>
         <p><strong>{{ comment.author.username }}</strong> - {{ comment.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
         <p>{{ comment.body }}</p>
     </div>

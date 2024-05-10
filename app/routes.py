@@ -284,3 +284,28 @@ def unfollow(user_id):
     
     return redirect(url_for('main.channel', user_id=user_id))
 
+@main.route('/user/<username>')
+def user_channel(username):
+    # 根据用户名获取用户信息
+    user = User.query.filter_by(username=username).first()
+
+    if user:
+        # 显示用户的 channel 页面
+        return render_template('user_channel.html', user=user)
+    else:
+        # 如果未找到用户，则显示 404 页面或者其他提示
+        return render_template('404.html'), 404
+
+@main.route('/followers/<int:user_id>')
+def followers(user_id):
+    user = User.query.get_or_404(user_id)  # 确保用户存在
+    # 获取所有关注当前用户的用户列表
+    followers = User.query.join(Follow, Follow.follower_id == User.id).filter(Follow.followed_id == user_id).all()
+    return render_template('followers.html', user=user, followers=followers)
+
+@main.route('/following/<int:user_id>')
+def following(user_id):
+    user = User.query.get_or_404(user_id)  # 确保用户存在
+    # 获取当前用户关注的所有用户
+    following = User.query.join(Follow, Follow.followed_id == User.id).filter(Follow.follower_id == user_id).all()
+    return render_template('following.html', user=user, following=following)
