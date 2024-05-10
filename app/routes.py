@@ -284,3 +284,16 @@ def unfollow(user_id):
     
     return redirect(url_for('main.channel', user_id=user_id))
 
+@main.route('/followers/<int:user_id>')
+def followers(user_id):
+    user = User.query.get_or_404(user_id)
+    followers = user.followers.all()
+    return render_template('followers.html', user=user, followers=followers)
+
+@main.route('/following/<int:user_id>')
+def following(user_id):
+    user = User.query.get_or_404(user_id)
+    following = user.following.all()
+    return render_template('following.html', user=user, following=following)
+
+
