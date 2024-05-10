@@ -160,13 +160,23 @@ def upload_product():
 
 
 
-@main.route('/post/<int:post_id>')
+@main.route('/post/<int:post_id>', methods=['GET', 'POST'])
 def show_post(post_id):
     post = Post.query.get_or_404(post_id)
     comments = Comment.query.filter_by(post_id=post_id).all()
-    comment_form = CommentForm()  # 实例化评论表单对象
+    comment_form = CommentForm()
 
-    return render_template('post.html', title=post.title, post=post, comments=comments, comment_form=comment_form)
+    if comment_form.validate_on_submit():
+        comment_body = comment_form.body.data
+        new_comment = Comment(body=comment_body, author_id=current_user.id, post_id=post_id)
+        db.session.add(new_comment)
+        db.session.commit()
+
+    # 查询每条评论的作者信息
+    for comment in comments:
+        comment.author = User.query.get(comment.author_id)
+
+    return render_template('post.html', post=post, comments=comments, comment_form=comment_form)
 
 
 @main.route('/post/<int:post_id>/comment', methods=['POST'])
