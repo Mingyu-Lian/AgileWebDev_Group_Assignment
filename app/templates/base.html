@@ -71,7 +71,6 @@
 
         <br>
         <br>
-        <br>
      
         {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -81,6 +80,7 @@
             {% endfor %}
         </ul>
         {% endif %}
+        <br> <br>
         {% endwith %}
         {% block content %}{% endblock %}
 

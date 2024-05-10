@@ -19,36 +19,63 @@
         
         <div class="col-md-10">
             <!-- Post Board -->
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
                 {% for post in posts %}
                 <div class="col">
-                    <div class="card h-100">
-                        <img src="{{ post.img }}" class="card-img-top" alt="Post image">
-                        <div class="card-body">
-                            <h5 class="card-title"><strong>{{ post.title }}</strong></h5>
-                            <p class="card-text">{{ post.description }}</p>
+
+                    <a href="{{ url_for('main.show_post', post_id=post.id) }}" class="post-card-link">
+
+                        <div class="card h-100 post-card">
+                            {% if post.img %}
+                            <img src="{{ url_for('static', filename='post_image/' + post.img) }}" class="card-img-top" alt="{{ post.title }}" style="height: 200px; object-fit: cover;">
+                            {% else %}
+                            <img src="{{ url_for('static', filename='post_image/default.jpg') }}" class="card-img-top" alt="Default Image" style="height: 200px; object-fit: cover;">
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title">{{ post.title }}</h5>
+                            </div>
+                            <div class="card-footer d-flex justify-content-between">
+                                <small class="text-muted"><i class='fas fa-heart' style='font-size:16px'></i> &nbsp;&nbsp; {{ post.likes }}</small>
+                                <small class="text-muted"><i class='fas fa-comment-alt' style='font-size:16px'></i> &nbsp;&nbsp;{{ post.comments.count() }}</small>
+                            </div>
                         </div>
-                        <div class="card-footer">
-                            <small class="text-muted"><i class="bi bi-heart"></i> {{ post.likes }}</small>
-                            <small class="text-muted"><i class="bi bi-chat-dots"></i> {{ post.comments.count() }}</small>
-                        </div>
-                    </div>
+                    </a>
                 </div>
                 {% endfor %}
-            </div>
-            <!-- Pagination -->
+            </div >
+                <!-- Pagination -->
+                <br>
+                <br>
+                <br>
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        {% if page > 1 %}
+                        <li class="page-item"><a class="page-link" href="{{ url_for('main.home', page=page - 1, filter=filter) }}">Previous</a></li>
+                        {% else %}
+                        <li class="page-item disabled"><span class="page-link">Previous</span></li>
+                        {% endif %}
+                
+                        {% for num in range(1, total_pages + 1) %}
+                            {% if num == page %}
+                            <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                            {% else %}
+                            <li class="page-item"><a class="page-link" href="{{ url_for('main.home', page=num, filter=filter) }}">{{ num }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                
+                        {% if page  < total_pages %}
+                        <li class="page-item"><a class="page-link" href="{{ url_for('main.home', page=page + 1, filter=filter) }}">Next</a></li>
+                        {% else %}
+                        <li class="page-item disabled"><span class="page-link">Next</span></li>
+                        {% endif %}
+                    </ul>
+                </nav>
             <br>
             <br>
             <br>
             <br>
             <br>
-            <nav aria-label="Page navigation example">
-                <ul class="pagination">
-                    <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                    <!-- Dynamic Pagination Links -->
-                    <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                </ul>
-            </nav>
+            
         </div>
     </div>
 </div>

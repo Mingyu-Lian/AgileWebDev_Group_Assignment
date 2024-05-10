@@ -1,30 +1,54 @@
 {% extends "base.html" %}
 
-{% block title %}{{ title }}{% endblock %}
-
 {% block content %}
 <div class="container">
-    <h1>{{ post.title }}</h1>
-    <img src="{{ url_for('static', filename='uploads/' + post.image_filename) }}" alt="Post Image" class="img-fluid">
+    <h2>{{ post.title }}</h2>
     <p>{{ post.description }}</p>
-    <p>Tags: {{ post.tag }}</p>
+    {% if post.img %}
+        <img src="{{ url_for('static', filename='post_image/' + post.img) }}" alt="Post Image" class="img-fluid">
+    {% endif %}
 
-    <h2>Comments</h2>
-    <ul class="list-group">
-        {% for comment in comments %}
-        <li class="list-group-item">{{ comment.text }}</li>
-        {% endfor %}
-    </ul>
+    <hr>
 
-    <h3>Add a Comment</h3>
-    <form method="POST">
-        {{ form.csrf_token }}
+    {% for comment in comments %}
+    <div class="comment">
+        {% if comment.author.details %}
+            {% if comment.author.details.avatar %}
+                <!-- 显示用户设置的头像，使用内联样式来调整样式 -->
+                <img src="{{ url_for('static', filename='user_icon/uploads/' + comment.author.details.avatar) }}" alt="User Avatar" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
+            {% else %}
+                <!-- 如果用户详情存在但没有头像，则显示默认头像 -->
+                <img src="{{ url_for('static', filename='user_icon/default_user_icon.jpg') }}" alt="Default Avatar" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
+            {% endif %}
+        {% else %}
+            <!-- 用户详情对象不存在的情况下，使用默认头像 -->
+            <img src="{{ url_for('static', filename='user_icon/default_user_icon.jpg') }}" alt="Default Avatar" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
+        {% endif %}
+        <p><strong>{{ comment.author.username }}</strong> - {{ comment.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+        <p>{{ comment.body }}</p>
+    </div>
+    {% endfor %}
+
+    <hr>
+
+    <!-- Form to add a new comment -->
+    <form method="POST" action="{{ url_for('main.add_comment', post_id=post.id) }}">
+        {{ comment_form.hidden_tag() }}
         <div class="form-group">
-            {{ form.comment.label }}
-            {{ form.comment(class="form-control") }}
+            <label for="content" class="form-control-label">Add a Comment:</label>
+            {% if comment_form.content.errors %}
+                {{ comment_form.content(class="form-control is-invalid", maxlength=500) }}
+                <div class="invalid-feedback">
+                    {% for error in comment_form.content.errors %}
+                        <span>{{ error }}</span><br>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ comment_form.content(class="form-control", maxlength=500) }}
+            {% endif %}
         </div>
+        
         <button type="submit" class="btn btn-primary">Submit Comment</button>
     </form>
 </div>
 {% endblock %}
-

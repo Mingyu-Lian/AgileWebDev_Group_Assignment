@@ -4,9 +4,11 @@ import os
 from werkzeug.utils import secure_filename
 from flask import Blueprint, render_template, flash, redirect, url_for, request, current_app
 from flask_login import login_user, current_user,logout_user,login_required
-from .forms import LoginForm, SignUpForm,UploadForm, IconForm, ProfileForm
-from .models import db, User,UserDetails,Post,Follow
+
+from .forms import LoginForm, SignUpForm,UploadForm, IconForm, ProfileForm, CommentForm
+from .models import db, User,UserDetails,Post,Follow, Comment
 from sqlalchemy import or_
+
 
 
 
@@ -61,8 +63,29 @@ def logout():
 @main.route('/')
 @main.route('/home')
 def home():
-    posts = Post.query.order_by(Post.created_at.desc()).all()
-    return render_template('home.html', posts=posts, filter='all')
+    filter_type = request.args.get('filter', 'all')
+    page = request.args.get('page', 1, type=int)
+    per_page = 8
+    offset = (page - 1) * per_page
+
+    if filter_type == 'following' and current_user.is_authenticated:
+        followed_users = [followed.id for followed in current_user.following]
+        total_posts = Post.query.filter(Post.author_id.in_(followed_users)).count()
+        posts = Post.query.filter(Post.author_id.in_(followed_users)).order_by(Post.created_at.desc()).limit(per_page).offset(offset).all()
+    else:
+        total_posts = Post.query.count()
+        posts = Post.query.order_by(Post.created_at.desc()).limit(per_page).offset(offset).all()
+
+    total_pages = (total_posts + per_page - 1) // per_page
+
+    return render_template(
+        'home.html',
+        posts=posts,
+        filter=filter_type,
+        page=page,
+        total_pages=total_pages
+    )
+
 
 
 @main.route('/profile', methods=['GET', 'POST'])
@@ -134,7 +157,6 @@ def set_icon():
     return render_template('set_icon.html', title='Profile', form=form, user_profile=user_profile)
 
 
-
 @main.route('/upload/product', methods=['GET', 'POST'])
 def upload_product():
     form = UploadForm()
@@ -146,22 +168,61 @@ def upload_product():
 
         if image_file:
             filename = secure_filename(image_file.filename)
-            image_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            file_path = os.path.join(filename)
+            image_file.save(os.path.join(current_app.config['UPLOAD_POST_IMG'], file_path))
+        else:
+            # 如果没有上传图片，则使用默认图片路径
+            file_path = 'default.JPG'
 
-            new_post = Post(title=title, description=description, tag=tag, image_filename=filename)
-            db.session.add(new_post)
-            db.session.commit()
+        new_post = Post(title=title, description=description, author_id=current_user.id, category_id=tag, img=file_path)
+        db.session.add(new_post)
+        db.session.commit()
 
-            flash('Post uploaded successfully!', 'success')
-            return redirect(url_for('main.home'))
+        flash('Post uploaded successfully!', 'success')
+        return redirect(url_for('main.home'))
 
     return render_template('upload.html', title='Upload Post', form=form)
 
 
 
-@main.route('/post')
-def post():
-    return render_template('home.html', title='Post')
+@main.route('/post/<int:post_id>', methods=['GET', 'POST'])
+def show_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    comments = Comment.query.filter_by(post_id=post_id).all()
+    comment_form = CommentForm()
+
+    if comment_form.validate_on_submit():
+        comment_body = comment_form.body.data
+        new_comment = Comment(body=comment_body, author_id=current_user.id, post_id=post_id)
+        db.session.add(new_comment)
+        db.session.commit()
+
+    # 查询每条评论的作者信息
+    for comment in comments:
+        comment.author = User.query.get(comment.author_id)
+
+    return render_template('post.html', post=post, comments=comments, comment_form=comment_form)
+
+
+@main.route('/post/<int:post_id>/comment', methods=['POST'])
+@login_required
+def add_comment(post_id):
+    form = CommentForm()
+    post = Post.query.get_or_404(post_id)
+
+    if form.validate_on_submit():
+        comment_body = form.content.data
+
+        new_comment = Comment(body=comment_body, author_id=current_user.id, post_id=post_id)
+        db.session.add(new_comment)
+        db.session.commit()
+
+        flash('Your comment has been added!', 'success')
+        return redirect(url_for('main.show_post', post_id=post_id))
+
+    # If the form did not validate, redirect back to the post page
+    return redirect(url_for('main.show_post', post_id=post_id))
+
 
 @main.route('/channel/<int:user_id>', methods=['GET', 'POST'])
 def channel(user_id):
