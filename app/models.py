@@ -92,7 +92,7 @@ class Post(db.Model):
     likes = db.Column(db.Integer, default=0)
     following = db.Column(db.Integer, default=0)
 
-    
+    author = db.relationship('User', backref=db.backref('posts', lazy=True))
     comments = db.relationship('Comment', back_populates='post', lazy='dynamic')
 
 class Comment(db.Model):

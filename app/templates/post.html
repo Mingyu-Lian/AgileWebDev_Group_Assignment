@@ -77,4 +77,11 @@
         <button type="submit" class="btn btn-primary">Submit Comment</button>
     </form>
 </div>
+
+    {% if current_user.is_authenticated and post.author_id == current_user.id %}
+        <form method="post" action="{{ url_for('main.delete_post', post_id=post.id) }}">
+            <input type="hidden" name="_method" value="DELETE">
+            <button type="submit" class="btn btn-danger">Delete Post</button>
+        </form>
+    {% endif %}
 {% endblock %}
