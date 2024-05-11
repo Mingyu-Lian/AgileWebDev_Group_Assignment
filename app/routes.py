@@ -223,7 +223,38 @@ def add_comment(post_id):
     # If the form did not validate, redirect back to the post page
     return redirect(url_for('main.show_post', post_id=post_id))
 
+@main.route('/like_post/<int:post_id>', methods=['POST'])
+@login_required
+def like_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    
+    if current_user in post.liked_by_users:
+        post.likes -= 1
+        post.liked_by_users.remove(current_user)
+    else:
+        post.likes += 1
+        post.liked_by_users.append(current_user)
+    
+    db.session.commit()
+    return redirect(url_for('main.show_post', post_id=post_id))
 
+
+@main.route('/posts/<int:post_id>', methods=['POST'])
+@login_required
+def delete_post(post_id):
+    post = Post.query.get_or_404(post_id)
+
+    # 检查当前登录用户是否是帖子的作者
+    if current_user.id != post.author_id:
+        flash('You are not authorized to delete this post.', 'error')
+        return redirect(url_for('main.show_post'))
+    
+    # 删除帖子
+    db.session.delete(post)
+    db.session.commit()
+
+    flash('Post deleted successfully.', 'success')
+    return redirect(url_for('main.home'))
 @main.route('/channel/<int:user_id>', methods=['GET', 'POST'])
 def channel(user_id):
     user = User.query.get_or_404(user_id)
