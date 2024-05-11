@@ -274,21 +274,29 @@ def channel(user_id):
     return render_template('channel.html', user=user, is_own_channel=is_own_channel, user_id=user_id, user_profile=user_profile, posts=posts)
 
 
-@main.route('/search', methods=['GET', 'POST'])
+@main.route('/search', methods=['GET'])
 def search():
-    query = request.form['query'] # 获取搜索关键词
-    # 调用搜索函数执行搜索操作
-    results = perform_search(query)
-    return render_template('search_results.html', query=query, results=results)
+    query = request.args.get('query', '')
+    filter_type = request.args.get('filter', 'posts')  # default is post
 
-def perform_search(query):
-    # Perform a database query to find users whose username contains the search query
-    results = User.query.filter(or_(User.username.ilike(f"%{query}%"), UserDetails.name.ilike(f"%{query}%"))).all()
+    if query:
+        search = f"%{query}%"
+        if filter_type == 'posts':
+            results = Post.query.join(User).filter(
+                db.or_(
+                    Post.title.ilike(search),
+                    Post.description.ilike(search),
+                )
+            ).distinct().all()
+        elif filter_type == 'users':
+            # 正确地连接 User 和 UserDetails，并通过 UserDetails.name 进行搜索
+            results = User.query.join(UserDetails).filter(UserDetails.name.ilike(search)).all()
 
-    # Extract usernames from the results
-    usernames = [user.username for user in results]
-
-    return usernames
+        return render_template('search_results.html', posts=results if filter_type == 'posts' else None,
+                               users=results if filter_type == 'users' else None, query=query, filter=filter_type)
+    else:
+        flash("Please enter a search term.")
+        return redirect(url_for('main.home'))
 
 @main.route('/follow/<int:user_id>', methods=['GET', 'POST'])
 @login_required
