@@ -236,7 +236,7 @@ def like_post(post_id):
         post.liked_by_users.append(current_user)
     
     db.session.commit()
-    return redirect(url_for('show_post', post_id=post_id))
+    return redirect(url_for('main.show_post', post_id=post_id))
 
 
 @main.route('/posts/<int:post_id>', methods=['POST'])
