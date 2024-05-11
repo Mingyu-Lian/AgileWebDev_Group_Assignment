@@ -26,6 +26,12 @@ followers = db.Table(
     db.Column('followed_id', db.Integer, db.ForeignKey('user.id'), primary_key=True)
 )
 
+user_likes = db.Table(
+    'user_likes',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+    db.Column('post_id', db.Integer, db.ForeignKey('post.id'), primary_key=True)
+)
+
 class Follow(db.Model):
     __tablename__ = 'follow'
 
@@ -90,10 +96,31 @@ class Post(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
     likes = db.Column(db.Integer, default=0)
-    following = db.Column(db.Integer, default=0)
 
-    
+    author = db.relationship('User', backref=db.backref('posts', lazy=True))
     comments = db.relationship('Comment', back_populates='post', lazy='dynamic')
+    # 定义与用户的多对多关系，用来表示哪些用户点赞了这个帖子
+    liked_by_users = db.relationship('User', secondary=user_likes, backref=db.backref('liked_posts', lazy='dynamic'))
+
+    def count_likes(self):
+        return len(self.liked_by_users)
+
+    def is_liked_by_user(self, user_id):
+        return user_id in [user.id for user in self.liked_by_users]
+
+    def like_post(self, user_id):
+        if not self.is_liked_by_user(user_id):
+            user = User.query.get(user_id)
+            if user:
+                self.liked_by_users.append(user)
+                db.session.commit()
+
+    def unlike_post(self, user_id):
+        if self.is_liked_by_user(user_id):
+            user = User.query.get(user_id)
+            if user:
+                self.liked_by_users.remove(user)
+                db.session.commit()
 
 class Comment(db.Model):
     __tablename__ = 'comment'
@@ -103,7 +130,6 @@ class Comment(db.Model):
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     body = db.Column(db.Text)
-    likes = db.Column(db.Integer, default=0)
 
     # 在 Comment 类中只使用 back_populates 指回 Post 类的 relationship
     post = db.relationship('Post', back_populates='comments')
