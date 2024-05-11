@@ -270,7 +270,8 @@ def channel(user_id):
     user = User.query.get_or_404(user_id)
     is_own_channel = (current_user.is_authenticated and current_user.id == user_id)
     user_profile = UserDetails.query.filter_by(id=user_id).first()
-    return render_template('channel.html', user=user, is_own_channel=is_own_channel, user_id=user_id, user_profile=user_profile)
+    posts = Post.query.filter_by(author_id=user_id).order_by(Post.created_at.desc()).all()  # 获取该用户的所有帖子
+    return render_template('channel.html', user=user, is_own_channel=is_own_channel, user_id=user_id, user_profile=user_profile, posts=posts)
 
 
 @main.route('/search', methods=['GET', 'POST'])

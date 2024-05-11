@@ -9,12 +9,12 @@
         <a href="{{ url_for('main.channel', user_id=followee.id) }}" class="list-group-item list-group-item-action d-flex align-items-center">
             {% if followee.details and followee.details.img %}
                 <!-- 如果用户设置了头像，则显示用户头像 -->
-                <img src="{{ url_for('static', filename='user_icon/uploads/' + followee.details.img) }}" alt="{{ followee.username }}'s Avatar" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
+                <img src="{{ url_for('static', filename='user_icon/uploads/' + followee.details.img) }}" alt="{{ followee.details.name }}'s Avatar" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
             {% else %}
                 <!-- 如果没有头像，则显示默认头像 -->
                 <img src="{{ url_for('static', filename='user_icon/default_user_icon.jpg') }}" alt="Default Avatar" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
             {% endif %}
-            {{ followee.username }}
+            {{ followee.details.name if followee.details and followee.details.name else followee.username }}
         </a>
         {% endfor %}
     </div>
