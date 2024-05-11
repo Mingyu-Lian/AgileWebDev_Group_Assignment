@@ -13,3 +13,12 @@ document.getElementById('description').addEventListener('input', function() {
     var remaining = maxLength - currentLength;
     document.getElementById('descriptionCounter').innerText = remaining;
 });
+//
+document.querySelectorAll('.tag-btn').forEach(button => {
+    button.addEventListener('click', function(event) {
+        event.preventDefault(); // 阻止按钮的默认行为
+        document.querySelectorAll('.tag-btn').forEach(btn => btn.classList.remove('selected'));
+        this.classList.add('selected');
+        document.getElementById('tag').value = this.getAttribute('data-tag');
+    });
+});

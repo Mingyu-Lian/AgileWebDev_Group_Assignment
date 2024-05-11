@@ -20,7 +20,7 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     </head>
 
-    <body data-user-authenticated="{{ current_user.is_authenticated }}">
+    <body data-user-authenticated="{{ 'true' if current_user.is_authenticated else 'false' }}">
         <div id="top"></div>
         <nav class="navbar navbar-expand-lg navbar-dark bg-light">
             <div class="container-fluid">
@@ -47,7 +47,7 @@
                         
                         {% if current_user.is_authenticated %}
                         <li class="nav-item mt-3">
-                            <span style="color: rgb(101, 93, 93); font-family:  Haettenschweiler;font-size: large; ">Hi, {{ current_user.username }}!</span> 
+                            <span style="color: rgb(101, 93, 93); font-family:  Haettenschweiler;font-size: large; ">Hi, {{ current_user.details.name if current_user.details and current_user.details.name else current_user.username }}!</span> 
                         </li>
                         {% else %}
                         {% endif %}
@@ -85,28 +85,30 @@
         {% block content %}{% endblock %}
 
         <!-- Modal for the authentic check  -->
+        <!-- Modal for the authentication check -->
+        <!-- Login Modal -->
         <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="loginModalLabel">Please Login</h5>
+                        <h5 class="modal-title" id="loginModalLabel">Login Required</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                    You need to log in to view details.
+                        Please log in to continue.
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Stay Logout</button>
-                        <a href="{{ url_for('main.login') }}" class="btn btn-primary" "><span class="spinner-grow spinner-grow-sm"></span> Login/Sign In</a>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <a href="{{ url_for('main.login') }}" class="btn btn-primary">Login</a>
                     </div>
-            </div>
+                </div>
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-        
         <script src="static/myScript.js"></script>
+        
        
         <footer>
             <div class="container">

@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="container followsection">
-    <h2>{{ user.username }}'s Followers</h2>
+    <h2>{{ user.details.name }}'s Followers</h2>
     <br>
     <div class="list-group">
         {% for follower in followers %}

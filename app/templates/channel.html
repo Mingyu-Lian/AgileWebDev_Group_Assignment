@@ -11,9 +11,10 @@
       {% else %}
         <img src="{{ url_for('static', filename='user_icon/uploads/' + user_profile.img if user_profile.img else 'user_icon/default_user_icon.jpg') }}" alt="User Icon" class="profile-img rounded-circle mb-3" width="160" height="160">
       {% endif %}
-      <h2 class="fw-light channeltitle">{{ user_profile.name }}'s Channel</h2> 
+
+      <h2 class="fw-light channeltitle">{{ user_profile.name }}'s Channel</h2>
           <div class="channeltext">
-            <p>{{ user_profile.city }}, {{ user_profile.country }}</p> <br>
+            <p>{{ user_profile.city }}, &nbsp;{{ user_profile.country }}</p> <br>
             <p> {{ user_profile.job_title }} in <strong>{{ user_profile.company }}</strong></p>
             <p>{{ user_profile.job_description }}</p> <br>
             <p><strong>Education Level:</strong> {{ user_profile.education_level }}</p>
@@ -30,13 +31,12 @@
             {% if current_user.is_following(user) %}
                 <a href="{{ url_for('main.unfollow', user_id=user.id) }}" class="btn btn-danger rounded-pill px-4 my-1"><i class='fas fa-user-minus' style='font-size:16px'></i> Unfollow</a>
             {% else %}
-                <a href="{{ url_for('main.follow', user_id=user.id) }}" class="btn btn-primary rounded-pill px-4 my-1"><i class='fas fa-user-plus' style='font-size:16px'></i> Follow</a>
+                <a href="{{ url_for('main.follow', user_id=user.id) }}" class="btn btn-primary px-4 my-1"><i class='fas fa-user-plus' style='font-size:16px'></i> Follow</a>
             {% endif %}
         {% endif %}
         {% else %}
           <!-- if not login -->    
-          <!-- 这个是不是要跳转到log in界面？ -->
-          <a href="{{ url_for('main.login') }}" class="btn btn-primary rounded-pill px-4 my-1"><i class='fas fa-plus' style='font-size:16px'></i> Follow</a> 
+          <a href="{{ url_for('main.login') }}" class=" btn btn-primary  rounded-pill px-4 my-1"><i class='fas fa-plus' style='font-size:16px'></i> Follow</a> 
         {% endif %}
       </div>
     </div>

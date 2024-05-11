@@ -68,15 +68,18 @@ in the university of Western Australia (2024 S1) */
 }
 
 .flashmessage{
+    list-style-type: none;
     border-radius: 20px;
-    background-color: antiquewhite;
-    color: rgb(223, 58, 58);
+    background-color: rgb(226, 239, 240);
+    color: rgb(31, 79, 113);
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 200%;
+    font-size: 150%;
     font-weight: bold;
     padding: 10px;
     text-align: center;
     margin: auto;
+    width: 80%;
+    box-shadow:  0 4px 8px rgba(0, 0, 0, 0.5);
 }
 
 .navbar .btn {
@@ -171,7 +174,6 @@ in the university of Western Australia (2024 S1) */
 .post-card:hover {
     transform: scale(1.05);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    font-size: larger;
 }
 
 .post-card-link {
@@ -370,3 +372,13 @@ in the university of Western Australia (2024 S1) */
     transform: scale(1.05); /* 放大效果 */
     background-color: rgb(187, 180, 180); /* 背景颜色改变 */
 }
+
+
+/* Upload CSS (some follow profile section)*/
+
+/* .upload .btn-tag.selected {
+    background-color: rgb(34, 95, 155) !important;
+    color: rgb(250, 247, 247) !important;
+} */
+
+
