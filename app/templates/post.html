@@ -8,28 +8,39 @@
         <img src="{{ url_for('static', filename='post_image/' + post.img) }}" alt="Post Image" class="img-fluid">
     {% endif %}
 
+     <!-- 帖子喜欢按钮 -->
+     {% if current_user.is_authenticated %}
+     {% if post in current_user.liked_posts %}
+       <form action="{{ url_for('main.like_post', post_id=post.id) }}" method="POST">
+         <button type="submit" class="btn btn-danger">Unlike</button>
+       </form>
+     {% else %}
+       <form action="{{ url_for('main.like_post', post_id=post.id) }}" method="POST">
+         <button type="submit" class="btn btn-primary">Like</button>
+       </form>
+     {% endif %}
+   {% endif %}
+
+
     <hr>
 
-    {% for comment in comments %}
-    <div class="comment">
-        <a href="{{ url_for('main.user_channel', username=comment.author.username) }}">
-            {% if comment.author.details %}
-                {% if comment.author.details.avatar %}
-                    <!-- 显示用户设置的头像，使用内联样式来调整样式 -->
-                    <img src="{{ url_for('static', filename='user_icon/uploads/' + comment.author.details.avatar) }}" alt="User Avatar" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
-                {% else %}
-                    <!-- 如果用户详情存在但没有头像，则显示默认头像 -->
-                    <img src="{{ url_for('static', filename='user_icon/default_user_icon.jpg') }}" alt="Default Avatar" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
-                {% endif %}
-            {% else %}
-                <!-- 用户详情对象不存在的情况下，使用默认头像 -->
-                <img src="{{ url_for('static', filename='user_icon/default_user_icon.jpg') }}" alt="Default Avatar" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
-            {% endif %}
-        </a>
-        <p><strong>{{ comment.author.username }}</strong> - {{ comment.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
-        <p>{{ comment.body }}</p>
-    </div>
-    {% endfor %}
+    <h3>Comments</h3>
+    <ul class="list-group">
+        {% for comment in comments %}
+            <li class="list-group-item">
+                <div class="comment">
+                    <!-- 显示评论用户的头像 -->
+                    {% if comment.author.details and comment.author.details.img %}
+                        <img src="{{ url_for('static', filename='user_icon/uploads/' + comment.author.details.img) }}" alt="User Icon" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='user_icon/default_user_icon.jpg') }}" alt="Default Icon" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
+                    {% endif %}
+                    <p><strong>{{ comment.author.username }}</strong> - {{ comment.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                    <p>{{ comment.body }}</p>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
 
     <hr>
 
@@ -53,4 +64,11 @@
         <button type="submit" class="btn btn-primary">Submit Comment</button>
     </form>
 </div>
+
+    {% if current_user.is_authenticated and post.author_id == current_user.id %}
+        <form method="post" action="{{ url_for('main.delete_post', post_id=post.id) }}">
+            <input type="hidden" name="_method" value="DELETE">
+            <button type="submit" class="btn btn-danger">Delete Post</button>
+        </form>
+    {% endif %}
 {% endblock %}

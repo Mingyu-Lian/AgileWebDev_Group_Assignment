@@ -11,7 +11,8 @@
       {% else %}
         <img src="{{ url_for('static', filename='user_icon/uploads/' + user_profile.img if user_profile.img else 'user_icon/default_user_icon.jpg') }}" alt="User Icon" class="profile-img rounded-circle mb-3" width="160" height="160">
       {% endif %}
-      <h2 class="fw-light channeltitle">{{ user.details.name }}'s Channel</h2> 
+
+      <h2 class="fw-light channeltitle">{{ user_profile.name }}'s Channel</h2>
           <div class="channeltext">
             <p>{{ user_profile.city }}, &nbsp;{{ user_profile.country }}</p> <br>
             <p> {{ user_profile.job_title }} in <strong>{{ user_profile.company }}</strong></p>
@@ -42,12 +43,29 @@
 
     <!-- 发帖记录部分 -->
     <div class="col-md-8 col-sm-12">
-      
-      <h1>post</h1>
-      <h1>post</h1>
-      <h1>post</h1>
-      <h1>post</h1>
-      <!-- 此处添加用户的帖子列表，例如最近的帖子等 -->
+      <h3>Posts by {{ user_profile.name }}</h3>
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
+        {% for post in posts %}
+        <div class="col">
+          <a href="{{ url_for('main.show_post', post_id=post.id) }}" class="post-card-link">
+            <div class="card h-100 post-card">
+              {% if post.img %}
+              <img src="{{ url_for('static', filename='post_image/' + post.img) }}" class="card-img-top" alt="{{ post.title }}" style="height: 200px; object-fit: cover;">
+              {% else %}
+              <img src="{{ url_for('static', filename='post_image/default.jpg') }}" class="card-img-top" alt="Default Image" style="height: 200px; object-fit: cover;">
+              {% endif %}
+              <div class="card-body">
+                <h5 class="card-title">{{ post.title }}</h5>
+              </div>
+              <div class="card-footer d-flex justify-content-between">
+                <small class="text-muted"><i class='fas fa-heart' style='font-size:16px'></i> &nbsp;&nbsp; {{ post.likes }}</small>
+                <small class="text-muted"><i class='fas fa-comment-alt' style='font-size:16px'></i> &nbsp;&nbsp;{{ post.comments.count() }}</small>
+              </div>
+            </div>
+          </a>
+        </div>
+        {% endfor %}
+      </div>
     </div>
   </div>
 </div>
