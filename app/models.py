@@ -101,6 +101,8 @@ class Post(db.Model):
     comments = db.relationship('Comment', back_populates='post', lazy='dynamic')
     # 定义与用户的多对多关系，用来表示哪些用户点赞了这个帖子
     liked_by_users = db.relationship('User', secondary=user_likes, backref=db.backref('liked_posts', lazy='dynamic'))
+    
+    category = db.relationship('Category', backref=db.backref('posts', lazy=True))
 
     def count_likes(self):
         return len(self.liked_by_users)
