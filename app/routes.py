@@ -227,12 +227,16 @@ def add_comment(post_id):
 @login_required
 def like_post(post_id):
     post = Post.query.get_or_404(post_id)
-    if post in current_user.liked_posts:
-        current_user.liked_posts.remove(post)
+    
+    if current_user in post.liked_by_users:
+        post.likes -= 1
+        post.liked_by_users.remove(current_user)
     else:
-        current_user.liked_posts.append(post)
+        post.likes += 1
+        post.liked_by_users.append(current_user)
+    
     db.session.commit()
-    return redirect(url_for('main.show_post', post_id=post_id))
+    return redirect(url_for('show_post', post_id=post_id))
 
 @main.route('/like_comment/<int:comment_id>', methods=['POST'])
 @login_required
