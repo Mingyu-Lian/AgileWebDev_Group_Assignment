@@ -2,7 +2,7 @@
 
 import os
 from werkzeug.utils import secure_filename
-from flask import Blueprint, render_template, flash, redirect, url_for, request, current_app
+from flask import Blueprint, render_template, flash, redirect, url_for, request, current_app, session
 from flask_login import login_user, current_user,logout_user,login_required
 
 from .forms import LoginForm, SignUpForm,UploadForm, IconForm, ProfileForm, CommentForm
@@ -23,11 +23,15 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
-        if user is None or not user.check_password(form.password.data):
+        if user and user.check_password(form.password.data):
+            login_user(user, remember=form.remember_me.data)
+            # Redirect to the intended URL or to the home page
+            next_page = session.pop('next', None) or url_for('main.home')
+            return redirect(next_page)
+        else:
             flash('Invalid username or password')
-            return redirect(url_for('main.login'))
-        login_user(user, remember=form.remember_me.data)
-        return redirect(url_for('main.home'))
+    # Store the next URL from the query parameters or default to home
+    session['next'] = request.args.get('next', url_for('main.home'))
     return render_template('login.html', title='Sign In', form=form)
 
 
@@ -69,10 +73,16 @@ def home():
     offset = (page - 1) * per_page
 
     if filter_type == 'following' and current_user.is_authenticated:
-        followed_users = [followed.id for followed in current_user.following]
-        total_posts = Post.query.filter(Post.author_id.in_(followed_users)).count()
-        posts = Post.query.filter(Post.author_id.in_(followed_users)).order_by(Post.created_at.desc()).limit(per_page).offset(offset).all()
+        # Get IDs of users being followed by the current user
+        followed_ids = [followed.id for followed in current_user.following]
+        if followed_ids:
+            posts = Post.query.filter(Post.author_id.in_(followed_ids)).order_by(Post.created_at.desc()).limit(per_page).offset(offset).all()
+            total_posts = Post.query.filter(Post.author_id.in_(followed_ids)).count()
+        else:
+            posts = []
+            total_posts = 0
     else:
+        # Get all posts
         total_posts = Post.query.count()
         posts = Post.query.order_by(Post.created_at.desc()).limit(per_page).offset(offset).all()
 
@@ -85,7 +95,6 @@ def home():
         page=page,
         total_pages=total_pages
     )
-
 
 
 @main.route('/profile', methods=['GET', 'POST'])
@@ -158,6 +167,7 @@ def set_icon():
 
 
 @main.route('/upload/product', methods=['GET', 'POST'])
+@login_required
 def upload_product():
     form = UploadForm()
     if form.validate_on_submit():
