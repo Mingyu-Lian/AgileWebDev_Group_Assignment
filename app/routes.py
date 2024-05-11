@@ -238,16 +238,6 @@ def like_post(post_id):
     db.session.commit()
     return redirect(url_for('show_post', post_id=post_id))
 
-@main.route('/like_comment/<int:comment_id>', methods=['POST'])
-@login_required
-def like_comment(comment_id):
-    comment = Comment.query.get_or_404(comment_id)
-    if comment in current_user.liked_comments:
-        current_user.liked_comments.remove(comment)
-    else:
-        current_user.liked_comments.append(comment)
-    db.session.commit()
-    return redirect(url_for('main.show_post', post_id=comment.post_id))
 
 @main.route('/posts/<int:post_id>', methods=['POST'])
 @login_required

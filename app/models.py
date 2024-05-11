@@ -90,7 +90,6 @@ class Post(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
     likes = db.Column(db.Integer, default=0)
-    following = db.Column(db.Integer, default=0)
 
     author = db.relationship('User', backref=db.backref('posts', lazy=True))
     comments = db.relationship('Comment', back_populates='post', lazy='dynamic')
@@ -103,7 +102,6 @@ class Comment(db.Model):
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     body = db.Column(db.Text)
-    likes = db.Column(db.Integer, default=0)
 
     # 在 Comment 类中只使用 back_populates 指回 Post 类的 relationship
     post = db.relationship('Post', back_populates='comments')

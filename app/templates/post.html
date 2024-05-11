@@ -37,19 +37,6 @@
                     {% endif %}
                     <p><strong>{{ comment.author.username }}</strong> - {{ comment.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
                     <p>{{ comment.body }}</p>
-
-                     <!-- 评论喜欢按钮 -->
-                     {% if current_user.is_authenticated %}
-                        {% if comment in current_user.liked_comments %}
-                            <form action="{{ url_for('main.like_comment', comment_id=comment.id) }}" method="POST">
-                                <button type="submit" class="btn btn-danger">Unlike</button>
-                            </form>
-                        {% else %}
-                            <form action="{{ url_for('main.like_comment', comment_id=comment.id) }}" method="POST">
-                                <button type="submit" class="btn btn-primary">Like</button>
-                            </form>
-                        {% endif %}
-                    {% endif %}
                 </div>
             </li>
         {% endfor %}
