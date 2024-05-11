@@ -15,10 +15,11 @@
 
     <!-- 显示帖子所属的分类 -->
     <p><strong>Tag:</strong> 
-        {% for category in post.categories %}
-            {{ category.name }}
-            {% if not loop.last %}, {% endif %}
-        {% endfor %}
+        {% if post.category %}
+            {{ post.category.name }}
+        {% else %}
+            No Category
+        {% endif %}
     </p>
     <h2>{{ post.title }}</h2>
     <p>{{ post.description }}</p>

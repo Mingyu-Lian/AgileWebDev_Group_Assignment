@@ -3,6 +3,7 @@ from flask_wtf.file import FileField, FileAllowed, FileRequired
 from wtforms import StringField, PasswordField, BooleanField, SubmitField,TextAreaField,FileField,SelectField,EmailField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, Length, Optional
 from app.models import User
+from flask import flash
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -55,6 +56,7 @@ class UploadForm(FlaskForm):
     tag = SelectField('Tag', choices=[('', ''),('1', 'Interview'), ('2', 'Recruitment'), ('3', 'Job Search')], validators=[Optional()])
     image = FileField('Image', validators=[FileAllowed(['jpg', 'jpeg', 'png', 'gif'], 'Only image files allowed.'), Optional()])
     submit = SubmitField('Submit')
+    
 
 class CommentForm(FlaskForm):
     content = TextAreaField('Comment', validators=[DataRequired(), Length(max=500)])
