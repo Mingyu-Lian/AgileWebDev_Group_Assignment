@@ -5,7 +5,8 @@
 <div class="container-fluid userchannel">
   <div class="row">
     <!-- 个人信息部分 -->
-    <div class="col-md-4 col-sm-12 text-center">
+    <div class="col-md-1"> </div>
+    <div class="col-md-3 col-sm-12 text-center">
       {% if is_own_channel %}
         <img src="{{ url_for('static', filename='user_icon/uploads/' + user_profile.img if user_profile.img else 'user_icon/default_user_icon.jpg') }}" alt="User Icon" class="profile-img rounded-circle mb-3" width="160" height="160">
       {% else %}
@@ -42,8 +43,11 @@
     </div>
 
     <!-- 发帖记录部分 -->
-    <div class="col-md-8 col-sm-12">
-      <h3>Posts by {{ user_profile.name }}</h3>
+    <div class="col-md-7 col-sm-12">
+      <h3 style="color: rgb(34, 95, 155); font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; font-weight: bold;">
+        Posts by {{ user_profile.name }}</h3>
+        <br>
+        <br>
       <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
         {% for post in posts %}
         <div class="col">
@@ -69,6 +73,7 @@
         
       </div>
     </div>
+    <div class="col-md-1"> </div>
     
   </div>
 </div>
