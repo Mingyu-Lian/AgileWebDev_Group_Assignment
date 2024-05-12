@@ -3,12 +3,14 @@
 {% block content %}
 <div class="container">
     <!-- 显示作者名字和头像 -->
-    <p><strong>Author:</strong> {{ post.author.username }}</p>
-    {% if post.author.details and post.author.details.img %}
-        <img src="{{ url_for('static', filename='user_icon/uploads/' + post.author.details.img) }}" alt="Author Icon" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
-    {% else %}
-        <img src="{{ url_for('static', filename='user_icon/default_user_icon.jpg') }}" alt="Default Author Icon" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
-    {% endif %}
+    <p><strong>Author:</strong> {{ post.author.details.name }}</p>
+    <a href="{{ url_for('main.channel', user_id=post.author.id) }}">
+        {% if post.author.details and post.author.details.img %}
+            <img src="{{ url_for('static', filename='user_icon/uploads/' + post.author.details.img) }}" alt="Author Icon" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
+        {% else %}
+            <img src="{{ url_for('static', filename='user_icon/default_user_icon.jpg') }}" alt="Default Author Icon" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
+        {% endif %}
+    </a>
 
     <!-- 显示帖子创建时间 -->
     <p><strong>Created At:</strong> {{ post.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
@@ -50,11 +52,16 @@
                 <div class="comment">
                     <!-- 显示评论用户的头像 -->
                     {% if comment.author.details and comment.author.details.img %}
+                    <a href="{{ url_for('main.channel', user_id=comment.author.id) }}">
                         <img src="{{ url_for('static', filename='user_icon/uploads/' + comment.author.details.img) }}" alt="User Icon" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
                     {% else %}
                         <img src="{{ url_for('static', filename='user_icon/default_user_icon.jpg') }}" alt="Default Icon" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
                     {% endif %}
-                    <p><strong>{{ comment.author.username }}</strong> - {{ comment.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                    </a>
+                    <a href="{{ url_for('main.channel', user_id=comment.author.id) }}">
+                        <p><strong>{{ comment.author.details.name }}</strong></p>
+                    </a>
+                    <p>{{ comment.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
                     <p>{{ comment.body }}</p>
                 </div>
             </li>
