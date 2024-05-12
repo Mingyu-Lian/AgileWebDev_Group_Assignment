@@ -5,7 +5,7 @@ from werkzeug.utils import secure_filename
 from flask import Blueprint, render_template, flash, redirect, url_for, request, current_app, session
 from flask_login import login_user, current_user,logout_user,login_required
 
-from .forms import LoginForm, SignUpForm,UploadForm, IconForm, ProfileForm, CommentForm
+from .forms import LoginForm, SignUpForm,UploadForm, IconForm, ProfileForm, CommentForm, ResetPasswordForm
 from .models import db, User,UserDetails,Post,Follow, Comment
 from sqlalchemy import or_
 
@@ -359,3 +359,14 @@ def following(user_id):
     # 获取当前用户关注的所有用户
     following = User.query.join(Follow, Follow.followed_id == User.id).filter(Follow.follower_id == user_id).all()
     return render_template('following.html', user=user, following=following)
+
+
+@main.route('/reset_password', methods=['GET', 'POST'])
+def reset_password():
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        current_user.set_password(form.password.data)
+        db.session.commit()
+        flash('Your password has been updated!', 'success')
+        return redirect(url_for('main.profile'))
+    return render_template('reset_password.html', form=form)
