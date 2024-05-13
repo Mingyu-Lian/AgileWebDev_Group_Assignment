@@ -1,6 +1,5 @@
-// function userIsAuthenticated() {
-//     return document.body.dataset.userAuthenticated === 'true';
-// }
+// function userIsAuthenticated
+
 
 document.addEventListener('DOMContentLoaded', function () {
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
@@ -10,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
+// require log in
 document.addEventListener('DOMContentLoaded', function () {
     const authRequiredLinks = document.querySelectorAll('.requires-auth');
     authRequiredLinks.forEach(link => {
@@ -31,5 +31,30 @@ document.addEventListener('DOMContentLoaded', function () {
     function updateModalLoginLink(nextUrl) {
         const loginButton = document.querySelector('#loginModal .btn-primary');
         loginButton.href = `${loginButton.href}?next=${encodeURIComponent(nextUrl)}`;
+    }
+});
+
+
+// JavaScript function to update character counter 
+document.addEventListener('DOMContentLoaded', function () {
+    var titleInput = document.getElementById('title');
+    var descriptionInput = document.getElementById('description');
+    
+    if (titleInput) {
+        titleInput.addEventListener('input', function() {
+            var maxLength = this.getAttribute('maxlength');
+            var currentLength = this.value.length;
+            var remaining = maxLength - currentLength;
+            document.getElementById('titleCounter').innerText = remaining;
+        });
+    }
+
+    if (descriptionInput) {
+        descriptionInput.addEventListener('input', function() {
+            var maxLength = this.getAttribute('maxlength');
+            var currentLength = this.value.length;
+            var remaining = maxLength - currentLength;
+            document.getElementById('descriptionCounter').innerText = remaining;
+        });
     }
 });

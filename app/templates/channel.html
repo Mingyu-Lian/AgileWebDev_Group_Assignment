@@ -5,7 +5,7 @@
 <div class="container-fluid userchannel">
   <div class="row">
     <!-- 个人信息部分 -->
-    <div class="col-md-4 col-sm-12 text-center">
+    <div class="col-md-3 col-sm-12 text-center" style="margin-left: 20px;margin-right: 20px;">
       {% if is_own_channel %}
         <img src="{{ url_for('static', filename='user_icon/uploads/' + user_profile.img if user_profile.img else 'user_icon/default_user_icon.jpg') }}" alt="User Icon" class="profile-img rounded-circle mb-3" width="160" height="160">
       {% else %}
@@ -18,7 +18,7 @@
               {% if user_profile.city or user_profile.country %}
                   {{ user_profile.city }} &nbsp; &nbsp;{{ user_profile.country }}
               {% else %}
-                  No Location Info
+                  No Location Information
               {% endif %}
           </p>
           <br>
@@ -67,20 +67,32 @@
 
     <!-- 发帖记录部分 -->
     <div class="col-md-8 col-sm-12">
-      <h3>Posts by {{ user_profile.name }}</h3>
+      <h3 style="color: gray;">Posts by {{ user_profile.name }}</h3>
+      <br>
       <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
         {% for post in posts %}
         <div class="col">
             <a href="{{ url_for('main.show_post', post_id=post.id) }}" class="post-card-link">
                 <div class="card h-100 post-card">
                     {% if post.img %}
+                    {% if post.category %}
+                    {% set category_class = 'badge rounded-pill category-' + post.category.name|lower %}
+                    <div class="{{ category_class }}" style="position: absolute; top: 10px; left: 10px; z-index: 1000;">
+                        {{ post.category.name }}
+                    </div>
+                    {% else %}
+                    <div class="badge rounded-pill category-none" style="position: absolute; top: 10px; left: 10px; z-index: 1000;">
+                        No Category
+                    </div>
+                    {% endif %}
+
                     <img src="{{ url_for('static', filename='post_image/' + post.img) }}" class="card-img-top" alt="{{ post.title }}" style="height: 200px; object-fit: cover;">
                     {% else %}
                     <img src="{{ url_for('static', filename='post_image/default.jpg') }}" class="card-img-top" alt="Default Image" style="height: 200px; object-fit: cover;">
                     {% endif %}
                     <div class="card-body">
                         <h5 class="card-title">{{ post.title }}</h5>
-                        <p class="card-text">{{ post.description | truncate(80) }}</p> <!-- Truncate to limit the description if it's too long -->
+                        <p class="card-text">{{ post.description | truncate(40) }}</p> <!-- Truncate to limit the description if it's too long -->
                     </div>
                     <div class="card-footer d-flex justify-content-between">
                         <small class="text-muted"><i class='fas fa-heart' style='font-size:16px'></i> &nbsp;&nbsp; {{ post.likes }}</small>
