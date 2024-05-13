@@ -198,6 +198,7 @@ def upload_product():
 
 @main.route('/post/<int:post_id>', methods=['GET', 'POST'])
 def show_post(post_id):
+    user_profile = UserDetails.query.filter_by(id=current_user.id).first()
     post = Post.query.get_or_404(post_id)
     comments = Comment.query.filter_by(post_id=post_id).all()
     comment_form = CommentForm()
@@ -212,7 +213,7 @@ def show_post(post_id):
     for comment in comments:
         comment.author = User.query.get(comment.author_id)
 
-    return render_template('post.html', post=post, comments=comments, comment_form=comment_form)
+    return render_template('post.html', post=post, comments=comments, comment_form=comment_form, user_profile=user_profile)
 
 
 @main.route('/post/<int:post_id>/comment', methods=['POST'])
@@ -268,6 +269,7 @@ def delete_post(post_id):
     return redirect(url_for('main.home'))
 @main.route('/channel/<int:user_id>', methods=['GET', 'POST'])
 def channel(user_id):
+    user_profile = UserDetails.query.filter_by(id=current_user.id).first()
     user = User.query.get_or_404(user_id)
     is_own_channel = (current_user.is_authenticated and current_user.id == user_id)
     user_profile = UserDetails.query.filter_by(id=user_id).first()
@@ -277,6 +279,7 @@ def channel(user_id):
 
 @main.route('/search', methods=['GET'])
 def search():
+    user_profile = UserDetails.query.filter_by(id=current_user.id).first()
     query = request.args.get('query', '')
     filter_type = request.args.get('filter', 'posts')  # default is post
 
@@ -294,7 +297,7 @@ def search():
             results = User.query.join(UserDetails).filter(UserDetails.name.ilike(search)).all()
 
         return render_template('search_results.html', posts=results if filter_type == 'posts' else None,
-                               users=results if filter_type == 'users' else None, query=query, filter=filter_type)
+                               users=results if filter_type == 'users' else None, query=query, filter=filter_type, user_profile=user_profile)
     else:
         flash("Please enter a search term.")
         return redirect(url_for('main.home'))
