@@ -81,13 +81,15 @@ def home():
     posts = posts_pagination.items
     total_posts = posts_query.count()
     total_pages = posts_pagination.pages
+    user_profile = UserDetails.query.filter_by(id=current_user.id).first()
 
     return render_template(
         'home.html',
         posts=posts,
         filter=filter_type,
         page=page,
-        total_pages=total_pages
+        total_pages=total_pages,
+        user_profile=user_profile
     )
 
 
@@ -167,6 +169,7 @@ def set_icon():
 @main.route('/upload/product', methods=['GET', 'POST'])
 @login_required
 def upload_product():
+    user_profile = UserDetails.query.filter_by(id=current_user.id).first()
     form = UploadForm()
     if form.validate_on_submit():
         title = form.title.data
@@ -189,7 +192,7 @@ def upload_product():
         flash('Post uploaded successfully!', 'success')
         return redirect(url_for('main.home'))
 
-    return render_template('upload.html', title='Upload Post', form=form)
+    return render_template('upload.html', title='Upload Post', form=form,  user_profile=user_profile)
 
 
 
