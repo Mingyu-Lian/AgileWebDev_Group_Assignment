@@ -5,7 +5,7 @@
 <div class="container-fluid userchannel">
   <div class="row">
     <!-- 个人信息部分 -->
-    <div class="col-md-4 col-sm-12 text-center">
+    <div class="col-md-3 col-sm-12 text-center" style="margin-left: 20px;margin-right: 20px;">
       {% if is_own_channel %}
         <img src="{{ url_for('static', filename='user_icon/uploads/' + user_profile.img if user_profile.img else 'user_icon/default_user_icon.jpg') }}" alt="User Icon" class="profile-img rounded-circle mb-3" width="160" height="160">
       {% else %}
@@ -14,11 +14,35 @@
 
       <h2 class="fw-light channeltitle">{{ user_profile.name }}'s Channel</h2>
           <div class="channeltext">
-            <p>{{ user_profile.city }}, &nbsp;{{ user_profile.country }}</p> <br>
-            <p> {{ user_profile.job_title }} in <strong>{{ user_profile.company }}</strong></p>
-            <p>{{ user_profile.job_description }}</p> <br>
-            <p><strong>Education Level:</strong> {{ user_profile.education_level }}</p>
-            <p><strong>Academic Institution:</strong> {{ user_profile.academic_institution }}</p><br>
+            <p>
+              {% if user_profile.city or user_profile.country %}
+                  {{ user_profile.city }} &nbsp; &nbsp;{{ user_profile.country }}
+              {% else %}
+                  No Location Information
+              {% endif %}
+          </p>
+          <br>
+          <p>
+              {% if user_profile.job_title and user_profile.company %}
+                  {{ user_profile.job_title }} in <strong>{{ user_profile.company }}</strong>
+              {% elif user_profile.job_title %}
+                  {{ user_profile.job_title }}
+              {% elif user_profile.company %}
+                  <strong>{{ user_profile.company }}</strong>
+              {% else %}
+                  No Career Information
+              {% endif %}
+          </p>
+          <br>
+          <p>
+              <strong>Education Level:</strong> 
+              {{ user_profile.education_level if user_profile.education_level else 'No Info' }}
+          </p>
+          <p>
+              <strong>Academic Institution:</strong> 
+              {{ user_profile.academic_institution if user_profile.academic_institution else 'No Info' }}
+          </p>
+          <br>
           </div>
       <!-- Button Section -->
       <div class="my-2">
@@ -31,7 +55,7 @@
             {% if current_user.is_following(user) %}
                 <a href="{{ url_for('main.unfollow', user_id=user.id) }}" class="btn btn-danger rounded-pill px-4 my-1"><i class='fas fa-user-minus' style='font-size:16px'></i> Unfollow</a>
             {% else %}
-                <a href="{{ url_for('main.follow', user_id=user.id) }}" class="btn btn-primary px-4 my-1"><i class='fas fa-user-plus' style='font-size:16px'></i> Follow</a>
+                <a href="{{ url_for('main.follow', user_id=user.id) }}" class="btn btn-primary rounded-pill px-4 my-1"><i class='fas fa-user-plus' style='font-size:16px'></i> Follow</a>
             {% endif %}
         {% endif %}
         {% else %}
@@ -43,20 +67,32 @@
 
     <!-- 发帖记录部分 -->
     <div class="col-md-8 col-sm-12">
-      <h3>Posts by {{ user_profile.name }}</h3>
+      <h3 style="color: gray;">Posts by {{ user_profile.name }}</h3>
+      <br>
       <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
         {% for post in posts %}
         <div class="col">
             <a href="{{ url_for('main.show_post', post_id=post.id) }}" class="post-card-link">
                 <div class="card h-100 post-card">
                     {% if post.img %}
+                    {% if post.category %}
+                    {% set category_class = 'badge rounded-pill category-' + post.category.name|lower %}
+                    <div class="{{ category_class }}" style="position: absolute; top: 10px; left: 10px; z-index: 1000;">
+                        {{ post.category.name }}
+                    </div>
+                    {% else %}
+                    <div class="badge rounded-pill category-none" style="position: absolute; top: 10px; left: 10px; z-index: 1000;">
+                        No Category
+                    </div>
+                    {% endif %}
+
                     <img src="{{ url_for('static', filename='post_image/' + post.img) }}" class="card-img-top" alt="{{ post.title }}" style="height: 200px; object-fit: cover;">
                     {% else %}
                     <img src="{{ url_for('static', filename='post_image/default.jpg') }}" class="card-img-top" alt="Default Image" style="height: 200px; object-fit: cover;">
                     {% endif %}
                     <div class="card-body">
                         <h5 class="card-title">{{ post.title }}</h5>
-                        <p class="card-text">{{ post.description | truncate(80) }}</p> <!-- Truncate to limit the description if it's too long -->
+                        <p class="card-text">{{ post.description | truncate(40) }}</p> <!-- Truncate to limit the description if it's too long -->
                     </div>
                     <div class="card-footer d-flex justify-content-between">
                         <small class="text-muted"><i class='fas fa-heart' style='font-size:16px'></i> &nbsp;&nbsp; {{ post.likes }}</small>
