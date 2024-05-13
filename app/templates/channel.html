@@ -14,11 +14,35 @@
 
       <h2 class="fw-light channeltitle">{{ user_profile.name }}'s Channel</h2>
           <div class="channeltext">
-            <p>{{ user_profile.city }}, &nbsp;{{ user_profile.country }}</p> <br>
-            <p> {{ user_profile.job_title }} in <strong>{{ user_profile.company }}</strong></p>
-            <p>{{ user_profile.job_description }}</p> <br>
-            <p><strong>Education Level:</strong> {{ user_profile.education_level }}</p>
-            <p><strong>Academic Institution:</strong> {{ user_profile.academic_institution }}</p><br>
+            <p>
+              {% if user_profile.city or user_profile.country %}
+                  {{ user_profile.city }} &nbsp; &nbsp;{{ user_profile.country }}
+              {% else %}
+                  No Location Info
+              {% endif %}
+          </p>
+          <br>
+          <p>
+              {% if user_profile.job_title and user_profile.company %}
+                  {{ user_profile.job_title }} in <strong>{{ user_profile.company }}</strong>
+              {% elif user_profile.job_title %}
+                  {{ user_profile.job_title }}
+              {% elif user_profile.company %}
+                  <strong>{{ user_profile.company }}</strong>
+              {% else %}
+                  No Career Information
+              {% endif %}
+          </p>
+          <br>
+          <p>
+              <strong>Education Level:</strong> 
+              {{ user_profile.education_level if user_profile.education_level else 'No Info' }}
+          </p>
+          <p>
+              <strong>Academic Institution:</strong> 
+              {{ user_profile.academic_institution if user_profile.academic_institution else 'No Info' }}
+          </p>
+          <br>
           </div>
       <!-- Button Section -->
       <div class="my-2">
@@ -31,7 +55,7 @@
             {% if current_user.is_following(user) %}
                 <a href="{{ url_for('main.unfollow', user_id=user.id) }}" class="btn btn-danger rounded-pill px-4 my-1"><i class='fas fa-user-minus' style='font-size:16px'></i> Unfollow</a>
             {% else %}
-                <a href="{{ url_for('main.follow', user_id=user.id) }}" class="btn btn-primary px-4 my-1"><i class='fas fa-user-plus' style='font-size:16px'></i> Follow</a>
+                <a href="{{ url_for('main.follow', user_id=user.id) }}" class="btn btn-primary rounded-pill px-4 my-1"><i class='fas fa-user-plus' style='font-size:16px'></i> Follow</a>
             {% endif %}
         {% endif %}
         {% else %}
