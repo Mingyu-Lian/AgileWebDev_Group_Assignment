@@ -105,8 +105,14 @@
         <div class="form-group">
             {{ comment_form.content(class="form-control", placeholder="Add a comment...") }}
         </div>
-        <button type="submit" class="btn btn-primary submit-button">Submit Comment</button>
+        
+        {% if current_user.is_authenticated %}
+            <button type="submit" class="btn btn-primary">Submit Comment</button>
+        {% else %}
+            <p>You must be logged in to comment. <a href="{{ url_for('main.login') }}">Log in here</a>.</p>
+        {% endif %}
     </form>
+
 </div>
 </div>
 

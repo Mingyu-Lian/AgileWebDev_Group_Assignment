@@ -52,7 +52,7 @@ class IconForm(FlaskForm):
 class UploadForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired(message='Title is required.'), Length(max=50)])
     description = TextAreaField('Description', validators=[Length(max=500), Optional()])
-    tag = SelectField('Tag', choices=[('', ''),('1', 'Interview'), ('2', 'Recruitment'), ('3', 'Job Search')], validators=[Optional()])
+    tag = SelectField('Tag', choices=[('', ''),('1', 'Interview'), ('2', 'Recruitment'), ('3', 'Seeking'),('4', 'Experience')], validators=[Optional()])
     image = FileField('Image', validators=[FileAllowed(['jpg', 'jpeg', 'png', 'gif'], 'Only image files allowed.'), Optional()])
     submit = SubmitField('Submit')
 
