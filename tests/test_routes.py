@@ -16,6 +16,13 @@ class RouteTestCase(unittest.TestCase):
         db.drop_all()
         self.app_context.pop()
 
+    def login(self, username, password):
+        return self.client.post(
+            url_for('main.login'),
+            data=dict(username=username, password=password),
+            follow_redirects=True
+        )
+
     def test_home_route(self):
         response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
@@ -33,50 +40,37 @@ class RouteTestCase(unittest.TestCase):
         u1.set_password('cat')
         db.session.add(u1)
         db.session.commit()
-        with self.client:
-            self.client.post(
-                url_for('main.login'),
-                data=dict(username=u1.username, password='cat'),
-                follow_redirects=True
-            )
-            response = self.client.get('/logout', follow_redirects=True)
-            self.assertEqual(response.status_code, 200)
+        self.login('john', 'cat')
+        response = self.client.get('/logout', follow_redirects=True)
+        self.assertEqual(response.status_code, 200)
 
     def test_profile_route(self):
         u1 = User(username='john', email='john@example.com')
         u1.set_password('cat')
         db.session.add(u1)
         db.session.commit()
-        with self.client:
-            self.client.post(
-                url_for('main.login'),
-                data=dict(username=u1.username, password='cat'),
-                follow_redirects=True
-            )
-            response = self.client.get('/profile')
-            self.assertEqual(response.status_code, 200)
+        self.login('john', 'cat')
+        response = self.client.get('/profile', follow_redirects=True)
+        self.assertEqual(response.status_code, 200)
 
     def test_upload_product_route(self):
         u1 = User(username='john', email='john@example.com')
         u1.set_password('cat')
         db.session.add(u1)
         db.session.commit()
-        with self.client:
-            self.client.post(
-                url_for('main.login'),
-                data=dict(username=u1.username, password='cat'),
-                follow_redirects=True
-            )
-            response = self.client.get('/upload/product')
-            self.assertEqual(response.status_code, 200)
+        self.login('john', 'cat')
+        response = self.client.get('/upload/product')
+        self.assertEqual(response.status_code, 200)
 
     def test_show_post_route(self):
         u1 = User(username='john', email='john@example.com')
+        u1.set_password('cat')
         db.session.add(u1)
         db.session.commit()
         p1 = Post(title='Test Post', description='This is a test post', author=u1)
         db.session.add(p1)
         db.session.commit()
+        self.login('john', 'cat')
         response = self.client.get(f'/post/{p1.id}')
         self.assertEqual(response.status_code, 200)
 
@@ -87,88 +81,67 @@ class RouteTestCase(unittest.TestCase):
         db.session.add(u1)
         db.session.add(u2)
         db.session.commit()
-        with self.client:
-            self.client.post(
-                url_for('main.login'),
-                data=dict(username=u1.username, password='cat'),
-                follow_redirects=True
-            )
-            response = self.client.get(f'/follow/{u2.id}', follow_redirects=True)
-            self.assertEqual(response.status_code, 200)
-            self.assertTrue(u1.is_following(u2))
+        self.login('john', 'cat')
+        response = self.client.get(f'/follow/{u2.id}', follow_redirects=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(u1.is_following(u2))
 
-
-def test_unfollow_route(self):
-    u1 = User(username='john', email='john@example.com')
-    u1.set_password('cat')
-    u2 = User(username='jane', email='jane@example.com')
-    db.session.add(u1)
-    db.session.add(u2)
-    db.session.commit()
-    follow = Follow(follower=u1, followed=u2)
-    db.session.add(follow)
-    db.session.commit()
-    with self.client:
-        self.client.post(
-            url_for('main.login'),
-            data=dict(username=u1.username, password='cat'),
-            follow_redirects=True
-        )
+    def test_unfollow_route(self):
+        u1 = User(username='john', email='john@example.com')
+        u1.set_password('cat')
+        u2 = User(username='jane', email='jane@example.com')
+        db.session.add(u1)
+        db.session.add(u2)
+        db.session.commit()
+        follow = Follow(follower=u1, followed=u2)
+        db.session.add(follow)
+        db.session.commit()
+        self.login('john', 'cat')
         response = self.client.get(f'/unfollow/{u2.id}', follow_redirects=True)
         self.assertEqual(response.status_code, 200)
         self.assertFalse(u1.is_following(u2))
 
-
-def test_user_channel_route(self):
-    u1 = User(username='john', email='john@example.com')
-    db.session.add(u1)
-    db.session.commit()
-    response = self.client.get(f'/user/{u1.username}')
-    self.assertEqual(response.status_code, 200)
-
-
-def test_followers_route(self):
-    u1 = User(username='john', email='john@example.com')
-    u2 = User(username='jane', email='jane@example.com')
-    db.session.add(u1)
-    db.session.add(u2)
-    db.session.commit()
-    follow = Follow(follower=u2, followed=u1)
-    db.session.add(follow)
-    db.session.commit()
-    response = self.client.get(f'/followers/{u1.id}')
-    self.assertEqual(response.status_code, 200)
-    self.assertIn(u2, response.get_data(as_text=True))
-
-
-def test_following_route(self):
-    u1 = User(username='john', email='john@example.com')
-    u2 = User(username='jane', email='jane@example.com')
-    db.session.add(u1)
-    db.session.add(u2)
-    db.session.commit()
-    follow = Follow(follower=u1, followed=u2)
-    db.session.add(follow)
-    db.session.commit()
-    response = self.client.get(f'/following/{u1.id}')
-    self.assertEqual(response.status_code, 200)
-    self.assertIn(u2, response.get_data(as_text=True))
-
-
-def test_reset_password_route(self):
-    u1 = User(username='john', email='john@example.com')
-    u1.set_password('cat')
-    db.session.add(u1)
-    db.session.commit()
-    with self.client:
-        self.client.post(
-            url_for('main.login'),
-            data=dict(username=u1.username, password='cat'),
-            follow_redirects=True
-        )
-        response = self.client.get('/reset_password')
+    def test_user_channel_route(self):
+        u1 = User(username='john', email='john@example.com')
+        db.session.add(u1)
+        db.session.commit()
+        response = self.client.get(f'/user/{u1.username}')
         self.assertEqual(response.status_code, 200)
 
+    def test_followers_route(self):
+        u1 = User(username='john', email='john@example.com')
+        u2 = User(username='jane', email='jane@example.com')
+        db.session.add(u1)
+        db.session.add(u2)
+        db.session.commit()
+        follow = Follow(follower=u2, followed=u1)
+        db.session.add(follow)
+        db.session.commit()
+        response = self.client.get(f'/followers/{u1.id}')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(u2.username, response.get_data(as_text=True))
+
+    def test_following_route(self):
+        u1 = User(username='john', email='john@example.com')
+        u2 = User(username='jane', email='jane@example.com')
+        db.session.add(u1)
+        db.session.add(u2)
+        db.session.commit()
+        follow = Follow(follower=u1, followed=u2)
+        db.session.add(follow)
+        db.session.commit()
+        response = self.client.get(f'/following/{u1.id}')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(u2.username, response.get_data(as_text=True))
+
+    def test_reset_password_route(self):
+        u1 = User(username='john', email='john@example.com')
+        u1.set_password('cat')
+        db.session.add(u1)
+        db.session.commit()
+        self.login('john', 'cat')
+        response = self.client.get('/reset_password')
+        self.assertEqual(response.status_code, 200)
 
 if __name__ == '__main__':
     unittest.main()

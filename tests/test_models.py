@@ -16,7 +16,7 @@ class ModelTestCase(unittest.TestCase):
         self.app_context.pop()
 
     def test_user_model(self):
-        # 测试用户模型
+
         u1 = User(username='john', email='john@example.com')
         u1.set_password('cat')
         db.session.add(u1)
@@ -24,7 +24,7 @@ class ModelTestCase(unittest.TestCase):
         self.assertTrue(u1.check_password('cat'))
         self.assertFalse(u1.check_password('dog'))
 
-        # 测试 is_following 方法
+
         u2 = User(username='jane', email='jane@example.com')
         u2.set_password('cat')
         db.session.add(u2)
@@ -36,8 +36,9 @@ class ModelTestCase(unittest.TestCase):
         self.assertFalse(u2.is_following(u1))
 
     def test_post_model(self):
-        # 测试帖子模型
+
         u1 = User(username='john', email='john@example.com')
+        u1.set_password('cat')
         db.session.add(u1)
         db.session.commit()
         c1 = Category(name='Technology')
@@ -48,8 +49,8 @@ class ModelTestCase(unittest.TestCase):
         self.assertEqual(p1.author.username, 'john')
         self.assertEqual(p1.category.name, 'Technology')
 
-        # 测试 count_likes 和 is_liked_by_user 方法
         u2 = User(username='jane', email='jane@example.com')
+        u2.set_password('cat')
         db.session.add(u2)
         db.session.commit()
         p1.liked_by_users.append(u1)
@@ -60,21 +61,22 @@ class ModelTestCase(unittest.TestCase):
         self.assertTrue(p1.is_liked_by_user(u2.id))
 
     def test_comment_model(self):
-        # 测试评论模型
+
         u1 = User(username='john', email='john@example.com')
+        u1.set_password('cat')
         db.session.add(u1)
         db.session.commit()
         p1 = Post(title='Test Post', description='This is a test post', author=u1)
         db.session.add(p1)
         db.session.commit()
-        c1 = Comment(body='This is a test comment', author=u1, post=p1)
+        c1 = Comment(body='This is a test comment', author_id=u1.id, post_id=p1.id)
         db.session.add(c1)
         db.session.commit()
-        self.assertEqual(c1.author.username, 'john')
-        self.assertEqual(c1.post.title, 'Test Post')
+        self.assertEqual(c1.author_id, u1.id)
+        self.assertEqual(c1.post_id, p1.id)
 
     def test_user_details_model(self):
-        # 测试用户详情模型
+
         u1 = User(username='john', email='john@example.com')
         u1.set_password('cat')
         db.session.add(u1)

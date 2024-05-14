@@ -39,21 +39,39 @@ def login():
 def signup():
     form = SignUpForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user:
-            flash('The email is already registered')
+        try:
+
+            user = User.query.filter_by(email=form.email.data).first()
+            if user:
+                flash('The email is already registered')
+                return redirect(url_for('main.signup'))
+
+
+            new_user = User(username=form.username.data, email=form.email.data)
+            new_user.set_password(form.password.data)
+            db.session.add(new_user)
+            db.session.flush()
+
+
+            new_user_details = UserDetails(id=new_user.id)
+            db.session.add(new_user_details)
+
+
+            db.session.commit()
+            flash('Successfully registered!')
+            return redirect(url_for('main.login'))
+
+        except Exception as e:
+
+            db.session.rollback()
+            if 'username' in str(e):
+                flash('Username is too long. Please use a shorter username.')
+            elif 'password' in str(e):
+                flash('Password is too long. Please use a shorter password.')
+            else:
+                flash('An error occurred during registration. Please try again.')
             return redirect(url_for('main.signup'))
-        new_user = User(username=form.username.data, email=form.email.data)
-        new_user.set_password(form.password.data)
-        db.session.add(new_user)
-        db.session.flush()
 
-        new_user_details = UserDetails(id=new_user.id)
-        db.session.add(new_user_details)
-
-        db.session.commit()
-        flash('Successfully registered!')
-        return redirect(url_for('main.login'))
     return render_template('signup.html', title='Sign Up', form=form)
 
 
@@ -369,9 +387,10 @@ def following(user_id):
 @main.route('/reset_password', methods=['GET', 'POST'])
 def reset_password():
     form = ResetPasswordForm()
+    user_profile = UserDetails.query.filter_by(id=current_user.id).first()
     if form.validate_on_submit():
         current_user.set_password(form.password.data)
         db.session.commit()
         flash('Your password has been updated!', 'success')
         return redirect(url_for('main.profile'))
-    return render_template('reset_password.html', form=form)
+    return render_template('reset_password.html', form=form, user_profile=user_profile)
