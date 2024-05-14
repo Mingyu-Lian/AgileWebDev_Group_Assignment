@@ -67,7 +67,6 @@ def logout():
 @main.route('/')
 @main.route('/home')
 def home():
-
     filter_type = request.args.get('filter', 'all')
     page = request.args.get('page', 1, type=int)
     per_page = 8
@@ -82,7 +81,7 @@ def home():
     posts = posts_pagination.items
     total_posts = posts_query.count()
     total_pages = posts_pagination.pages
-    user_profile = UserDetails.query.filter_by(id=current_user.id).first()
+    user_profile = UserDetails.query.filter_by(id=current_user.id).first() if current_user.is_authenticated else None
 
     return render_template(
         'home.html',
@@ -92,6 +91,7 @@ def home():
         total_pages=total_pages,
         user_profile=user_profile
     )
+
 
 
 

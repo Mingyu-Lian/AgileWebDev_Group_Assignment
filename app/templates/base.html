@@ -22,45 +22,51 @@
 
     <body data-user-authenticated="{{ 'true' if current_user.is_authenticated else 'false' }}">
         <div id="top"></div>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-light">
-    <div class="container-fluid">
-        <!-- Logo -->
-        <a class="nav-link nav-logo" href="{{ url_for('main.home') }}">
-            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" class="rounded-pill nav-logo-img">
-        </a>
-        <!-- Toggler -->
-        <button class="navbar-toggler bg-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <!-- Navbar links and forms -->
-        <div class="collapse navbar-collapse" id="mynavbar">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('main.home') }}">Home</a>
-                </li>
-            </ul>
-            <form action="{{ url_for('main.search') }}" method="get" class="d-flex search-form">
-                <input name="query" class="form-control me-2" type="text" placeholder="Search">
-                <button class="btn btn-primary" type="submit">Search</button>
-            </form>
-            {% if current_user.is_authenticated %}
-            <!-- User profile and dropdown -->
-            <ul class="navbar-nav d-flex align-items-center">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="{{ url_for('static', filename='user_icon/uploads/' + user_profile.img) if user_profile.img else url_for('static', filename='user_icon/default_user_icon.jpg') }}" alt="User Icon" class="rounded-circle profile-img">
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="{{ url_for('main.channel', user_id=current_user.id) }}">My Channel</a></li>
-                        <li><a class="dropdown-item" href="{{ url_for('main.profile') }}">Edit Profile</a></li>
-                        <li><a class="dropdown-item" href="{{ url_for('main.logout') }}">Logout</a></li>
-                    </ul>
-                </li>
-            </ul>
-            {% endif %}
+         <nav class="navbar navbar-expand-lg navbar-dark bg-light">
+        <div class="container-fluid">
+            <!-- Logo -->
+            <a class="nav-link nav-logo" href="{{ url_for('main.home') }}">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" class="rounded-pill nav-logo-img">
+            </a>
+            <!-- Toggler -->
+            <button class="navbar-toggler bg-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- Navbar links and forms -->
+            <div class="collapse navbar-collapse" id="mynavbar">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('main.home') }}">Home</a>
+                    </li>
+                </ul>
+                <form action="{{ url_for('main.search') }}" method="get" class="d-flex search-form">
+                    <input name="query" class="form-control me-2" type="text" placeholder="Search">
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </form>
+                {% if current_user.is_authenticated %}
+                <!-- User profile and dropdown -->
+                <ul class="navbar-nav d-flex align-items-center">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="{{ url_for('static', filename='user_icon/uploads/' + (user_profile.img if user_profile.img else 'default_user_icon.jpg')) }}" alt="User Icon" class="rounded-circle profile-img">
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{{ url_for('main.channel', user_id=current_user.id) }}">My Channel</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('main.profile') }}">Edit Profile</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('main.logout') }}">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                {% else %}
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-primary" href="{{ url_for('main.login') }}">Login</a>
+                    </li>
+                </ul>
+                {% endif %}
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
 
 
