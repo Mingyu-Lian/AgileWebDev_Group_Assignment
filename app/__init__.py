@@ -11,7 +11,7 @@ from app.models import db
 migrate = Migrate()
 login_manager = LoginManager()
 
-def create_app():
+def create_app(Config):
     app = Flask(__name__)
     app.config.from_object(Config)
 
