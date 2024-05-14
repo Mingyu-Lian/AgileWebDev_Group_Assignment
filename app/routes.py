@@ -67,6 +67,9 @@ def logout():
 @main.route('/')
 @main.route('/home')
 def home():
+    if not current_user.is_authenticated:
+
+        return redirect(url_for('main.login'))
     filter_type = request.args.get('filter', 'all')
     page = request.args.get('page', 1, type=int)
     per_page = 8
