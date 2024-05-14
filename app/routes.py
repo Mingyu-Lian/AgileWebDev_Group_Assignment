@@ -5,7 +5,7 @@ from werkzeug.utils import secure_filename
 from flask import Blueprint, render_template, flash, redirect, url_for, request, current_app, session
 from flask_login import login_user, current_user,logout_user,login_required
 
-from .forms import LoginForm, SignUpForm,UploadForm, IconForm, ProfileForm, CommentForm
+from .forms import LoginForm, SignUpForm,UploadForm, IconForm, ProfileForm, CommentForm, ResetPasswordForm
 from .models import db, User,UserDetails,Post,Follow, Comment
 from sqlalchemy import or_
 
@@ -70,23 +70,17 @@ def home():
     filter_type = request.args.get('filter', 'all')
     page = request.args.get('page', 1, type=int)
     per_page = 8
-    offset = (page - 1) * per_page
 
     if filter_type == 'following' and current_user.is_authenticated:
-        # Get IDs of users being followed by the current user
-        followed_ids = [followed.id for followed in current_user.following]
-        if followed_ids:
-            posts = Post.query.filter(Post.author_id.in_(followed_ids)).order_by(Post.created_at.desc()).limit(per_page).offset(offset).all()
-            total_posts = Post.query.filter(Post.author_id.in_(followed_ids)).count()
-        else:
-            posts = []
-            total_posts = 0
+        followed_ids = [followed.followed_id for followed in current_user.following]
+        posts_query = Post.query.filter(Post.author_id.in_(followed_ids))
     else:
-        # Get all posts
-        total_posts = Post.query.count()
-        posts = Post.query.order_by(Post.created_at.desc()).limit(per_page).offset(offset).all()
+        posts_query = Post.query
 
-    total_pages = (total_posts + per_page - 1) // per_page
+    posts_pagination = posts_query.order_by(Post.created_at.desc()).paginate(page=page, per_page=per_page, error_out=False)
+    posts = posts_pagination.items
+    total_posts = posts_query.count()
+    total_pages = posts_pagination.pages
 
     return render_template(
         'home.html',
@@ -95,6 +89,10 @@ def home():
         page=page,
         total_pages=total_pages
     )
+
+
+
+
 
 
 @main.route('/profile', methods=['GET', 'POST'])
@@ -313,7 +311,7 @@ def follow(user_id):
     follow = Follow(follower_id=current_user.id, followed_id=user_to_follow.id)
     db.session.add(follow)
     db.session.commit()
-    flash(f'You are now following {user_to_follow.username}', 'success')
+    flash(f'You are now following the user', 'success')
     return redirect(url_for('main.channel', user_id=user_id))
 
 @main.route('/unfollow/<int:user_id>', methods=['GET', 'POST'])
@@ -326,10 +324,10 @@ def unfollow(user_id):
     
         current_user.following.filter_by(followed_id=user_id).delete()
         db.session.commit()
-        flash(f'You have unfollowed {user_to_unfollow.username}', 'success')
+        flash(f'You have unfollowed sucessfully', 'success')
     else:
         
-        flash(f'You are not following {user_to_unfollow.username}', 'warning')
+        flash(f'You are not following this user', 'warning')
 
     
     return redirect(url_for('main.channel', user_id=user_id))
@@ -359,3 +357,14 @@ def following(user_id):
     # 获取当前用户关注的所有用户
     following = User.query.join(Follow, Follow.followed_id == User.id).filter(Follow.follower_id == user_id).all()
     return render_template('following.html', user=user, following=following)
+
+
+@main.route('/reset_password', methods=['GET', 'POST'])
+def reset_password():
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        current_user.set_password(form.password.data)
+        db.session.commit()
+        flash('Your password has been updated!', 'success')
+        return redirect(url_for('main.profile'))
+    return render_template('reset_password.html', form=form)
