@@ -1,19 +1,21 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
-from .config import Config
 from .routes import main as main_blueprint
 from app.models import User
 from app.models import db
+from app.config import DevelopmentConfig, TestingConfig
 
 
 migrate = Migrate()
 login_manager = LoginManager()
 
-def create_app(Config):
+def create_app(Config_Name=DevelopmentConfig):
     app = Flask(__name__)
-    app.config.from_object(Config)
+    if Config_Name == 'testing':
+        app.config.from_object(TestingConfig)
+    else:
+        app.config.from_object(DevelopmentConfig)
 
     db.init_app(app)
     migrate.init_app(app, db)
