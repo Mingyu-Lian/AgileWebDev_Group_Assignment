@@ -87,8 +87,13 @@
             {% endif %}
         </div>
         
-        <button type="submit" class="btn btn-primary">Submit Comment</button>
+        {% if current_user.is_authenticated %}
+            <button type="submit" class="btn btn-primary">Submit Comment</button>
+        {% else %}
+            <p>You must be logged in to comment. <a href="{{ url_for('main.login') }}">Log in here</a>.</p>
+        {% endif %}
     </form>
+
 </div>
 
     {% if current_user.is_authenticated and post.author_id == current_user.id %}
