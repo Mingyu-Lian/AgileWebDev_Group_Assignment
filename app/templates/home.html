@@ -11,7 +11,7 @@
                 <br>
                 <a href="{{ url_for('main.home', filter='all') }}" class=" top2 {{'active' if filter == 'all' else '' }}">All Posts</a> 
                 
-                <a href="{{ url_for('main.home', filter='following') }}" class=" requires-auth top2  {{'active' if filter == 'following' else '' }}">Follow Posts</a> 
+                <a href="{{ url_for('main.home', filter='following') }}" class=" requires-auth top2  {{'active' if filter == 'following' else '' }}">Following</a> 
                 <br><br>
                 <!-- Add Post button -->
                 <a href="{{ url_for('main.upload_product') }}" class="requires-auth add-post-btn" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Add New Post" id="addPostButton">

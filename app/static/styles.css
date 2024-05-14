@@ -461,17 +461,20 @@ in the university of Western Australia (2024 S1) */
 
 
 .category-Interview {
-    background-color: rgb(56, 93, 111); /* Bootstrap primary blue */
+    background-color: rgb(40, 169, 233); /* Bootstrap primary blue */
 }
 
 .category-Recruitment {
-    background-color: rgb(166, 112, 127) /* Bootstrap danger red */
+    background-color: rgb(229, 107, 51) /* Bootstrap danger red */
 }
 
-.category-Jobsearch {
-    background-color:rgb(207, 74, 74); /* Bootstrap success green */
+.category-Seeking {
+    background-color:rgb(44, 131, 70); /* Bootstrap success green */
 }
 
+.category-Experience {
+    background-color: rgb(135, 55, 169); /* Bootstrap secondary gray */
+}
 .category-none {
     background-color: rgb(114, 112, 112); /* Bootstrap secondary gray */
 }
