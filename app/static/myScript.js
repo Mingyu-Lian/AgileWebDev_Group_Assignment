@@ -58,3 +58,15 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+
+document.getElementById('email').addEventListener('input', function() {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailHelpText = document.getElementById('emailHelp');
+    if (this.value.match(emailPattern)) {
+        emailHelpText.textContent = 'Email format is valid.';
+        emailHelpText.style.color = 'green';
+    } else {
+        emailHelpText.textContent = 'Invalid email format.';
+        emailHelpText.style.color = 'red';
+    }
+});
