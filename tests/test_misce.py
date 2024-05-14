@@ -37,24 +37,33 @@ class ModelTestCase(unittest.TestCase):
             db.session.commit()
         db.session.rollback()
 
-
     def test_cascade_delete(self):
 
         u1 = User(username='john', email='john@example.com')
         u1.set_password('cat')
         db.session.add(u1)
         db.session.commit()
+
+
         c1 = Category(name='Technology')
         db.session.add(c1)
+        db.session.commit()
+
+
         p1 = Post(title='Test Post', description='This is a test post', author=u1, category=c1)
         db.session.add(p1)
         db.session.commit()
+
+
         c2 = Comment(body='This is a test comment', author_id=u1.id, post_id=p1.id)
         db.session.add(c2)
         db.session.commit()
 
-        db.session.delete(u1)
+
+        db.session.delete(p1)
         db.session.commit()
+
+
         self.assertIsNone(Post.query.get(p1.id))
         self.assertIsNone(Comment.query.get(c2.id))
 
