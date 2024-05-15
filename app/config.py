@@ -9,7 +9,7 @@ class Config:
     UPLOAD_POST_IMG = os.path.join(basedir, 'static', 'post_image')
     DEFAULT_POST_IMAGE_PATH = os.path.join(basedir, 'static', 'post_image', 'default.jpg')
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024
-    SERVER_NAME = os.environ.get('SERVER_NAME') or '127.0.0.1:8080'
+    SERVER_NAME = os.environ.get('SERVER_NAME') or '127.0.0.1:5000'
     
     APPLICATION_ROOT = os.environ.get('APPLICATION_ROOT') or '/'
     PREFERRED_URL_SCHEME = os.environ.get('PREFERRED_URL_SCHEME') or 'http'
