@@ -59,18 +59,32 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-// 获取文件上传控件
+
+// In the upload page, review the image to see if it meets the requirements
 const fileInput = document.querySelector('input[type="file"]');
 
-// 监听文件选择事件
+
 fileInput.addEventListener('change', (event) => {
     const selectedFile = event.target.files[0];
     const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
 
-    // 检查所选文件类型是否在允许的文件类型列表中
+
     if (!allowedTypes.includes(selectedFile.type)) {
-        // 不允许的文件类型，显示提示信息并清除文件选择
+
         alert('Only image files (jpg, jpeg, png, gif) are allowed.');
-        fileInput.value = ''; // 清除文件选择
+        fileInput.value = ''; 
     }
 });
+
+document.getElementById('email').addEventListener('input', function() {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailHelpText = document.getElementById('emailHelp');
+    if (this.value.match(emailPattern)) {
+        emailHelpText.textContent = 'Email format is valid.';
+        emailHelpText.style.color = 'green';
+    } else {
+        emailHelpText.textContent = 'Invalid email format.';
+        emailHelpText.style.color = 'red';
+    }
+});
+
