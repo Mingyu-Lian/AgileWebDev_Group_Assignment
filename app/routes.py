@@ -305,7 +305,7 @@ def channel(user_id):
     user = User.query.get_or_404(user_id)
     is_own_channel = (current_user.is_authenticated and current_user.id == user_id)
     user_profile = UserDetails.query.filter_by(id=user_id).first()
-    posts = Post.query.filter_by(author_id=user_id).order_by(Post.created_at.desc()).all()  # 获取该用户的所有帖子
+    posts = Post.query.filter_by(author_id=user_id).order_by(Post.created_at.desc()).all()  # fectch posts
     return render_template('channel.html', user=user, is_own_channel=is_own_channel, user_id=user_id, user_profile=user_profile, posts=posts)
 
 
@@ -325,7 +325,7 @@ def search():
                 )
             ).distinct().all()
         elif filter_type == 'users':
-            # 正确地连接 User 和 UserDetails，并通过 UserDetails.name 进行搜索
+            # search user's name / not username
             results = User.query.join(UserDetails).filter(UserDetails.name.ilike(search)).all()
 
         return render_template('search_results.html', posts=results if filter_type == 'posts' else None,
@@ -370,31 +370,19 @@ def unfollow(user_id):
     
     return redirect(url_for('main.channel', user_id=user_id))
 
-@main.route('/user/<username>')
-def user_channel(username):
-    # 根据用户名获取用户信息
-    user = User.query.filter_by(username=username).first()
-
-    if user:
-        # 显示用户的 channel 页面
-        return render_template('user_channel.html', user=user)
-    else:
-        # 如果未找到用户，则显示 404 页面或者其他提示
-        return render_template('404.html'), 404
-
 @main.route('/followers/<int:user_id>')
 def followers(user_id):
     user_profile = UserDetails.query.filter_by(id=current_user.id).first()
-    user = User.query.get_or_404(user_id)  # 确保用户存在
-    # 获取所有关注当前用户的用户列表
+    user = User.query.get_or_404(user_id)  # make sure user exist
+    # get follower's list
     followers = User.query.join(Follow, Follow.follower_id == User.id).filter(Follow.followed_id == user_id).all()
     return render_template('followers.html', user=user, followers=followers, user_profile=user_profile)
 
 @main.route('/following/<int:user_id>')
 def following(user_id):
     user_profile = UserDetails.query.filter_by(id=current_user.id).first()
-    user = User.query.get_or_404(user_id)  # 确保用户存在
-    # 获取当前用户关注的所有用户
+    user = User.query.get_or_404(user_id)  # make sure user exist
+    # get following's list
     following = User.query.join(Follow, Follow.followed_id == User.id).filter(Follow.follower_id == user_id).all()
     return render_template('following.html', user=user, following=following, user_profile=user_profile)
 
