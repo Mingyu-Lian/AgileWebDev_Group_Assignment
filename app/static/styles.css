@@ -1,19 +1,32 @@
-/*This css file is an assignment of CITS5505 unit 
-in the university of Western Australia (2024 S1) */
-/*This is a part of the Group assingment*/
+/*This css file is an assignment of CITS5505 unit
+in the University of Western Australia (2024 S1) */
+/*This is a part of the Group assignment*/
 
 /* Base CSS */
 .navbar .navbar-nav .nav-link {
     color: black !important;
-    font-family:Verdana, Geneva, Tahoma, sans-serif; 
-    font-size: 18px !important; 
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 18px !important;
     font-weight: 500 !important;
     padding: 10px;
     border-radius: 10px !important;
     margin-top: 4px;
-    transition: all 0.3S;
+    transition: all 0.3s;
+}
+.nav-logo-img {
+    max-width: 80px; /* 限制 logo 的最大宽度 */
+    height: auto; /* 保持 logo 的高度比例 */
 }
 
+.profile-img {
+    width: 80px; /* 设置头像的宽度 */
+    height: 80px; /* 设置头像的高度 */
+}
+
+.dropdown-menu {
+    right: 0; /* 保证下拉菜单不会超出屏幕 */
+    left: auto; /* 避免下拉菜单向左展开 */
+}
 .navbar .nav-logo img {
     transition: all 0.3s ease;
 }
@@ -24,11 +37,11 @@ in the university of Western Australia (2024 S1) */
 
 .navbar .navbar-nav .nav-link:hover {
     color: white !important;
-    background-color: rgb(34, 95, 155); 
+    background-color: rgb(34, 95, 155);
     padding: 10px;
     padding-left: 20px;
     padding-right: 20px;
-    border-radius: 10px; 
+    border-radius: 10px;
 }
 
 .navbar .navbar-nav .nav-link:active {
@@ -39,9 +52,9 @@ in the university of Western Australia (2024 S1) */
 .navbar .navbar-nav .login{
     color: white !important;
     background-color: rgb(48, 110, 173) !important;
-    border-radius: 20px !important; 
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-    font-weight: bolder !important;  
+    border-radius: 20px !important;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bolder !important;
     text-align: center;
     width: 150px;
     transition: all 0.4s ease !important;
@@ -99,8 +112,18 @@ in the university of Western Australia (2024 S1) */
     background-color: rgb(55, 64, 73) !important;
 }
 
-/*Homepage CSS*/
-/*Home Sidebar*/
+/* 调整布局以适应较小的屏幕 */
+@media (max-width: 768px) {
+    .homesidebar {
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+    }
+    .homesidebar .top2 {
+        margin: 0 10px;
+    }
+}
+
 .homesidebar {
     display: flex;
     flex-direction: column;
@@ -114,29 +137,18 @@ in the university of Western Australia (2024 S1) */
     min-width: 90px;
 }
 
-@media (max-width: 768px) { 
-    .homesidebar {
-        flex-direction: row; 
-        justify-content: space-around;
-        align-items: center;
-    }
-    .homesidebar top2 {
-        margin: 0 10px; 
-    }
-}
-
-.homesidebar .top2{
+.homesidebar .top2 {
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     text-decoration: none;
     color: rgb(34, 95, 155);
 
     padding: 10px;
     border-radius: 20px;
-    justify-content: center; 
+    justify-content: center;
     transition: all 0.4s ease;
     margin: 5px 5px;
     display: inline-block;
-    transition: all 0.4s ease; 
+    transition: all 0.4s ease;
 }
 
 .homesidebar .top2:hover {
@@ -149,13 +161,13 @@ in the university of Western Australia (2024 S1) */
     position: relative;
     color: rgb(34, 94, 155);
     text-align: center;
-    transition: transform 0.4s; 
-    z-index: 10; 
+    transition: transform 0.4s;
+    z-index: 10;
 }
 
 .add-post-btn:hover {
-    transform:  scale(1.2) rotate(90deg); 
-    transform-origin: center; 
+    transform:  scale(1.2) rotate(90deg);
+    transform-origin: center;
     color: rgb(34, 94, 155);
 }
 
@@ -172,7 +184,7 @@ in the university of Western Australia (2024 S1) */
     color: white;
     padding: 10px 20px !important;
     font-size: 0.8em !important;
-    font-weight: bold !important;  
+    font-weight: bold !important;
 }
 
 
@@ -188,14 +200,14 @@ in the university of Western Australia (2024 S1) */
 }
 
 .post-card-link {
-    text-decoration: none; 
+    text-decoration: none;
     transition: all 0.15s ease;
 }
 
 .post-card-link:hover {
-    text-decoration: none; 
+    text-decoration: none;
     font-size: larger;
-} 
+}
 
 /* Homepage Pagination */
 
@@ -214,7 +226,7 @@ in the university of Western Australia (2024 S1) */
 
 .pagination .page-item.active .page-link {
     background-color: rgb(224, 222, 222)!important;
-    border: transparent !important; 
+    border: transparent !important;
     color: rgb(34, 95, 155) !important;
     font-weight: bolder;
 }
@@ -227,7 +239,7 @@ in the university of Western Australia (2024 S1) */
     padding-right: 20px !important;
 }
 .pagination .page-item.disabled .page-link {
-    color:white !important; 
+    color:white !important;
     background-color:  rgba(102, 138, 176, 0.906) !important; /* 禁用状态的背景色 */
 }
 
@@ -282,7 +294,7 @@ in the university of Western Australia (2024 S1) */
 
 .profile .profile-img:hover {
     transform: scale(1.1);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
 
 .profile .profile-value{
@@ -326,7 +338,7 @@ in the university of Western Australia (2024 S1) */
 
 .userchannel .profile-img:hover {
     transform: scale(1.1);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   }
 
 .userchannel .channeltitle{
@@ -348,11 +360,11 @@ in the university of Western Australia (2024 S1) */
     background-color:rgb(34, 95, 155) !important ;
   }
  .userchannel  .btn:hover {
-    background-color: rgb(221, 220, 220) !important; 
+    background-color: rgb(221, 220, 220) !important;
     color:rgb(34, 95, 155) ;
     font-weight: bold;
   }
-  
+
   @media (max-width: 768px) {
     /* 调整布局以适应较小的屏幕 */
     .userchannel .profile-img {
@@ -368,20 +380,20 @@ in the university of Western Australia (2024 S1) */
     font-size:xx-large; /* 字体大小 */
     color: rgb(34, 95, 155) !important; /* 字体颜色 */
     font-weight: bolder;
-    
+
 }
 
 
 .list-group-item {
-    font-family: 'Verdana', sans-serif; 
-    color: rgb(34, 95, 155) !important; 
-    transition: transform 0.3s ease; 
+    font-family: 'Verdana', sans-serif;
+    color: rgb(34, 95, 155) !important;
+    transition: transform 0.3s ease;
 }
 
 
 .list-group-item:hover {
-    transform: scale(1.05); 
-    background-color: rgb(187, 180, 180); 
+    transform: scale(1.05);
+    background-color: rgb(187, 180, 180);
 }
 
 /* search page */
@@ -394,13 +406,13 @@ in the university of Western Australia (2024 S1) */
 .search .btn-group {
     display: flex;
     justify-content: center;
-    width: 50%; 
+    width: 50%;
     margin: auto;
 }
 
 .search .btn {
-    border-radius: 20px; 
-    background-color: rgb(236, 236, 236); 
+    border-radius: 20px;
+    background-color: rgb(236, 236, 236);
     border: none;
     color: rgb(34, 95, 155);
     padding: 10px 30px;
@@ -409,12 +421,12 @@ in the university of Western Australia (2024 S1) */
 }
 
 .search .btn:hover {
-    background-color: rgb(34, 95, 155); 
+    background-color: rgb(34, 95, 155);
     color: white;
 }
 
 .search .btn.active {
-    background-color: rgb(34, 95, 155) !important; 
+    background-color: rgb(34, 95, 155) !important;
     color: white !important ;
 }
 
@@ -430,13 +442,13 @@ in the university of Western Australia (2024 S1) */
 
 .post-container .post-image {
     width: 80%;
-    max-width: 900px; 
-    height: auto; 
+    max-width: 900px;
+    height: auto;
     max-height: 500px;
     object-fit: cover;
-    display: block; 
+    display: block;
     margin: 0 auto;
-    border-radius: 30px; 
+    border-radius: 30px;
 }
 
 .post-container .post-maintitle{
@@ -589,22 +601,22 @@ in the university of Western Australia (2024 S1) */
 .comment-author {
     display: flex;
     align-items: center;
-    margin-bottom: 10px; 
+    margin-bottom: 10px;
 }
 
 .comment-author img,
 .comment-author a {
-    transition: transform 0.3s ease;  
+    transition: transform 0.3s ease;
 }
 
 .comment-author a:hover,
 .comment-author img:hover {
-    transform: scale(1.1);  
+    transform: scale(1.1);
     text-decoration: none;
 }
 
 .comment-text {
-    margin-left: 10px;  
+    margin-left: 10px;
     color:rgb(34, 95, 155) ;
     text-decoration: none;
 }
@@ -633,8 +645,8 @@ in the university of Western Australia (2024 S1) */
 
 .post-container .submit-button {
 
-    margin-top: 10px;  
-    transition: all 0.3s ease;  
+    margin-top: 10px;
+    transition: all 0.3s ease;
     background-color:rgb(34, 95, 155) ;
     color: white;
     font-weight: bold;
@@ -647,13 +659,13 @@ in the university of Western Australia (2024 S1) */
 }
 
 .post-container  .submit-button:hover {
-    background-color:rgba(34, 94, 155, 0.801) ;  
+    background-color:rgba(34, 94, 155, 0.801) ;
     padding-left: 30px;
     padding-right: 30px ;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .post-container  .submit-button:active {
-    background-color: black;  
+    background-color: black;
 
 }

@@ -39,21 +39,39 @@ def login():
 def signup():
     form = SignUpForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user:
-            flash('The email is already registered')
+        try:
+
+            user = User.query.filter_by(email=form.email.data).first()
+            if user:
+                flash('The email is already registered')
+                return redirect(url_for('main.signup'))
+
+
+            new_user = User(username=form.username.data, email=form.email.data)
+            new_user.set_password(form.password.data)
+            db.session.add(new_user)
+            db.session.flush()
+
+
+            new_user_details = UserDetails(id=new_user.id)
+            db.session.add(new_user_details)
+
+
+            db.session.commit()
+            flash('Successfully registered!')
+            return redirect(url_for('main.login'))
+
+        except Exception as e:
+
+            db.session.rollback()
+            if 'username' in str(e):
+                flash('Username is too long. Please use a shorter username.')
+            elif 'password' in str(e):
+                flash('Password is too long. Please use a shorter password.')
+            else:
+                flash('An error occurred during registration. Please try again.')
             return redirect(url_for('main.signup'))
-        new_user = User(username=form.username.data, email=form.email.data)
-        new_user.set_password(form.password.data)
-        db.session.add(new_user)
-        db.session.flush()
 
-        new_user_details = UserDetails(id=new_user.id)
-        db.session.add(new_user_details)
-
-        db.session.commit()
-        flash('Successfully registered!')
-        return redirect(url_for('main.login'))
     return render_template('signup.html', title='Sign Up', form=form)
 
 
@@ -81,14 +99,17 @@ def home():
     posts = posts_pagination.items
     total_posts = posts_query.count()
     total_pages = posts_pagination.pages
+    user_profile = UserDetails.query.filter_by(id=current_user.id).first() if current_user.is_authenticated else None
 
     return render_template(
         'home.html',
         posts=posts,
         filter=filter_type,
         page=page,
-        total_pages=total_pages
+        total_pages=total_pages,
+        user_profile=user_profile
     )
+
 
 
 
@@ -167,6 +188,7 @@ def set_icon():
 @main.route('/upload/product', methods=['GET', 'POST'])
 @login_required
 def upload_product():
+    user_profile = UserDetails.query.filter_by(id=current_user.id).first()
     form = UploadForm()
     if form.validate_on_submit():
         title = form.title.data
@@ -189,12 +211,13 @@ def upload_product():
         flash('Post uploaded successfully!', 'success')
         return redirect(url_for('main.home'))
 
-    return render_template('upload.html', title='Upload Post', form=form)
+    return render_template('upload.html', title='Upload Post', form=form,  user_profile=user_profile)
 
 
 
 @main.route('/post/<int:post_id>', methods=['GET', 'POST'])
 def show_post(post_id):
+    user_profile = UserDetails.query.filter_by(id=current_user.id).first()
     post = Post.query.get_or_404(post_id)
     comments = Comment.query.filter_by(post_id=post_id).all()
     comment_form = CommentForm()
@@ -209,7 +232,7 @@ def show_post(post_id):
     for comment in comments:
         comment.author = User.query.get(comment.author_id)
 
-    return render_template('post.html', post=post, comments=comments, comment_form=comment_form)
+    return render_template('post.html', post=post, comments=comments, comment_form=comment_form, user_profile=user_profile)
 
 
 @main.route('/post/<int:post_id>/comment', methods=['POST'])
@@ -265,6 +288,7 @@ def delete_post(post_id):
     return redirect(url_for('main.home'))
 @main.route('/channel/<int:user_id>', methods=['GET', 'POST'])
 def channel(user_id):
+    user_profile = UserDetails.query.filter_by(id=current_user.id).first()
     user = User.query.get_or_404(user_id)
     is_own_channel = (current_user.is_authenticated and current_user.id == user_id)
     user_profile = UserDetails.query.filter_by(id=user_id).first()
@@ -274,6 +298,7 @@ def channel(user_id):
 
 @main.route('/search', methods=['GET'])
 def search():
+    user_profile = UserDetails.query.filter_by(id=current_user.id).first()
     query = request.args.get('query', '')
     filter_type = request.args.get('filter', 'posts')  # default is post
 
@@ -291,7 +316,7 @@ def search():
             results = User.query.join(UserDetails).filter(UserDetails.name.ilike(search)).all()
 
         return render_template('search_results.html', posts=results if filter_type == 'posts' else None,
-                               users=results if filter_type == 'users' else None, query=query, filter=filter_type)
+                               users=results if filter_type == 'users' else None, query=query, filter=filter_type, user_profile=user_profile)
     else:
         flash("Please enter a search term.")
         return redirect(url_for('main.home'))
@@ -362,9 +387,10 @@ def following(user_id):
 @main.route('/reset_password', methods=['GET', 'POST'])
 def reset_password():
     form = ResetPasswordForm()
+    user_profile = UserDetails.query.filter_by(id=current_user.id).first()
     if form.validate_on_submit():
         current_user.set_password(form.password.data)
         db.session.commit()
         flash('Your password has been updated!', 'success')
         return redirect(url_for('main.profile'))
-    return render_template('reset_password.html', form=form)
+    return render_template('reset_password.html', form=form, user_profile=user_profile)
