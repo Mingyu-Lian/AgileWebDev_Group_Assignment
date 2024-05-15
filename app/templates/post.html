@@ -2,18 +2,18 @@
 
 {% block content %}
 <div class="container post-container">
-    <!-- Post Title -->
-    <p class="post-maintitle">{{ post.title }}</p>
+    <!-- Post Title includes the title of the post, the date the post was created, and the category of post.-->
+    <p class="post-maintitle">{{ post.title }}</p>  
     <p class="text-muted">{{ post.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
     {% if post.category %}
-    {% set category_class = 'category-' + post.category.name|lower %}
+    {% set category_class = 'category-' + post.category.name|lower %} <!--Find the name of the number corresponding to this post from the category database and output it.-->
     {% else %}
     {% set category_class = 'category-none' %}
     {% endif %}
     <p class="post-category {{ category_class }}">
-        {{ post.category.name if post.category else 'No Category' }}
+        {{ post.category.name if post.category else 'No Category' }} <!--Unselected will output no category.-->
     </p>
-    <!-- Post Image -->
+    <!-- Post Image displays the image set for the post, otherwise the default image is displayed.-->
     <div class="postimg">
         {% if post.img %}
         <img src="{{ url_for('static', filename='post_image/' + post.img) }}" alt="{{ post.title }}" class="post-image">
@@ -22,10 +22,10 @@
     <br>
     </p>
 
-    <!-- Author and Interaction Section -->
+    <!-- Author and Interaction Section displays the author's icon and username, which can be clicked to enter the author's homepage.-->
     <div class="d-flex justify-content-between align-items-center post-meta">
         <div class="author-info">
-            <a href="{{ url_for('main.channel', user_id=post.author.id) }}" class="author-link">
+            <a href="{{ url_for('main.channel', user_id=post.author.id) }}" class="author-link"> <!--Click on the username or icon to jump to the user channel page.-->
             {% if post.author.details and post.author.details.img %}
             <img src="{{ url_for('static', filename='user_icon/uploads/' + post.author.details.img) }}" alt="Author Icon" class="author-icon">
             {% else %}
@@ -41,16 +41,16 @@
             <!-- Like and Delete Buttons -->
             {% if current_user.is_authenticated %}
             {% if post in current_user.liked_posts %}
-              <form action="{{ url_for('main.like_post', post_id=post.id) }}" method="POST">
+              <form action="{{ url_for('main.like_post', post_id=post.id) }}" method="POST"> <!--User clicks unlike to enter into the database.-->
                 <button type="submit" class="btn unlike-btn btn-primary rounded-pill"><i class='fas fa-heart-broken' style='font-size:16px'></i> Unlike</button>
               </form>
             {% else %}
-              <form action="{{ url_for('main.like_post', post_id=post.id) }}" method="POST">
+              <form action="{{ url_for('main.like_post', post_id=post.id) }}" method="POST"> <!--User clicks like to enter into the database.-->
                 <button type="submit" class="btn like-btn btn-primary rounded-pill"><i class='far fa-heart' style='font-size:16px'></i> Like</button>
               </form>
             {% endif %}
             {% endif %}
-            {% if current_user.is_authenticated and post.author_id == current_user.id %}
+            {% if current_user.is_authenticated and post.author_id == current_user.id %} <!--Confirms whether the user is an author or not, and displays the delete button if they are.-->
                 <form method="post" action="{{ url_for('main.delete_post', post_id=post.id) }}">
                 <input type="hidden" name="_method" value="DELETE">
                 <button type="submit" class="btn delete-btn btn-primary rounded-pill" id="deletepost"><i class='fas fa-trash-alt' style='font-size:16px'></i> Delete Post</button>
@@ -61,12 +61,12 @@
 
 
 
-    <!-- Post Description and Category -->
+    <!-- Post Description -->
     <br>
     <p class="post-description">{{ post.description }}</p>
     <br>
     
-    <!-- Comments Section -->
+    <!-- Comments Section includes user comments, sorted from oldest to newest. It is also available to click on a user's icon or nickname to go to their homepage.-->
     <div class="comments-section">
         <h3 class="title">Comments</h3>
         {% for comment in post.comments %}
@@ -74,7 +74,7 @@
         
         <div class="comment">
             <div class="comment-author">
-                <a href="{{ url_for('main.channel', user_id=comment.author.id) }}" >
+                <a href="{{ url_for('main.channel', user_id=comment.author.id) }}" > <!--Click on the icon to jump to the user channel page.-->
                     {% if comment.author.details and comment.author.details.img %}
                         <img src="{{ url_for('static', filename='user_icon/uploads/' + comment.author.details.img) }}" alt="User Icon" 
                              class="comment-icon"
@@ -85,18 +85,18 @@
                              style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
                     {% endif %}
                 </a>
-                <a href="{{ url_for('main.channel', user_id=comment.author.id) }}" class="comment-text">
+                <a href="{{ url_for('main.channel', user_id=comment.author.id) }}" class="comment-text"> <!--Click on the username to jump to the user channel page.-->
                     <strong>{{ comment.author.details.name }}</strong>
                 </a>
             </div>
-            <p class="time">{{ comment.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+            <p class="time">{{ comment.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p> 
             <p class="body">{{ comment.body }}</p>
         </div>
         
         {% endfor %}
     </div>
 
-    <!-- Add Comment Form -->
+    <!-- Add Comment Form detects whether the user is logged in or not, if not logged in will not be able to comment, and provide a link to jump to the login page.-->
     <br>
     <br>
     <div class="add-comment-form">
@@ -106,10 +106,10 @@
             {{ comment_form.content(class="form-control", placeholder="Add a comment...") }}
         </div>
         
-        {% if current_user.is_authenticated %}
-            <button type="submit" class="btn btn-primary">Submit Comment</button>
+        {% if current_user.is_authenticated %} <!--Detecting whether a user is logged in.-->
+            <button type="submit" class="btn btn-primary">Submit Comment</button>  
         {% else %}
-            <p>You must be logged in to comment. <a href="{{ url_for('main.login') }}">Log in here</a>.</p>
+            <p>You must be logged in to comment. <a href="{{ url_for('main.login') }}">Log in here</a>.</p> <!--If user is not logged in, user can click log in here to go to the login page.-->
         {% endif %}
     </form>
 

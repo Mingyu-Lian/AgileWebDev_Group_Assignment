@@ -189,26 +189,29 @@ def set_icon():
 @main.route('/upload/product', methods=['GET', 'POST'])
 @login_required
 def upload_product():
+
     user_profile = UserDetails.query.filter_by(id=current_user.id).first()
-    form = UploadForm()
+    form = UploadForm() # Example of creating an UploadForm.
+
+    #If the form data is validated and it is a POST request.
     if form.validate_on_submit():
         title = form.title.data
         description = form.description.data
         tag = form.tag.data
         image_file = form.image.data
 
-        if image_file:
+        if image_file: 
             filename = secure_filename(image_file.filename)
             file_path = os.path.join(filename)
-            image_file.save(os.path.join(current_app.config['UPLOAD_POST_IMG'], file_path))
+            image_file.save(os.path.join(current_app.config['UPLOAD_POST_IMG'], file_path))#Save the image in the corresponding path.
         else:
-            # 如果没有上传图片，则使用默认图片路径
+            #If no image is uploaded, the default image path is used.
             file_path = 'default.JPG'
-
+        #Saving to the database.
         new_post = Post(title=title, description=description, author_id=current_user.id, category_id=tag, img=file_path)
         db.session.add(new_post)
         db.session.commit()
-
+        #Successful save to the database will notify and jump back to the home page.
         flash('Post uploaded successfully!', 'success')
         return redirect(url_for('main.home'))
 
@@ -218,18 +221,20 @@ def upload_product():
 
 @main.route('/post/<int:post_id>', methods=['GET', 'POST'])
 def show_post(post_id):
-    user_profile = UserDetails.query.filter_by(id=current_user.id).first()
-    post = Post.query.get_or_404(post_id)
-    comments = Comment.query.filter_by(post_id=post_id).all()
-    comment_form = CommentForm()
 
+    user_profile = UserDetails.query.filter_by(id=current_user.id).first()
+    post = Post.query.get_or_404(post_id) #Query the post with the specified post_id and return a 404 error page if it doesn't exist.
+    comments = Comment.query.filter_by(post_id=post_id).all() #All comments for querying a specific post_id
+    comment_form = CommentForm() # Example of creating a CommentForm
+    
+    # If a user submits a comment form and it passes validation
     if comment_form.validate_on_submit():
         comment_body = comment_form.body.data
         new_comment = Comment(body=comment_body, author_id=current_user.id, post_id=post_id)
         db.session.add(new_comment)
         db.session.commit()
 
-    # 查询每条评论的作者信息
+    #Look up author information for each comment.
     for comment in comments:
         comment.author = User.query.get(comment.author_id)
 
@@ -239,34 +244,37 @@ def show_post(post_id):
 @main.route('/post/<int:post_id>/comment', methods=['POST'])
 @login_required
 def add_comment(post_id):
-    form = CommentForm()
-    post = Post.query.get_or_404(post_id)
-
+    form = CommentForm() #Example of creating a CommentForm.
+    post = Post.query.get_or_404(post_id) 
+   
+    # If the comment form data is validated and submitted via a POST request.
     if form.validate_on_submit():
         comment_body = form.content.data
 
         new_comment = Comment(body=comment_body, author_id=current_user.id, post_id=post_id)
         db.session.add(new_comment)
         db.session.commit()
-
+        
+        #Successful save to the database will notify and jump back to the post page.
         flash('Your comment has been added!', 'success')
         return redirect(url_for('main.show_post', post_id=post_id))
 
-    # If the form did not validate, redirect back to the post page
     return redirect(url_for('main.show_post', post_id=post_id))
 
 @main.route('/like_post/<int:post_id>', methods=['POST'])
 @login_required
 def like_post(post_id):
-    post = Post.query.get_or_404(post_id)
-    
+    post = Post.query.get_or_404(post_id) 
+    #Check if the current user has already liked the post.
     if current_user in post.liked_by_users:
+        #Unliked if already liked.
         post.likes -= 1
         post.liked_by_users.remove(current_user)
     else:
+        #Performs a like operation if it has not been liked before.
         post.likes += 1
         post.liked_by_users.append(current_user)
-    
+    #Saving to the database.
     db.session.commit()
     return redirect(url_for('main.show_post', post_id=post_id))
 
@@ -276,17 +284,18 @@ def like_post(post_id):
 def delete_post(post_id):
     post = Post.query.get_or_404(post_id)
 
-    # 检查当前登录用户是否是帖子的作者
+    #Check if the currently logged in user is the author of the post.
     if current_user.id != post.author_id:
         flash('You are not authorized to delete this post.', 'error')
         return redirect(url_for('main.show_post'))
     
-    # 删除帖子
+    #If it is the author of the post, perform the delete post action.
     db.session.delete(post)
     db.session.commit()
 
     flash('Post deleted successfully.', 'success')
     return redirect(url_for('main.home'))
+
 @main.route('/channel/<int:user_id>', methods=['GET', 'POST'])
 def channel(user_id):
     user_profile = UserDetails.query.filter_by(id=current_user.id).first()
