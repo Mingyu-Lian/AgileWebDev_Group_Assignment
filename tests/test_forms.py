@@ -42,9 +42,7 @@ class FormTestCase(unittest.TestCase):
         )
         self.assertTrue(form.validate())
 
-    def test_icon_form(self):
-        # 测试IconForm需要模拟一个文件上传
-        pass
+
 
     def test_upload_form(self):
         form = UploadForm(
