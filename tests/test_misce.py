@@ -76,7 +76,7 @@ class ModelTestCase(unittest.TestCase):
         p1 = Post(title='Test Post', description='This is a test post', author=u1)
         db.session.add(p1)
         db.session.commit()
-        self.assertTrue((datetime.utcnow() - p1.timestamp).total_seconds() < 10)
+        self.assertTrue((datetime.utcnow() - p1.created_at).total_seconds() < 10)
 
     def test_error_handling(self):
 
