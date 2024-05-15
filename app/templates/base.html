@@ -48,7 +48,7 @@
                 <ul class="navbar-nav d-flex align-items-center">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="{{ url_for('static', filename='user_icon/uploads/' + (user_profile.img if user_profile.img else 'default_user_icon.jpg')) }}" alt="User Icon" class="rounded-circle profile-img">
+                           <img src="{{ url_for('static', filename='user_icon/uploads/' + user_profile.img) if user_profile.img else url_for('static', filename='user_icon/default_user_icon.jpg') }}" alt="User Icon" class="profile-img rounded-circle">
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="{{ url_for('main.channel', user_id=current_user.id) }}">My Channel</a></li>
