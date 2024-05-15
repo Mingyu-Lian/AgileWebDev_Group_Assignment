@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container post-container">
     <!-- Post Title includes the title of the post, the date the post was created, and the category of post.-->
-    <p class="post-maintitle">{{ post.title }}</p>  
+    <p class="post-maintitle">{{ post.title }}</p>
     <p class="text-muted">{{ post.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
     {% if post.category %}
     {% set category_class = 'category-' + post.category.name|lower %} <!--Find the name of the number corresponding to this post from the category database and output it.-->
@@ -20,7 +20,6 @@
         {% endif %}
     </div>
     <br>
-    </p>
 
     <!-- Author and Interaction Section displays the author's icon and username, which can be clicked to enter the author's homepage.-->
     <div class="d-flex justify-content-between align-items-center post-meta">
@@ -36,7 +35,6 @@
             </a>
         </div>
 
-        
         <div class="interaction-buttons">
             <!-- Like and Delete Buttons -->
             {% if current_user.is_authenticated %}
@@ -59,40 +57,35 @@
         </div>
     </div>
 
-
-
     <!-- Post Description -->
     <br>
     <p class="post-description">{{ post.description }}</p>
     <br>
-    
+
     <!-- Comments Section includes user comments, sorted from oldest to newest. It is also available to click on a user's icon or nickname to go to their homepage.-->
     <div class="comments-section">
         <h3 class="title">Comments</h3>
         {% for comment in post.comments %}
-        
-        
         <div class="comment">
             <div class="comment-author">
                 <a href="{{ url_for('main.channel', user_id=comment.author.id) }}" > <!--Click on the icon to jump to the user channel page.-->
                     {% if comment.author.details and comment.author.details.img %}
-                        <img src="{{ url_for('static', filename='user_icon/uploads/' + comment.author.details.img) }}" alt="User Icon" 
+                        <img src="{{ url_for('static', filename='user_icon/uploads/' + comment.author.details.img) }}" alt="User Icon"
                              class="comment-icon"
                              style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
                     {% else %}
-                        <img src="{{ url_for('static', filename='user_icon/default_user_icon.jpg') }}" alt="Default Icon" 
+                        <img src="{{ url_for('static', filename='user_icon/default_user_icon.jpg') }}" alt="Default Icon"
                              class="comment-icon"
                              style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
                     {% endif %}
                 </a>
                 <a href="{{ url_for('main.channel', user_id=comment.author.id) }}" class="comment-text"> <!--Click on the username to jump to the user channel page.-->
-                    <strong>{{ comment.author.details.name }}</strong>
+                    <strong>{{ comment.author.details.name if comment.author.details else comment.author.username }}</strong>
                 </a>
             </div>
-            <p class="time">{{ comment.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p> 
+            <p class="time">{{ comment.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
             <p class="body">{{ comment.body }}</p>
         </div>
-        
         {% endfor %}
     </div>
 
@@ -105,22 +98,21 @@
         <div class="form-group">
             {{ comment_form.content(class="form-control", placeholder="Add a comment...") }}
         </div>
-        
+
         {% if current_user.is_authenticated %} <!--Detecting whether a user is logged in.-->
-            <button type="submit" class="btn btn-primary">Submit Comment</button>  
+            <button type="submit" class="btn btn-primary">Submit Comment</button>
         {% else %}
             <p>You must be logged in to comment. <a href="{{ url_for('main.login') }}">Log in here</a>.</p> <!--If user is not logged in, user can click log in here to go to the login page.-->
         {% endif %}
     </form>
-
 </div>
 </div>
 
 <script>
     //delete popup
     document.addEventListener('DOMContentLoaded', function () {
-        var deleteButtons = document.querySelectorAll('.delete-btn'); 
-    
+        var deleteButtons = document.querySelectorAll('.delete-btn');
+
         deleteButtons.forEach(function(button) {
             button.addEventListener('click', function(event) {
                 if (!confirm('Are you sure you want to delete this post?')) {
@@ -129,6 +121,6 @@
             });
         });
     });
-    </script>
+</script>
 
 {% endblock %}
