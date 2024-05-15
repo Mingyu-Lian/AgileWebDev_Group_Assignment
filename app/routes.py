@@ -101,6 +101,7 @@ def home():
     total_pages = posts_pagination.pages
     user_profile = UserDetails.query.filter_by(id=current_user.id).first() if current_user.is_authenticated else None
 
+
     return render_template(
         'home.html',
         posts=posts,
