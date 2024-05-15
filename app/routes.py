@@ -381,17 +381,19 @@ def user_channel(username):
 
 @main.route('/followers/<int:user_id>')
 def followers(user_id):
+    user_profile = UserDetails.query.filter_by(id=current_user.id).first()
     user = User.query.get_or_404(user_id)  # 确保用户存在
     # 获取所有关注当前用户的用户列表
     followers = User.query.join(Follow, Follow.follower_id == User.id).filter(Follow.followed_id == user_id).all()
-    return render_template('followers.html', user=user, followers=followers)
+    return render_template('followers.html', user=user, followers=followers, user_profile=user_profile)
 
 @main.route('/following/<int:user_id>')
 def following(user_id):
+    user_profile = UserDetails.query.filter_by(id=current_user.id).first()
     user = User.query.get_or_404(user_id)  # 确保用户存在
     # 获取当前用户关注的所有用户
     following = User.query.join(Follow, Follow.followed_id == User.id).filter(Follow.follower_id == user_id).all()
-    return render_template('following.html', user=user, following=following)
+    return render_template('following.html', user=user, following=following, user_profile=user_profile)
 
 
 @main.route('/reset_password', methods=['GET', 'POST'])
