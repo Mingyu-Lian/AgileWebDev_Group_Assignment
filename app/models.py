@@ -92,31 +92,37 @@ class Post(db.Model):
     title = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(200))
     img = db.Column(db.String(200))
-    author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'))  #Foreign key association for the author, used to output the author's name in connection with the user database.
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
-    likes = db.Column(db.Integer, default=0)
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id')) #Foreign key association of the category, used to output the name of the category by connecting to the category database
+    likes = db.Column(db.Integer, default=0) #The default number of likes per post is 0.
 
+    #Creating a one-to-many relationship to a User, find the name that corresponds to the author id.
     author = db.relationship('User', backref=db.backref('posts', lazy=True))
+    #Creates a one-to-many relationship to the Comment. back_populates specifies the reverse relationship.
     comments = db.relationship('Comment', back_populates='post', lazy='dynamic')
-    # 定义与用户的多对多关系，用来表示哪些用户点赞了这个帖子
+    #Define a many-to-many relationship with users to indicate which users have liked the post.
     liked_by_users = db.relationship('User', secondary=user_likes, backref=db.backref('liked_posts', lazy='dynamic'))
-    
+    #Creating a one-to-many relationship to Category, find the name of the corresponding category id.
     category = db.relationship('Category', backref=db.backref('posts', lazy=True))
 
+     #Calculating the number of likes
     def count_likes(self):
         return len(self.liked_by_users)
 
+    #Check if a user has liked the post
     def is_liked_by_user(self, user_id):
         return user_id in [user.id for user in self.liked_by_users]
 
+    #Liking of posts by users
     def like_post(self, user_id):
         if not self.is_liked_by_user(user_id):
             user = User.query.get(user_id)
             if user:
                 self.liked_by_users.append(user)
                 db.session.commit()
-
+                
+     #Unliking of posts by users
     def unlike_post(self, user_id):
         if self.is_liked_by_user(user_id):
             user = User.query.get(user_id)
@@ -128,16 +134,16 @@ class Comment(db.Model):
     __tablename__ = 'comment'
 
     id = db.Column(db.Integer, primary_key=True)
-    author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'))  #Foreign key association for the author, used to output the author's name in connection with the user database.
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))   #Foreign key association for the post, output in the corresponding id post
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     body = db.Column(db.Text)
 
-    # 在 Comment 类中只使用 back_populates 指回 Post 类的 relationship
+    #Creates a one-to-many relationship to the Post. back_populates specifies the reverse relationship.
     post = db.relationship('Post', back_populates='comments')
 
 
-class Category(db.Model):
+class Category(db.Model): #Stores the category name, which is used to output the category.
 
     __tablename__ = 'category'
 
