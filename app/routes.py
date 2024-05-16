@@ -221,23 +221,24 @@ def upload_product():
 
 @main.route('/post/<int:post_id>', methods=['GET', 'POST'])
 def show_post(post_id):
-    post = Post.query.get_or_404(post_id)  # 查询指定post_id的帖子，如果不存在则返回404错误
-    comments = Comment.query.filter_by(post_id=post_id).all()  # 查询所有指定post_id的评论
-    comment_form = CommentForm()  # 创建评论表单示例
+    post = Post.query.get_or_404(post_id)  #Query the post with the specified post_id and return a 404 error page if it doesn't exist.
+    comments = Comment.query.filter_by(post_id=post_id).all()  #All comments for querying a specific post_id
+    comment_form = CommentForm()  #Example of creating a CommentForm
 
     user_profile = None
+    #If a user submits a comment form and it passes validation
     if current_user.is_authenticated:
         user_profile = UserDetails.query.filter_by(id=current_user.id).first()
 
-        # 如果用户提交了评论表单并通过验证
+        #Look up author information for each comment.
         if comment_form.validate_on_submit():
             comment_body = comment_form.body.data
             new_comment = Comment(body=comment_body, author_id=current_user.id, post_id=post_id)
             db.session.add(new_comment)
             db.session.commit()
-            return redirect(url_for('main.show_post', post_id=post_id))  # 提交评论后重定向以避免重新提交表单
+            return redirect(url_for('main.show_post', post_id=post_id)) 
 
-    # 查找每条评论的作者信息
+    #Look up author information for each comment.
     for comment in comments:
         comment.author = User.query.get(comment.author_id)
 
