@@ -398,3 +398,11 @@ def reset_password():
         flash('Your password has been updated!', 'success')
         return redirect(url_for('main.profile'))
     return render_template('reset_password.html', form=form, user_profile=user_profile)
+
+
+@main.route('/aboutus')
+def aboutus():
+    user_profile = None
+    if current_user.is_authenticated:
+        user_profile = UserDetails.query.filter_by(id=current_user.id).first()
+    return render_template('aboutus.html', user_profile=user_profile)

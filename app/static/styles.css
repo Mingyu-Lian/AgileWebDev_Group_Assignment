@@ -36,6 +36,7 @@ in the university of Western Australia (2024 S1) */
 
 .navbar .search-form{
     margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 /*base page button */
@@ -688,5 +689,80 @@ in the university of Western Australia (2024 S1) */
 
 .post-container  .submit-button:active {
     background-color: black;  
+}
+
+
+/* About us page */
+.aboutus-background {
+    background-color: #f3f7f9;
+    border-radius: 20px;
+}
+
+
+
+
+
+.aboutus-box {
+    width: 80%;
+    margin:auto;
+}
+
+.aboutus-logo {
+    margin-top: 50px;
+    margin-left: 100px;
+    width: 200px;
+}
+
+#abouttitle {
+    color: rgb(34, 95, 155) ;
+}
+
+.aboutus-heading {
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 2rem;
+    color:rgb(22, 67, 111) ;    
+}
+
+.aboutus-text {
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 0.9rem;
+}
+
+
+/* size when in md-lg */
+@media (min-width: 768px) {
+    .aboutus-heading {
+        font-size: 3rem; 
+    }
+    .aboutus-text{
+        font-size: 1.1rem ;
+    }
+    .aboutus-logo {
+        margin-top: 50px;
+        margin-left: 100px;
+        width: 300px;
+    }  
+
+}
+
+.aboutus .btn-link {
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    background-color:rgb(34, 95, 155);
+    color: white;
+    border: none;
+    text-decoration: none;
+    font-weight: bold;
+    padding:10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin:20px;
+    
+}
+
+.aboutus .btn-link:hover {
+    color:rgb(34, 95, 155);
+    background-color: white;
+    text-decoration: none;
+    box-shadow:  0 4px 8px rgba(0, 0, 0, 0.5);
 
 }
