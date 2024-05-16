@@ -40,7 +40,6 @@ def signup():
     form = SignUpForm()
     if form.validate_on_submit():
         try:
-
             user = User.query.filter_by(email=form.email.data).first()
             if user:
                 flash('The email is already registered')
@@ -108,11 +107,9 @@ def home():
         filter=filter_type,
         page=page,
         total_pages=total_pages,
-        user_profile=user_profile
+        user_profile=user_profile,
+        title='Home'
     )
-
-
-
 
 
 
@@ -120,11 +117,13 @@ def home():
 @main.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
-    user_profile = UserDetails.query.filter_by(id=current_user.id).first()    
+    user_profile = UserDetails.query.filter_by(id=current_user.id).first()
+    user = User.query.filter_by(id=current_user.id).first()
     if not user_profile:
         flash('User not found and please inform this error to dev.', 'error')
         return redirect(url_for('main.home'))
-    return render_template('profile.html', user_profile=user_profile)
+    return render_template('profile.html', user_profile=user_profile, user=user,
+        title='Your Profile')
 
 @main.route('/profile/set_profile', methods=['GET', 'POST'])
 def set_profile():
@@ -163,7 +162,7 @@ def set_profile():
         flash('Profile updated successfully!', 'success')
         return redirect(url_for('main.profile'))
 
-    return render_template('set_profile.html', title='Profile', form=form, user_profile=user_profile)
+    return render_template('set_profile.html', title='Set Your Profile', form=form, user_profile=user_profile)
 
 @main.route('/profile/set_icon', methods=['GET', 'POST'])
 def set_icon():
@@ -183,12 +182,13 @@ def set_icon():
             flash('User profile not found.', 'error')
             return redirect(url_for('main.profile'))
 
-    return render_template('set_icon.html', title='Profile', form=form, user_profile=user_profile)
+    return render_template('set_icon.html', title='Set Your Icon', form=form, user_profile=user_profile)
 
 
 @main.route('/upload/product', methods=['GET', 'POST'])
 @login_required
 def upload_product():
+
 
     user_profile = UserDetails.query.filter_by(id=current_user.id).first()
     form = UploadForm() # Example of creating an UploadForm.
@@ -221,6 +221,8 @@ def upload_product():
 
 @main.route('/post/<int:post_id>', methods=['GET', 'POST'])
 def show_post(post_id):
+
+
     post = Post.query.get_or_404(post_id)  #Query the post with the specified post_id and return a 404 error page if it doesn't exist.
     comments = Comment.query.filter_by(post_id=post_id).all()  #All comments for querying a specific post_id
     comment_form = CommentForm()  #Example of creating a CommentForm
@@ -242,7 +244,7 @@ def show_post(post_id):
     for comment in comments:
         comment.author = User.query.get(comment.author_id)
 
-    return render_template('post.html', post=post, comments=comments, comment_form=comment_form, user_profile=user_profile)
+    return render_template('post.html', post=post, comments=comments, comment_form=comment_form, user_profile=user_profile,  title='Post Details',)
 
 
 @main.route('/post/<int:post_id>/comment', methods=['POST'])
@@ -302,12 +304,12 @@ def delete_post(post_id):
 
 @main.route('/channel/<int:user_id>', methods=['GET', 'POST'])
 def channel(user_id):
-    user_profile = UserDetails.query.filter_by(id=current_user.id).first()
     user = User.query.get_or_404(user_id)
     is_own_channel = (current_user.is_authenticated and current_user.id == user_id)
-    user_profile = UserDetails.query.filter_by(id=user_id).first()
-    posts = Post.query.filter_by(author_id=user_id).order_by(Post.created_at.desc()).all()  # fectch posts
-    return render_template('channel.html', user=user, is_own_channel=is_own_channel, user_id=user_id, user_profile=user_profile, posts=posts)
+    user_profile = UserDetails.query.filter_by(id=current_user.id).first() if current_user.is_authenticated else None
+    other_user_profile = UserDetails.query.filter_by(id=user_id).first()
+    posts = Post.query.filter_by(author_id=user_id).order_by(Post.created_at.desc()).all()  # fetch posts
+    return render_template('channel.html', user=user, is_own_channel=is_own_channel, user_profile=user_profile, other_user_profile=other_user_profile, posts=posts, title='Channel')
 
 
 @main.route('/search', methods=['GET'])
@@ -330,7 +332,7 @@ def search():
             results = User.query.join(UserDetails).filter(UserDetails.name.ilike(search)).all()
 
         return render_template('search_results.html', posts=results if filter_type == 'posts' else None,
-                               users=results if filter_type == 'users' else None, query=query, filter=filter_type, user_profile=user_profile)
+                               users=results if filter_type == 'users' else None, query=query, filter=filter_type, user_profile=user_profile, title='Search',)
     else:
         flash("Please enter a search term.")
         return redirect(url_for('main.home'))
@@ -363,7 +365,7 @@ def unfollow(user_id):
     
         current_user.following.filter_by(followed_id=user_id).delete()
         db.session.commit()
-        flash(f'You have unfollowed sucessfully', 'success')
+        flash(f'You have unfollowed successfully', 'success')
     else:
         
         flash(f'You are not following this user', 'warning')
@@ -377,7 +379,7 @@ def followers(user_id):
     user = User.query.get_or_404(user_id)  # make sure user exist
     # get follower's list
     followers = User.query.join(Follow, Follow.follower_id == User.id).filter(Follow.followed_id == user_id).all()
-    return render_template('followers.html', user=user, followers=followers, user_profile=user_profile)
+    return render_template('followers.html', user=user, followers=followers, user_profile=user_profile ,title='Your Followers')
 
 @main.route('/following/<int:user_id>')
 def following(user_id):
@@ -385,7 +387,7 @@ def following(user_id):
     user = User.query.get_or_404(user_id)  # make sure user exist
     # get following's list
     following = User.query.join(Follow, Follow.followed_id == User.id).filter(Follow.follower_id == user_id).all()
-    return render_template('following.html', user=user, following=following, user_profile=user_profile)
+    return render_template('following.html', user=user, following=following, user_profile=user_profile,title='Your Following')
 
 
 @main.route('/reset_password', methods=['GET', 'POST'])
@@ -397,7 +399,7 @@ def reset_password():
         db.session.commit()
         flash('Your password has been updated!', 'success')
         return redirect(url_for('main.profile'))
-    return render_template('reset_password.html', form=form, user_profile=user_profile)
+    return render_template('reset_password.html', form=form, user_profile=user_profile,title='Reset Your Password')
 
 
 @main.route('/aboutus')
@@ -405,4 +407,4 @@ def aboutus():
     user_profile = None
     if current_user.is_authenticated:
         user_profile = UserDetails.query.filter_by(id=current_user.id).first()
-    return render_template('aboutus.html', user_profile=user_profile)
+    return render_template('aboutus.html', user_profile=user_profile,title='About Us')

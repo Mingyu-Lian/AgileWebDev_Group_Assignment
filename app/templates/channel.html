@@ -9,38 +9,38 @@
       {% if is_own_channel %}
         <img src="{{ url_for('static', filename='user_icon/uploads/' + user_profile.img if user_profile.img else 'user_icon/default_user_icon.jpg') }}" alt="User Icon" class="profile-img rounded-circle mb-3" width="160" height="160">
       {% else %}
-        <img src="{{ url_for('static', filename='user_icon/uploads/' + user_profile.img if user_profile.img else 'user_icon/default_user_icon.jpg') }}" alt="User Icon" class="profile-img rounded-circle mb-3" width="160" height="160">
+        <img src="{{ url_for('static', filename='user_icon/uploads/' + other_user_profile.img if other_user_profile.img else 'user_icon/default_user_icon.jpg') }}" alt="User Icon" class="profile-img rounded-circle mb-3" width="160" height="160">
       {% endif %}
 
-      <h2 class="fw-light channeltitle">{{ user_profile.name }}'s Channel</h2>
+      <h2 class="fw-light channeltitle">{{ other_user_profile.name }}'s Channel</h2>
           <div class="channeltext">
             <p>
-              {% if user_profile.city or user_profile.country %}
-                  {{ user_profile.city }} &nbsp; &nbsp;{{ user_profile.country }}
+              {% if other_user_profile.city or other_user_profile.country %}
+                  {{ other_user_profile.city }} &nbsp; &nbsp;{{ other_user_profile.country }}
               {% else %}
                   No Location Information
               {% endif %}
           </p>
           <br>
           <p>
-              {% if user_profile.job_title and user_profile.company %}
-                  {{ user_profile.job_title }} in <strong>{{ user_profile.company }}</strong>
-              {% elif user_profile.job_title %}
-                  {{ user_profile.job_title }}
-              {% elif user_profile.company %}
-                  <strong>{{ user_profile.company }}</strong>
+              {% if other_user_profile.job_title and other_user_profile.company %}
+                  {{ other_user_profile.job_title }} in <strong>{{ other_user_profile.company }}</strong>
+              {% elif other_user_profile.job_title %}
+                  {{ other_user_profile.job_title }}
+              {% elif other_user_profile.company %}
+                  <strong>{{ other_user_profile.company }}</strong>
               {% else %}
                   No Career Information
               {% endif %}
           </p>
           <br>
           <p>
-              <strong>Education Level:</strong> 
-              {{ user_profile.education_level if user_profile.education_level else 'No Info' }}
+              <strong>Education Level:</strong>
+              {{ other_user_profile.education_level if other_user_profile.education_level else 'No Info' }}
           </p>
           <p>
-              <strong>Academic Institution:</strong> 
-              {{ user_profile.academic_institution if user_profile.academic_institution else 'No Info' }}
+              <strong>Academic Institution:</strong>
+              {{ other_user_profile.academic_institution if other_user_profile.academic_institution else 'No Info' }}
           </p>
           <br>
           </div>
@@ -59,15 +59,15 @@
             {% endif %}
         {% endif %}
         {% else %}
-          <!-- if not login -->    
-          <a href="{{ url_for('main.login') }}" class=" btn btn-primary  rounded-pill px-4 my-1"><i class='fas fa-plus' style='font-size:16px'></i> Follow</a> 
+          <!-- if not login -->
+          <a href="{{ url_for('main.login') }}" class=" btn btn-primary  rounded-pill px-4 my-1"><i class='fas fa-plus' style='font-size:16px'></i> Follow</a>
         {% endif %}
       </div>
     </div>
 
     <!-- Post Part -->
     <div class="col-md-8 col-sm-12">
-      <h3 style="color: gray;">Posts by {{ user_profile.name }}</h3>
+      <h3 style="color: gray;">Posts by {{ other_user_profile.name }}</h3>
       <br>
       <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
         {% for post in posts %}
