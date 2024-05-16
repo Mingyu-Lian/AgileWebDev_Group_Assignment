@@ -99,8 +99,10 @@
             {{ comment_form.content(class="form-control", placeholder="Add a comment...") }}
         </div>
 
-        {% if current_user.is_authenticated %} <!--Detecting whether a user is logged in.-->
-            <button type="submit" class="btn btn-primary">Submit Comment</button>
+        
+        {% if current_user.is_authenticated %}
+            <button type="submit" class="btn btn-primary submit-button">Submit Comment</button>
+
         {% else %}
             <p>You must be logged in to comment. <a href="{{ url_for('main.login') }}">Log in here</a>.</p> <!--If user is not logged in, user can click log in here to go to the login page.-->
         {% endif %}
