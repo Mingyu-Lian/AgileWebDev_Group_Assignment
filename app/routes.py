@@ -18,9 +18,12 @@ main = Blueprint('main', __name__)
 
 @main.route('/login', methods=['GET', 'POST'])
 def login():
+    # check if log in
     if current_user.is_authenticated:
         return redirect(url_for('main.home'))
+    # login value imported
     form = LoginForm()
+    # check the log in condition
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user and user.check_password(form.password.data):
@@ -38,6 +41,7 @@ def login():
 @main.route('/signup', methods=['GET', 'POST'])
 def signup():
     form = SignUpForm()
+    # check the log in condition
     if form.validate_on_submit():
         try:
             user = User.query.filter_by(email=form.email.data).first()
@@ -45,13 +49,13 @@ def signup():
                 flash('The email is already registered')
                 return redirect(url_for('main.signup'))
 
-
+            # variable pipelines for passing the information to database
             new_user = User(username=form.username.data, email=form.email.data)
             new_user.set_password(form.password.data)
             db.session.add(new_user)
             db.session.flush()
 
-
+            # create instance in user details as well
             new_user_details = UserDetails(id=new_user.id)
             db.session.add(new_user_details)
 
@@ -61,7 +65,7 @@ def signup():
             return redirect(url_for('main.login'))
 
         except Exception as e:
-
+            # exception handling
             db.session.rollback()
             if 'username' in str(e):
                 flash('Username is too long. Please use a shorter username.')
@@ -73,7 +77,7 @@ def signup():
 
     return render_template('signup.html', title='Sign Up', form=form)
 
-
+# too basic
 @main.route('/logout')
 def logout():
     logout_user()
@@ -117,8 +121,10 @@ def home():
 @main.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
+    # filter the profile by the current user id
     user_profile = UserDetails.query.filter_by(id=current_user.id).first()
     user = User.query.filter_by(id=current_user.id).first()
+    # handling exception (although i dont believe this will be useful)
     if not user_profile:
         flash('User not found and please inform this error to dev.', 'error')
         return redirect(url_for('main.home'))
@@ -143,6 +149,7 @@ def set_profile():
         form.education_level.data = user_profile.education_level
         form.academic_institution.data = user_profile.academic_institution
 
+# put the previous data inside the forms for the user-friendly design
     if form.validate_on_submit():
         if user_profile:
             user_profile.name = form.name.data
@@ -156,6 +163,7 @@ def set_profile():
             user_profile.education_level = form.education_level.data
             user_profile.academic_institution = form.academic_institution.data
         else:
+            # exception handling
             flash('Got problems processing the data, please inform the web dev')
             return redirect(url_for('main.profile'))
         db.session.commit()
@@ -171,6 +179,7 @@ def set_icon():
     if form.validate_on_submit():
         if user_profile:
             file = form.img.data
+            # for safety to use secure filename
             filename = secure_filename(file.filename)
             file_path = os.path.join(filename)
             file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], file_path))
@@ -389,7 +398,7 @@ def following(user_id):
     following = User.query.join(Follow, Follow.followed_id == User.id).filter(Follow.follower_id == user_id).all()
     return render_template('following.html', user=user, following=following, user_profile=user_profile,title='Your Following')
 
-
+# reset password. which is quite basic
 @main.route('/reset_password', methods=['GET', 'POST'])
 def reset_password():
     form = ResetPasswordForm()

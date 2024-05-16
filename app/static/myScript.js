@@ -72,6 +72,7 @@ fileInput.addEventListener('change', (event) => {
     }
 });
 
+// using regular expression to check the email structure is valid at client side. If it is not valid return error to handle the exception.
 document.getElementById('email').addEventListener('input', function() {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const emailHelpText = document.getElementById('emailHelp');

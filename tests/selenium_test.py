@@ -12,16 +12,16 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 @pytest.fixture(scope="module")
 def flask_server():
-    # 启动 Flask 服务器
-    server = subprocess.Popen(["flask", "run", "--host=127.0.0.1", "--port=8080"])
-    time.sleep(3)  # 等待服务器启动
+    # open flask server
+    server = subprocess.Popen(["flask", "run", "--host=127.0.0.1", "--port=5000"])
+    time.sleep(3)  # wait for launching
     yield
-    server.terminate()  # 结束 Flask 服务器
+    server.terminate()  # terminate the flask
     server.wait()
 
 @pytest.fixture(scope="class")
 def setup(request):
-    # 使用 ChromeOptions 指定 ChromeDriver 的路径
+    # set up for selenium with chrome
     options = webdriver.ChromeOptions()
     service = Service(ChromeDriverManager().install())
     driver = webdriver.Chrome(service=service, options=options)
@@ -34,8 +34,10 @@ def setup(request):
 class TestCITS5505:
     def test_cITS5505(self):
         driver = self.driver
-        driver.get("http://127.0.0.1:8080/")
+        driver.get("http://127.0.0.1:5000/")
         driver.set_window_size(1562, 1296)
+
+        # auto generated codes from selenium IDE, added conditions which could be also worked as file tested here
 
         login_link = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.LINK_TEXT, "Login")))
         driver.execute_script("arguments[0].scrollIntoView(true);", login_link)

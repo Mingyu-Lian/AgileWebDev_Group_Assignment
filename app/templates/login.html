@@ -12,8 +12,10 @@
                     <form action="" method="post" novalidate>
                         {{ form.hidden_tag() }}
                         <div class="form-group">
+                        <!-- username form -->
                             {{ form.username.label(class="form-label") }}
                             {{ form.username(class="form-control", size=32) }}
+                        <!-- exception handle -->
                             {% for error in form.username.errors %}
                                 <div class="alert alert-danger" role="alert">
                                     {{ error }}
@@ -21,6 +23,7 @@
                             {% endfor %}
                         </div>
                         <div class="form-group">
+                        <!-- user password form -->
                             {{ form.password.label(class="form-label") }}
                             {{ form.password(class="form-control", size=32) }}
                             {% for error in form.password.errors %}
@@ -30,6 +33,7 @@
                             {% endfor %}
                         </div>
                         <div class="form-check">
+                            <!-- remember me check -->
                             {{ form.remember_me(class="form-check-input") }}
                             {{ form.remember_me.label(class="form-check-label") }}
                         </div>
@@ -38,6 +42,7 @@
                         </div>
                     </form>
                     <div class="mt-3">
+                        <!-- redirection -->
                         <a href="{{ url_for('main.signup') }}">Have no account? Sign-up here</a>
                     </div>
                 </div>

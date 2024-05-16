@@ -19,7 +19,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 Migrate(app, db)
-
+# mappings for followers
 followers = db.Table(
     'followers',
     db.Column('follower_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
@@ -42,7 +42,7 @@ class Follow(db.Model):
     followed = db.relationship('User', foreign_keys=[followed_id], backref=db.backref('followers', lazy='dynamic'))
 
 
-
+# The basic structure of User table with generating the password by hash
 class User(UserMixin, db.Model):
 
     __tablename__ = 'user'
@@ -56,18 +56,18 @@ class User(UserMixin, db.Model):
 
     def is_following(self, user):
         return self.following.filter_by(followed_id=user.id).first() is not None
-    
+    # enhance the safety by generating the hashed password
     def set_password(self, password):
         self.password_hash = generate_password_hash(password, method='pbkdf2:sha256')
-
+    # use func to check the password is correct
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-
+# The user details: separated from user for leaving the user table only for signing up.
 class UserDetails(db.Model):
 
     __tablename__ = 'user_details'
-
+    # Basic personal details information
     id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
     name = db.Column(db.String(80))
     address = db.Column(db.Text)
