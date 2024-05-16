@@ -40,7 +40,6 @@ def signup():
     form = SignUpForm()
     if form.validate_on_submit():
         try:
-
             user = User.query.filter_by(email=form.email.data).first()
             if user:
                 flash('The email is already registered')
@@ -190,6 +189,7 @@ def set_icon():
 @login_required
 def upload_product():
 
+
     user_profile = UserDetails.query.filter_by(id=current_user.id).first()
     form = UploadForm() # Example of creating an UploadForm.
 
@@ -221,6 +221,8 @@ def upload_product():
 
 @main.route('/post/<int:post_id>', methods=['GET', 'POST'])
 def show_post(post_id):
+
+
     post = Post.query.get_or_404(post_id)  #Query the post with the specified post_id and return a 404 error page if it doesn't exist.
     comments = Comment.query.filter_by(post_id=post_id).all()  #All comments for querying a specific post_id
     comment_form = CommentForm()  #Example of creating a CommentForm
@@ -302,7 +304,6 @@ def delete_post(post_id):
 
 @main.route('/channel/<int:user_id>', methods=['GET', 'POST'])
 def channel(user_id):
-    user_profile = UserDetails.query.filter_by(id=current_user.id).first()
     user = User.query.get_or_404(user_id)
     is_own_channel = (current_user.is_authenticated and current_user.id == user_id)
     user_profile = UserDetails.query.filter_by(id=user_id).first()
