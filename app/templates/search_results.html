@@ -3,16 +3,14 @@
 {% block content %}
 <div class="container search">
     <h2 class="searchtitle">Search Result of: "{{ query }}"</h2>
-    <!-- 筛选按钮 -->
     <br>
     <br>
     <div class="btn-group" role="group" aria-label="Basic example">
         <a href="{{ url_for('main.search', query=query, filter='posts') }}" class="btn btn-secondary {{ 'active' if filter == 'posts' else '' }}">Post</a>
-        <a href="{{ url_for('main.search', query=query, filter='users') }}" class="btn btn-secondary {{ 'active' if filter == 'users' else '' }}" >User</a>
+        <a href="{{ url_for('main.search', query=query, filter='users') }}" class="btn btn-secondary {{ 'active' if filter == 'users' else '' }}">User</a>
     </div>
     <br>
     <br>
-    <!-- 根据筛选显示结果 -->
     {% if filter == 'posts' %}
     <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
         {% for post in posts %}

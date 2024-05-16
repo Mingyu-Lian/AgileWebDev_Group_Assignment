@@ -4,7 +4,7 @@
 
 <div class="container-fluid userchannel">
   <div class="row">
-    <!-- 个人信息部分 -->
+    <!-- Personal info part -->
     <div class="col-md-3 col-sm-12 text-center" style="margin-left: 20px;margin-right: 20px;">
       {% if is_own_channel %}
         <img src="{{ url_for('static', filename='user_icon/uploads/' + user_profile.img if user_profile.img else 'user_icon/default_user_icon.jpg') }}" alt="User Icon" class="profile-img rounded-circle mb-3" width="160" height="160">
@@ -65,7 +65,7 @@
       </div>
     </div>
 
-    <!-- 发帖记录部分 -->
+    <!-- Post Part -->
     <div class="col-md-8 col-sm-12">
       <h3 style="color: gray;">Posts by {{ user_profile.name }}</h3>
       <br>

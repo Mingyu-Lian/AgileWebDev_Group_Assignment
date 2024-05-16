@@ -59,6 +59,23 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
+
+// In the upload page, review the image to see if it meets the requirements
+const fileInput = document.querySelector('input[type="file"]');
+
+
+fileInput.addEventListener('change', (event) => {
+    const selectedFile = event.target.files[0];
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+
+
+    if (!allowedTypes.includes(selectedFile.type)) {
+
+        alert('Only image files (jpg, jpeg, png, gif) are allowed.');
+        fileInput.value = ''; 
+    }
+});
+
 document.getElementById('email').addEventListener('input', function() {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const emailHelpText = document.getElementById('emailHelp');
@@ -70,3 +87,4 @@ document.getElementById('email').addEventListener('input', function() {
         emailHelpText.style.color = 'red';
     }
 });
+
