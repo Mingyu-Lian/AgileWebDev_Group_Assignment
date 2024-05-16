@@ -1,10 +1,11 @@
 from flask import Flask
 from flask_migrate import Migrate
-from flask_login import LoginManager
+from flask_login import LoginManager, current_user
 from .routes import main as main_blueprint
 from app.models import User
 from app.models import db
 from app.config import DevelopmentConfig, TestingConfig
+
 
 
 migrate = Migrate()

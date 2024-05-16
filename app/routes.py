@@ -306,9 +306,10 @@ def delete_post(post_id):
 def channel(user_id):
     user = User.query.get_or_404(user_id)
     is_own_channel = (current_user.is_authenticated and current_user.id == user_id)
-    user_profile = UserDetails.query.filter_by(id=user_id).first()
-    posts = Post.query.filter_by(author_id=user_id).order_by(Post.created_at.desc()).all()  # fectch posts
-    return render_template('channel.html', user=user, is_own_channel=is_own_channel, user_id=user_id, user_profile=user_profile, posts=posts ,title='Channel',)
+    user_profile = UserDetails.query.filter_by(id=current_user.id).first() if current_user.is_authenticated else None
+    other_user_profile = UserDetails.query.filter_by(id=user_id).first()
+    posts = Post.query.filter_by(author_id=user_id).order_by(Post.created_at.desc()).all()  # fetch posts
+    return render_template('channel.html', user=user, is_own_channel=is_own_channel, user_profile=user_profile, other_user_profile=other_user_profile, posts=posts, title='Channel')
 
 
 @main.route('/search', methods=['GET'])
