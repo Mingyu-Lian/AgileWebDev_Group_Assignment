@@ -64,7 +64,7 @@
                             style="width: 50px; height: auto;">
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                <li><span class="dropdown-name">Hi, {{ current_user.details.name if current_user.details and current_user.details.name else current_user.username }}</span></li>
+                                <li class="text-center mt-2"><span class="dropdown-name ">Hi, {{ current_user.details.name if current_user.details and current_user.details.name else current_user.username }}</span></li>
                                 <li><a class="dropdown-item" href="{{ url_for('main.channel', user_id=current_user.id) }}">My Channel</a></li>
                                 <li><a class="dropdown-item" href="{{ url_for('main.profile') }}">Edit Profile</a></li>
                                 <li><a class="dropdown-item" href="{{ url_for('main.logout') }}">Logout</a></li>

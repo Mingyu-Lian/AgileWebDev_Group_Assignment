@@ -89,15 +89,14 @@ in the university of Western Australia (2024 S1) */
 }
 
 /* base page drop list  */
-
 .navbar-nav .dropdown-name{
     color: black;
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin-top: 40px;
     margin-bottom: 30px;
-    margin-left: 30px;
     font-weight: bold;
 }
+
 .navbar-nav .dropdown-item {
     font-family:Arial, Helvetica, sans-serif;
     font-size:medium;
@@ -145,7 +144,6 @@ in the university of Western Australia (2024 S1) */
     
 }
 
-
 /*Homepage CSS*/
 /*Homepage Sidebar*/
 .homesidebar {
@@ -162,19 +160,19 @@ in the university of Western Australia (2024 S1) */
 
 @media (max-width: 768px) { 
     .homesidebar {
-        width: 100%;  /* 使sidebar占满整个行宽 */
+        width: 100%;  
         flex-direction: row;
         justify-content: space-around;
         align-items: center;
-        padding: 10px 0;  /* 调整padding以减少上下边距 */
-        margin-bottom: 10px;  /* 在sidebar和主内容区之间添加一些空间 */
+        padding: 10px 0;  
+        margin-bottom: 10px;  
     }
     .homesidebar .top2 {
-        margin: 0 5px; /* 在小屏幕上减少边距 */
-        padding: 5px 10px; /* 减少padding */
+        margin: 0 5px; 
+        padding: 5px 10px; 
     }
     .add-post-btn {
-        font-size: 50px; /* 调整按钮大小以适应较小屏幕 */
+        font-size: 50px;
     }
 }
 .homesidebar .top2{
@@ -697,10 +695,6 @@ in the university of Western Australia (2024 S1) */
     background-color: #f3f7f9;
     border-radius: 20px;
 }
-
-
-
-
 
 .aboutus-box {
     width: 80%;
