@@ -8,6 +8,7 @@
             <div class="card profile-card">
                 <h1 class="card-header text-center"> <i class='fas fa-edit' style='font-size:40px'></i> Edit Profile</h1>
                 <div class="card-body">
+                    <!-- setting profile by using form -->
                     <form method="POST" action="{{ url_for('main.set_profile') }}">
                         {{ form.hidden_tag() }}
                         <div class="form-group">

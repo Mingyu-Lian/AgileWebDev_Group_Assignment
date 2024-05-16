@@ -12,6 +12,7 @@
                     <form method="POST" action="{{ url_for('main.set_icon') }}" enctype="multipart/form-data">
                         {{ form.hidden_tag() }}
                         <div class="mb-3">
+                            <!-- img path -->
                             {{ form.img.label(class="form-label") }}
                             {{ form.img(class="form-control") }}
                         </div>

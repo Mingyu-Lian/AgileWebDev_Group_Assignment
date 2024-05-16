@@ -4,6 +4,7 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField,TextAr
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, Length, Optional
 from app.models import User
 
+# forms setting for login and sign up
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
@@ -16,7 +17,7 @@ class SignUpForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Sign Up')
-
+# exception handling:About the username and email: if they have been taken
     def validate_username(self, username):
         user = User.query.filter_by(username=username.data).first()
         if user:
@@ -29,7 +30,7 @@ class SignUpForm(FlaskForm):
 
 
 
-class ProfileForm(FlaskForm):
+class ProfileForm(FlaskForm): # Define the user's profile
     name = StringField('Name')
     address = StringField('Address')
     company = StringField('Company')
@@ -42,9 +43,10 @@ class ProfileForm(FlaskForm):
     academic_institution = StringField('Academic Institution')
     submit = SubmitField('Set Profile')
 
-class IconForm(FlaskForm):
+class IconForm(FlaskForm): # Define the form to upload the icon path
     img = FileField('Choose an icon', validators=[
         FileRequired(),
+        # restrict the data type
         FileAllowed(['jpg', 'png', 'jpeg', 'gif'], 'Images only!')
     ])
     submit = SubmitField('Upload')

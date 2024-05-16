@@ -14,11 +14,11 @@ class FormTestCase(unittest.TestCase):
         db.drop_all()
         self.app_context.pop()
 
-    def test_login_form(self):
+    def test_login_form(self):# as name
         form = LoginForm(username='john', password='cat')
         self.assertTrue(form.validate())
 
-    def test_signup_form(self):
+    def test_signup_form(self):# as name
         form = SignUpForm(
             username='john',
             email='john@example.com',
@@ -27,7 +27,7 @@ class FormTestCase(unittest.TestCase):
         )
         self.assertTrue(form.validate())
 
-    def test_profile_form(self):
+    def test_profile_form(self):# as name
         form = ProfileForm(
             name='John Doe',
             address='123 Main St',
@@ -44,7 +44,7 @@ class FormTestCase(unittest.TestCase):
 
 
 
-    def test_upload_form(self):
+    def test_upload_form(self):# as name
         form = UploadForm(
             title='Test Post',
             description='This is a test post',
@@ -52,11 +52,11 @@ class FormTestCase(unittest.TestCase):
         )
         self.assertTrue(form.validate())
 
-    def test_comment_form(self):
+    def test_comment_form(self):# as name
         form = CommentForm(content='This is a test comment')
         self.assertTrue(form.validate())
 
-    def test_reset_password_form(self):
+    def test_reset_password_form(self):# as name
         form = ResetPasswordForm(
             password='newpassword',
             confirm_password='newpassword'
