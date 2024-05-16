@@ -1,5 +1,8 @@
-<html>
+<!DOCTYPE html>
+<html lang="en-AU">
+<!-- valiadation pass (not for Jinja)-->
     <head>
+        <!-- the base page for other page to inherate -->
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
@@ -50,7 +53,7 @@
                         <button class="btn btn-primary rounded-pill" type="submit">Search</button>
                     </form>
 
-                    <!-- User profile and dropdown -->
+                    <!-- User profile icon and dropdown -->
                     {% if current_user.is_authenticated %}
                     <ul class="navbar-nav d-flex ">
                         <li class="nav-item dropdown">
@@ -77,10 +80,8 @@
                 </div>
             </div>
         </nav>
-
-
         <br>
-     
+        <!-- flash message -->
         {% with messages = get_flashed_messages() %}
         {% if messages %}
         <ul class="flashmessage">
@@ -116,7 +117,7 @@
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="{{ url_for('static', filename='myScript.js') }}"></script>
         
-       
+       <!-- footer -->
         <footer>
             <div class="container nav-footer">
                 <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
