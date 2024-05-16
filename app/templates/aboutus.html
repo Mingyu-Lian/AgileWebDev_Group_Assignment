@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="aboutus">
+    <div class="container mt-5 aboutus-background">
+        <div class="aboutus-box">
+            <div class="aboutuspic">
+                <div class="text-center mb-4">
+                    <!-- logo -->
+                    <br>
+                    <br>
+                    <img src="{{ url_for('static', filename='img/fulllogo.png') }}" alt="Logo" class="aboutus-logo">
+                    <br>
+                    <br>
+                    <br>
+                    <h1 class="aboutus-heading" id="abouttitle">About Job Insight</h1>
+                    <p class="aboutus-text">Welcome to LinkedIn, the world's largest professional network with more than 1 billion members in more than 200 countries and territories worldwide.</p>
+                </div>
+            </div>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <div class="text-center mb-3">
+                <h2 class="aboutus-heading">Vision</h2>
+                <p class="aboutus-text">Create economic opportunity for every member of the global workforce.</p>
+            </div>
+            <br>
+            <br>
+            <br>
+            <br>
+            <div class="mb-4">
+                <h2 class="aboutus-heading text-center">Who are we?</h2>
+                <p class="aboutus-text">LinkedIn began in co-founder <strong>Reid Hoffman's</strong> living room in 2002 and was officially launched on May 5, 2003.</p>
+                <p class="aboutus-text">Today, LinkedIn leads a diversified business with revenues from membership subscriptions, advertising sales and recruitment solutions under the leadership of <strong>Ryan Roslansky</strong>. In December 2016, Microsoft completed its acquisition of LinkedIn, bringing together the world’s leading professional cloud and the world’s leading professional network.</p>
+            </div>
+            <br>
+            <br>
+            <br>
+            <br>
+            <div class="text-center mt-4">
+                <p class="aboutus-text">For more information & Links:</p>
+                <a href="{{ url_for('main.home') }}" class="btn btn-link rounded-pill">Home Page &nbsp;<i class='fas fa-arrow-alt-circle-right' style='font-size:16px'></i></a>
+
+                {% if current_user.is_authenticated %}
+                        <a class="btn btn-link rounded-pill" href="{{ url_for('main.logout') }}"> Logout &nbsp; <i class='fas fa-arrow-alt-circle-right' style='font-size:16px'></i></a>
+                        {% else %}
+                        <a class="btn btn-link rounded-pill" href="{{ url_for('main.login') }}"> Login &nbsp; <i class='fas fa-arrow-alt-circle-right' style='font-size:16px'></i></a>
+                        {% endif %}
+
+            </div>
+        </div>
+        <br>
+        <br>
+    </div>
+</div>
+<br>
+<br>
+{% endblock %}

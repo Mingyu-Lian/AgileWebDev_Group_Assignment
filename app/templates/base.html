@@ -1,5 +1,8 @@
-<html>
+<!DOCTYPE html>
+<html lang="en-AU">
+<!-- valiadation pass (not for Jinja)-->
     <head>
+        <!-- the base page for other page to inherate -->
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
@@ -21,9 +24,10 @@
     </head>
 
     <body data-user-authenticated="{{ 'true' if current_user.is_authenticated else 'false' }}">
+        <!-- back to top function -->
         <div id="top">
         </div>
-        
+        <!--navigation bar -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-light">
             <div class="container-fluid">
                 <!-- Logo -->
@@ -42,7 +46,7 @@
                             <a class="nav-link" href="{{ url_for('main.home') }}">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('main.home') }}">About us</a>
+                            <a class="nav-link" href="{{ url_for('main.aboutus') }}">About us</a>
                         </li>
                     </ul>
                     <form action="{{ url_for('main.search') }}" method="get" class="d-flex search-form nav-item">
@@ -50,7 +54,7 @@
                         <button class="btn btn-primary rounded-pill" type="submit">Search</button>
                     </form>
 
-                    <!-- User profile and dropdown -->
+                    <!-- User profile icon and dropdown -->
                     {% if current_user.is_authenticated %}
                     <ul class="navbar-nav d-flex ">
                         <li class="nav-item dropdown">
@@ -60,7 +64,7 @@
                             style="width: 50px; height: auto;">
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                <li><span class="dropdown-name">Hi, {{ current_user.details.name if current_user.details and current_user.details.name else current_user.username }}!</span></li>
+                                <li><span class="dropdown-name">Hi, {{ current_user.details.name if current_user.details and current_user.details.name else current_user.username }}</span></li>
                                 <li><a class="dropdown-item" href="{{ url_for('main.channel', user_id=current_user.id) }}">My Channel</a></li>
                                 <li><a class="dropdown-item" href="{{ url_for('main.profile') }}">Edit Profile</a></li>
                                 <li><a class="dropdown-item" href="{{ url_for('main.logout') }}">Logout</a></li>
@@ -77,10 +81,9 @@
                 </div>
             </div>
         </nav>
-
-
         <br>
-     
+
+        <!-- flash message -->
         {% with messages = get_flashed_messages() %}
         {% if messages %}
         <ul class="flashmessage">
@@ -116,7 +119,7 @@
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="{{ url_for('static', filename='myScript.js') }}"></script>
         
-       
+       <!-- footer -->
         <footer>
             <div class="container nav-footer">
                 <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
@@ -142,6 +145,5 @@
                   </ul>
             </div>
         </footer>
-
     </body>
 </html>

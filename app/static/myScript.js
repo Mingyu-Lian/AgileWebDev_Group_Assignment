@@ -1,6 +1,4 @@
 // function userIsAuthenticated
-
-
 document.addEventListener('DOMContentLoaded', function () {
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
@@ -8,8 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-
-// require log in
+// require log in Modal, done by ChatGPT by asking it write modal function to alart on the login
 document.addEventListener('DOMContentLoaded', function () {
     const authRequiredLinks = document.querySelectorAll('.requires-auth');
     authRequiredLinks.forEach(link => {
@@ -34,8 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-
-// JavaScript function to update character counter 
+//function to update character counter, done by ChatGPT by asking it write input counter
 document.addEventListener('DOMContentLoaded', function () {
     var titleInput = document.getElementById('title');
     var descriptionInput = document.getElementById('description');
@@ -60,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-// In the upload page, review the image to see if it meets the requirements
+// function of client side validation: upload page, review the image to see if it meets the requirements
 const fileInput = document.querySelector('input[type="file"]');
 
 
@@ -87,4 +83,5 @@ document.getElementById('email').addEventListener('input', function() {
         emailHelpText.style.color = 'red';
     }
 });
+
 
