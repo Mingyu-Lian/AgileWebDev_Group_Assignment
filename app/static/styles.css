@@ -272,9 +272,9 @@ in the university of Western Australia (2024 S1) */
     background-color:rgb(15, 16, 16) !important;
 }
 .pagination .page-item.disabled .page-link {
-    color:white !important; 
-    background-color:  rgba(102, 138, 176, 0.906) !important; /* 禁用状态的背景色 */
-}
+    display: none !important;
+   
+} 
 
 
 /* Profile/login/Sign-up page CSS */
