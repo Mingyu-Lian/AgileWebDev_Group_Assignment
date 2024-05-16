@@ -314,7 +314,10 @@ def channel(user_id):
 
 @main.route('/search', methods=['GET'])
 def search():
-    user_profile = UserDetails.query.filter_by(id=current_user.id).first()
+    user_profile = None
+    if current_user.is_authenticated:
+        user_profile = UserDetails.query.filter_by(id=current_user.id).first()
+
     query = request.args.get('query', '')
     filter_type = request.args.get('filter', 'posts')  # default is post
 
@@ -336,6 +339,7 @@ def search():
     else:
         flash("Please enter a search term.")
         return redirect(url_for('main.home'))
+
 
 @main.route('/follow/<int:user_id>', methods=['GET', 'POST'])
 @login_required
@@ -373,21 +377,31 @@ def unfollow(user_id):
     
     return redirect(url_for('main.channel', user_id=user_id))
 
+
 @main.route('/followers/<int:user_id>')
 def followers(user_id):
-    user_profile = UserDetails.query.filter_by(id=current_user.id).first()
+    user_profile = None
+    if current_user.is_authenticated:
+        user_profile = UserDetails.query.filter_by(id=current_user.id).first()
+
     user = User.query.get_or_404(user_id)  # make sure user exist
     # get follower's list
     followers = User.query.join(Follow, Follow.follower_id == User.id).filter(Follow.followed_id == user_id).all()
-    return render_template('followers.html', user=user, followers=followers, user_profile=user_profile ,title='Your Followers')
+    return render_template('followers.html', user=user, followers=followers, user_profile=user_profile,
+                           title='Your Followers')
+
 
 @main.route('/following/<int:user_id>')
 def following(user_id):
-    user_profile = UserDetails.query.filter_by(id=current_user.id).first()
+    user_profile = None
+    if current_user.is_authenticated:
+        user_profile = UserDetails.query.filter_by(id=current_user.id).first()
+
     user = User.query.get_or_404(user_id)  # make sure user exist
     # get following's list
     following = User.query.join(Follow, Follow.followed_id == User.id).filter(Follow.follower_id == user_id).all()
-    return render_template('following.html', user=user, following=following, user_profile=user_profile,title='Your Following')
+    return render_template('following.html', user=user, following=following, user_profile=user_profile,
+                           title='Your Following')
 
 
 @main.route('/reset_password', methods=['GET', 'POST'])
