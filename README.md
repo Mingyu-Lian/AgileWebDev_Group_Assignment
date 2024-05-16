@@ -16,7 +16,7 @@ University students face numerous challenges when preparing for job interviews a
 
 - **Interview Experience Sharing**: Users can share their interview experiences, including questions asked, interview processes, and more.
 - **Job Information Browsing**: Access up-to-date job postings and internship opportunities from various companies.
-- **Bridging Industry Expert & Uni Alumni**: User can engage with community and connect with industry expert or uni alumni to get updated information for their career.
+- **Bridging Industry Expert & Uni Alumni**: User can engage with community and connect with industry expert or uni alumni to get updated information for their care
 
 ### Prerequisites
 
@@ -28,5 +28,7 @@ Ensure your computer has the following software installed:
 - All images used in this project are owned by our team.
 - Portions of the code were developed with the assistance of ChatGPT. These sections are appropriately marked within the code.
 
-
+# How to run
+git clone https://github.com/Mingyu-Lian/CITS5505_Group.git
+python app.py
 
