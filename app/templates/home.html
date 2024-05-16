@@ -35,7 +35,7 @@
                         <div class="card h-100 post-card">
                             {% if post.img %}
                             {% if post.category %}
-                            {% set category_class = 'badge rounded-pill category-' + post.category.name|lower %}
+                            {% set category_class = 'badge rounded-pill category-' + post.category.name %}
                             <div class="{{ category_class }}" style="position: absolute; top: 10px; left: 10px; z-index: 1000;">
                                 {{ post.category.name }}
                             </div>
