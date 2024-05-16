@@ -498,6 +498,7 @@ in the university of Western Australia (2024 S1) */
 }
 
 /* set color for different categories */
+
 .category-Interview {
     background-color: rgb(40, 169, 233); 
 }
@@ -516,6 +517,7 @@ in the university of Western Australia (2024 S1) */
 .category-none {
     background-color: rgb(114, 112, 112); 
 }
+
 
 .author-info {
     display: flex;
