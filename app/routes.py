@@ -330,7 +330,7 @@ def search():
     query = request.args.get('query', '')
     filter_type = request.args.get('filter', 'posts')  # default is post
 
-    if query:
+    if query: #search posts title/concent with specific items
         search = f"%{query}%"
         if filter_type == 'posts':
             results = Post.query.join(User).filter(
@@ -339,7 +339,7 @@ def search():
                     Post.description.ilike(search),
                 )
             ).distinct().all()
-        elif filter_type == 'users':
+        elif filter_type == 'users': #search user
             # search user's name / not username
             results = User.query.join(UserDetails).filter(UserDetails.name.ilike(search)).all()
 
