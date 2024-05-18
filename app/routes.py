@@ -307,7 +307,12 @@ def delete_post(post_id):
     #Check if the currently logged in user is the author of the post.
     if current_user.id != post.author_id:
         flash('You are not authorized to delete this post.', 'error')
-        return redirect(url_for('main.show_post'))
+        return redirect(url_for('main.show_post',post_id=post.id))
+    
+    # Delete all comments related to this post
+    comments = Comment.query.filter_by(post_id=post_id).all()
+    for comment in comments:
+        db.session.delete(comment)
     
     #If it is the author of the post, perform the delete post action.
     db.session.delete(post)
