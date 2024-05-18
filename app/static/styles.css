@@ -3,6 +3,7 @@ in the university of Western Australia (2024 S1) */
 /*This is a part of the Group assingment Group*/
 /* validation done */
 
+
 /* Base page CSS */
 
 .navbar .nav-logo img {
@@ -695,7 +696,6 @@ in the university of Western Australia (2024 S1) */
     background-color: black;  
 }
 
-
 /* About us page */
 .aboutus-background {
     background-color: #f3f7f9;
@@ -728,7 +728,6 @@ in the university of Western Australia (2024 S1) */
     font-size: 0.9rem;
 }
 
-
 /* size when in md-lg */
 @media (min-width: 768px) {
     .aboutus-heading {
@@ -742,7 +741,6 @@ in the university of Western Australia (2024 S1) */
         margin-left: 100px;
         width: 300px;
     }  
-
 }
 
 .aboutus .btn-link {
@@ -756,7 +754,6 @@ in the university of Western Australia (2024 S1) */
     padding-left: 20px;
     padding-right: 20px;
     margin:20px;
-    
 }
 
 .aboutus .btn-link:hover {
