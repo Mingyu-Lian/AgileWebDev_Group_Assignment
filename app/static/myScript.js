@@ -1,4 +1,12 @@
-// function userIsAuthenticated
+
+// This css file is an assignment of CITS5505 unit 
+//in the university of Western Australia (2024 S1)
+
+//This is the java script file, including different slient side validation
+
+
+
+// function of userIsAuthenticated
 document.addEventListener('DOMContentLoaded', function () {
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
@@ -6,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-// require log in Modal, done by ChatGPT by asking it write modal function to alart on the login
+// fucntion of requiring log in Modal, done by ChatGPT by asking it write modal function to alart on the login
 document.addEventListener('DOMContentLoaded', function () {
     const authRequiredLinks = document.querySelectorAll('.requires-auth');
     authRequiredLinks.forEach(link => {
@@ -72,7 +80,7 @@ fileInput.addEventListener('change', (event) => {
     }
 });
 
-// using regular expression to check the email structure is valid at client side. If it is not valid return error to handle the exception.
+// function of  of client side validation: expression to check the email structure is valid at client side. If it is not valid return error to handle the exception.
 document.getElementById('email').addEventListener('input', function() {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const emailHelpText = document.getElementById('emailHelp');
