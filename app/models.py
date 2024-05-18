@@ -1,3 +1,8 @@
+#This models.py file is an assignment of CITS5505 unit in the university of Western Australia (2024 S1)
+#This is a part of the Group assingment Group
+
+# the models file for app to modeling the database
+
 import os
 
 from flask import Flask
@@ -6,8 +11,6 @@ from flask_migrate import Migrate
 from flask_login import UserMixin
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
-
-
 
 # This grabs our directory
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -19,19 +22,21 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 Migrate(app, db)
-# mappings for followers
+# mapping for followers
 followers = db.Table(
     'followers',
     db.Column('follower_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
     db.Column('followed_id', db.Integer, db.ForeignKey('user.id'), primary_key=True)
 )
 
+# mapping for likes
 user_likes = db.Table(
     'user_likes',
     db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
     db.Column('post_id', db.Integer, db.ForeignKey('post.id'), primary_key=True)
 )
 
+# mapping for follow
 class Follow(db.Model):
     __tablename__ = 'follow'
 
@@ -42,7 +47,7 @@ class Follow(db.Model):
     followed = db.relationship('User', foreign_keys=[followed_id], backref=db.backref('followers', lazy='dynamic'))
 
 
-# The basic structure of User table with generating the password by hash
+#mapping for User table with generating the password by hash
 class User(UserMixin, db.Model):
 
     __tablename__ = 'user'
@@ -63,7 +68,7 @@ class User(UserMixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-# The user details: separated from user for leaving the user table only for signing up.
+# mapping for user details: separated from user for leaving the user table only for signing up.
 class UserDetails(db.Model):
 
     __tablename__ = 'user_details'
@@ -81,10 +86,9 @@ class UserDetails(db.Model):
     education_level = db.Column(db.String(100))
     academic_institution = db.Column(db.String(100))
 
-
     user = db.relationship('User', back_populates='details')
 
-
+# mapping for Post
 class Post(db.Model):
     __tablename__ = 'post'
 
@@ -130,6 +134,7 @@ class Post(db.Model):
                 self.liked_by_users.remove(user)
                 db.session.commit()
 
+# mapping for Commments
 class Comment(db.Model):
     __tablename__ = 'comment'
 
@@ -141,8 +146,8 @@ class Comment(db.Model):
 
     #Creates a one-to-many relationship to the Post. back_populates specifies the reverse relationship.
     post = db.relationship('Post', back_populates='comments')
-
-
+    
+# mapping for Catgegory
 class Category(db.Model): #Stores the category name, which is used to output the category.
 
     __tablename__ = 'category'

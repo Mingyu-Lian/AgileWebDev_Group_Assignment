@@ -1,4 +1,9 @@
 
+#This Routes.py file is an assignment of CITS5505 unit in the university of Western Australia (2024 S1)
+#This is a part of the Group assingment Group
+
+# the routes file for app
+
 
 import os
 from werkzeug.utils import secure_filename
@@ -11,11 +16,10 @@ from sqlalchemy import or_
 
 
 
-
-
+#Blueprint
 main = Blueprint('main', __name__)
 
-
+#login route
 @main.route('/login', methods=['GET', 'POST'])
 def login():
     # check if log in
@@ -37,7 +41,7 @@ def login():
     session['next'] = request.args.get('next', url_for('main.home'))
     return render_template('login.html', title='Sign In', form=form)
 
-
+#singup route
 @main.route('/signup', methods=['GET', 'POST'])
 def signup():
     form = SignUpForm()
@@ -77,17 +81,18 @@ def signup():
 
     return render_template('signup.html', title='Sign Up', form=form)
 
-# too basic
+# logout route
 @main.route('/logout')
 def logout():
     logout_user()
     flash('You have been logged out.')
     return redirect(url_for('main.login'))
 
-
+#home page route
 @main.route('/')
 @main.route('/home')
 def home():
+    #filter for following
     filter_type = request.args.get('filter', 'all')
     page = request.args.get('page', 1, type=int)
     per_page = 8
@@ -98,12 +103,12 @@ def home():
     else:
         posts_query = Post.query
 
+    #pagination function
     posts_pagination = posts_query.order_by(Post.created_at.desc()).paginate(page=page, per_page=per_page, error_out=False)
     posts = posts_pagination.items
     total_posts = posts_query.count()
     total_pages = posts_pagination.pages
     user_profile = UserDetails.query.filter_by(id=current_user.id).first() if current_user.is_authenticated else None
-
 
     return render_template(
         'home.html',
@@ -115,9 +120,7 @@ def home():
         title='Home'
     )
 
-
-
-
+#Profile route
 @main.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
@@ -131,6 +134,7 @@ def profile():
     return render_template('profile.html', user_profile=user_profile, user=user,
         title='Your Profile')
 
+#Set Profile route
 @main.route('/profile/set_profile', methods=['GET', 'POST'])
 def set_profile():
     form = ProfileForm()
@@ -149,7 +153,7 @@ def set_profile():
         form.education_level.data = user_profile.education_level
         form.academic_institution.data = user_profile.academic_institution
 
-# put the previous data inside the forms for the user-friendly design
+    # put the previous data inside the forms for the user-friendly design
     if form.validate_on_submit():
         if user_profile:
             user_profile.name = form.name.data
@@ -172,6 +176,7 @@ def set_profile():
 
     return render_template('set_profile.html', title='Set Your Profile', form=form, user_profile=user_profile)
 
+# Set Icon route
 @main.route('/profile/set_icon', methods=['GET', 'POST'])
 def set_icon():
     form = IconForm()
@@ -193,7 +198,7 @@ def set_icon():
 
     return render_template('set_icon.html', title='Set Your Icon', form=form, user_profile=user_profile)
 
-
+#Uplaod page route
 @main.route('/upload/product', methods=['GET', 'POST'])
 @login_required
 def upload_product():
@@ -227,10 +232,9 @@ def upload_product():
     return render_template('upload.html', title='Upload Post', form=form,  user_profile=user_profile)
 
 
-
+#Post Showing route
 @main.route('/post/<int:post_id>', methods=['GET', 'POST'])
 def show_post(post_id):
-
 
     post = Post.query.get_or_404(post_id)  #Query the post with the specified post_id and return a 404 error page if it doesn't exist.
     comments = Comment.query.filter_by(post_id=post_id).all()  #All comments for querying a specific post_id
@@ -255,7 +259,7 @@ def show_post(post_id):
 
     return render_template('post.html', post=post, comments=comments, comment_form=comment_form, user_profile=user_profile,  title='Post Details',)
 
-
+#Comments route
 @main.route('/post/<int:post_id>/comment', methods=['POST'])
 @login_required
 def add_comment(post_id):
@@ -276,6 +280,7 @@ def add_comment(post_id):
 
     return redirect(url_for('main.show_post', post_id=post_id))
 
+#Like Function route
 @main.route('/like_post/<int:post_id>', methods=['POST'])
 @login_required
 def like_post(post_id):
@@ -293,7 +298,7 @@ def like_post(post_id):
     db.session.commit()
     return redirect(url_for('main.show_post', post_id=post_id))
 
-
+#Delete Function Route
 @main.route('/posts/<int:post_id>', methods=['POST'])
 @login_required
 def delete_post(post_id):
@@ -311,6 +316,7 @@ def delete_post(post_id):
     flash('Post deleted successfully.', 'success')
     return redirect(url_for('main.home'))
 
+#Personal Channel route
 @main.route('/channel/<int:user_id>', methods=['GET', 'POST'])
 def channel(user_id):
     user = User.query.get_or_404(user_id)
@@ -320,7 +326,7 @@ def channel(user_id):
     posts = Post.query.filter_by(author_id=user_id).order_by(Post.created_at.desc()).all()  # fetch posts
     return render_template('channel.html', user=user, is_own_channel=is_own_channel, user_profile=user_profile, other_user_profile=other_user_profile, posts=posts, title='Channel')
 
-
+#Search / Search Result route
 @main.route('/search', methods=['GET'])
 def search():
     user_profile = None
@@ -350,6 +356,7 @@ def search():
         return redirect(url_for('main.home'))
 
 
+#Following route
 @main.route('/follow/<int:user_id>', methods=['GET', 'POST'])
 @login_required
 def follow(user_id):
@@ -368,6 +375,7 @@ def follow(user_id):
     flash(f'You are now following the user', 'success')
     return redirect(url_for('main.channel', user_id=user_id))
 
+#Unfollow route
 @main.route('/unfollow/<int:user_id>', methods=['GET', 'POST'])
 @login_required
 def unfollow(user_id):
@@ -386,7 +394,7 @@ def unfollow(user_id):
     
     return redirect(url_for('main.channel', user_id=user_id))
 
-
+#Follower route
 @main.route('/followers/<int:user_id>')
 def followers(user_id):
     user_profile = None
@@ -399,7 +407,7 @@ def followers(user_id):
     return render_template('followers.html', user=user, followers=followers, user_profile=user_profile,
                            title='Your Followers')
 
-
+#Following route
 @main.route('/following/<int:user_id>')
 def following(user_id):
     user_profile = None
@@ -412,7 +420,7 @@ def following(user_id):
     return render_template('following.html', user=user, following=following, user_profile=user_profile,
                            title='Your Following')
 
-# reset password. which is quite basic
+# Reset password route
 @main.route('/reset_password', methods=['GET', 'POST'])
 def reset_password():
     form = ResetPasswordForm()
@@ -424,7 +432,7 @@ def reset_password():
         return redirect(url_for('main.profile'))
     return render_template('reset_password.html', form=form, user_profile=user_profile,title='Reset Your Password')
 
-
+#Aboutus page route
 @main.route('/aboutus')
 def aboutus():
     user_profile = None
