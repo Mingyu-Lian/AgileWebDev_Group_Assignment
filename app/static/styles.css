@@ -89,6 +89,10 @@ in the university of Western Australia (2024 S1) */
 }
 
 /* base page drop list  */
+
+.navbar-nav .dropdown {
+    z-index: 100;
+}
 .navbar-nav .dropdown-name{
     color: black;
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
