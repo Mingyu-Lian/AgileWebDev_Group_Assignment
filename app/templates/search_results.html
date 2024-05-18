@@ -4,18 +4,20 @@
 <!--  This html file is for CITS5505 unit in the university of Western Australia (2024 S1)
 This is a part of the Group assingment Group-->
 
-<!-- This is page -->
+<!-- This is search result page -->
 
 <div class="container search">
     <h2 class="searchtitle">Search Result of: "{{ query }}"</h2>
     <br>
     <br>
+    <!-- search result filter -->
     <div class="btn-group" role="group" aria-label="Basic example">
         <a href="{{ url_for('main.search', query=query, filter='posts') }}" class="btn btn-secondary {{ 'active' if filter == 'posts' else '' }}">Post</a>
         <a href="{{ url_for('main.search', query=query, filter='users') }}" class="btn btn-secondary {{ 'active' if filter == 'users' else '' }}">User</a>
     </div>
     <br>
     <br>
+    <!-- Post content -->
     {% if filter == 'posts' %}
     <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
         {% for post in posts %}
@@ -51,6 +53,7 @@ This is a part of the Group assingment Group-->
         </div>
         {% endfor %}
     </div>
+    <!-- user content -->
     {% elif filter == 'users' %}
     <div class="container followsection">
         <br>

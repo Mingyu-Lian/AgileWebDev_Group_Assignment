@@ -4,7 +4,7 @@
 <!--  This html file is for CITS5505 unit in the university of Western Australia (2024 S1)
 This is a part of the Group assingment Group-->
 
-<!-- This is page -->
+<!-- This is sign up page -->
 
 <div class="profile container mt-5">
     <div class="row justify-content-center">
@@ -13,6 +13,7 @@ This is a part of the Group assingment Group-->
                 <div class="card-header text-center">
                     <h1> <i class='fas fa-user-plus' style='font-size:40px'></i> Register Now</h1>
                 </div>
+                <!-- information collecting -->
                 <div class="card-body">
                     <form action="" method="post" novalidate>
                         {{ form.hidden_tag() }}
@@ -52,6 +53,7 @@ This is a part of the Group assingment Group-->
                                 </div>
                             {% endfor %}
                         </div>
+                        <!-- button submitting -->
                         <div class="d-grid gap-2">
                             {{ form.submit(class="btn btn-primary") }}
                         </div>

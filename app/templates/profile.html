@@ -4,7 +4,7 @@
 <!--  This html file is for CITS5505 unit in the university of Western Australia (2024 S1)
 This is a part of the Group assingment Group-->
 
-<!-- This is page -->
+<!-- This is profile page showing all details of a user -->
 
 <div class="profile container mt-5">
     <div class="row justify-content-center">
@@ -63,7 +63,7 @@ This is a part of the Group assingment Group-->
                         </div>
                     </div>
                     <div class="d-flex justify-content-around mt-4">
-                        <!-- buttons for redirection -->
+                        <!-- buttons for redirection (3 setting functions) -->
                         <a href="{{ url_for('main.set_profile') }}" class="btn rounded-pill btn-primary"> <i class='fas fa-edit' style='font-size:15px'></i> Edit Profile</a>
                         <a href="{{ url_for('main.set_icon') }}" class="btn rounded-pill btn-secondary"><i class='fas fa-user-edit' style='font-size:15px'></i> Change Icon</a>
                         <a href="{{ url_for('main.reset_password') }}" class="btn rounded-pill btn-secondary"><i class='fas fa-key' style='font-size:15px'></i> Reset Password</a>

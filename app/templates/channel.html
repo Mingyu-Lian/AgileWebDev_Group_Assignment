@@ -4,11 +4,11 @@
 <!--  This html file is for CITS5505 unit in the university of Western Australia (2024 S1)
 This is a part of the Group assingment Group-->
 
-<!-- This is page -->
+<!-- This is the page for personal channel, including personal posts-->
 
 <div class="container-fluid userchannel">
   <div class="row">
-    <!-- Personal info part -->
+    <!-- Personal info part (left side)-->
     <div class="col-md-3 col-sm-12 text-center" style="margin-left: 20px;margin-right: 20px;">
       {% if is_own_channel %}
         <img src="{{ url_for('static', filename='user_icon/uploads/' + user_profile.img if user_profile.img else 'user_icon/default_user_icon.jpg') }}" alt="User Icon" class="profile-img rounded-circle mb-3" width="160" height="160">
