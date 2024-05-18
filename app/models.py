@@ -148,7 +148,7 @@ class Comment(db.Model):
     post = db.relationship('Post', back_populates='comments')
     
 # mapping for Catgegory
-class Category(db.Model): #Stores the category name, which is used to output the category.
+class Category(db.Model): #Stores the category name, which is used to output the category. Because there is no way to enter data into this database, it needs to be manually entered into the database as 1 Interview, 2 Recruitment, 3 Seeking, and 4 Experience.
 
     __tablename__ = 'category'
 
