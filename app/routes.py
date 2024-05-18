@@ -1,5 +1,5 @@
 
-#This css file is an assignment of CITS5505 unit in the university of Western Australia (2024 S1)
+#This Routes.py file is an assignment of CITS5505 unit in the university of Western Australia (2024 S1)
 #This is a part of the Group assingment Group
 
 # the routes file for app

@@ -1,3 +1,9 @@
+
+#This config.py file is an assignment of CITS5505 unit in the university of Western Australia (2024 S1)
+#This is a part of the Group assingment Group
+
+# the config file for app to seeting the configuration
+
 import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))

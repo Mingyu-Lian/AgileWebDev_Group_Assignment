@@ -7,7 +7,7 @@ from app.models import db
 from app.config import DevelopmentConfig, TestingConfig
 
 
-
+#Flask migrate 
 migrate = Migrate()
 login_manager = LoginManager()
 
@@ -35,6 +35,6 @@ def create_app(Config_Name=DevelopmentConfig):
 
     with app.app_context():
         from . import routes, models
-        db.create_all()  # 创建或更新数据库表
+        db.create_all()  
 
     return app
