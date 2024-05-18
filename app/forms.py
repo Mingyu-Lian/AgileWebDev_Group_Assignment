@@ -63,7 +63,7 @@ class IconForm(FlaskForm): # Define the form to upload the icon path
 # forms setting for Uploading Post
 class UploadForm(FlaskForm): #Define the form for upload posts, define the fields and validation rules in the form.
     title = StringField('Title', validators=[DataRequired(message='Title is required.'), Length(max=50)]) #Title is required to be present and can't exceed 50 characters.
-    description = TextAreaField('Description', validators=[Length(max=500), Optional()]) #Post descriptions are not required and are limited to 500 characters.
+    description = TextAreaField('Description', validators=[Length(max=5000), Optional()]) #Post descriptions are not required and are limited to 5000 characters.
     tag = SelectField('Tag', choices=[('', ''),('1', 'Interview'), ('2', 'Recruitment'), ('3', 'Seeking'),('4', 'Experience')], validators=[Optional()]) #There are 4 types of category for posts, and their corresponding values, the default is null。
     image = FileField('Image', validators=[FileAllowed(['jpg', 'jpeg', 'png', 'gif'], 'Only image files allowed.'), Optional()]) #Guaranteed image type and not required to be uploaded。
     submit = SubmitField('Submit')
