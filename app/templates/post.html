@@ -64,7 +64,7 @@ This is a part of the Group assingment Group-->
 
     <!-- Post Description -->
     <br>
-    <p class="post-description">{{ post.description }}</p>
+    <p class="post-description">{{ post.description | replace('\n', '<br>') | safe }}</p>
     <br>
 
     <!-- Comments Section includes user comments, sorted from oldest to newest. It is also available to click on a user's icon or nickname to go to their homepage.-->
@@ -89,7 +89,7 @@ This is a part of the Group assingment Group-->
                 </a> 
             </div>
             <p class="time">{{ comment.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
-            <p class="body">{{ comment.body }}</p>
+            <p class="body">{{ comment.body | replace('\n', '<br>') | safe }}</p>
         </div>
         {% endfor %}
     </div>
