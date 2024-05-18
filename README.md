@@ -46,7 +46,7 @@ Ensure your computer has the following software installed:
   FLASK_APP=run.py
   FLASK_ENV=development
 
-# How to run
+## How to run
 - git clone https://github.com/Mingyu-Lian/CITS5505_Group.git
 - cd 'your-project-name'
 - python app.py
