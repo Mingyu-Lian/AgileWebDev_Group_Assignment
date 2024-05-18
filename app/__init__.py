@@ -11,6 +11,7 @@ from app.config import DevelopmentConfig, TestingConfig
 migrate = Migrate()
 login_manager = LoginManager()
 
+
 def create_app(Config_Name=DevelopmentConfig):
     app = Flask(__name__)
     if Config_Name == 'testing':
@@ -35,6 +36,8 @@ def create_app(Config_Name=DevelopmentConfig):
 
     with app.app_context():
         from . import routes, models
+
         db.create_all()  
+
 
     return app

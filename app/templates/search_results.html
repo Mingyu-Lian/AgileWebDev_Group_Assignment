@@ -23,13 +23,24 @@ This is a part of the Group assingment Group-->
             <a href="{{ url_for('main.show_post', post_id=post.id) }}" class="post-card-link">
                 <div class="card h-100 post-card">
                     {% if post.img %}
+                    {% if post.category %}
+                    {% set category_class = 'badge rounded-pill category-' + post.category.name %}
+                    <div class="{{ category_class }}" style="position: absolute; top: 10px; left: 10px; z-index: 10;">
+                        {{ post.category.name }}
+                    </div>
+                    {% else %}
+                    <div class="badge rounded-pill category-none" style="position: absolute; top: 10px; left: 10px; z-index: 10;">
+                        No Category
+                    </div>
+                    {% endif %}
+
                     <img src="{{ url_for('static', filename='post_image/' + post.img) }}" class="card-img-top" alt="{{ post.title }}" style="height: 200px; object-fit: cover;">
                     {% else %}
-                    <img src="{{ url_for('static', filename='post_image/default.jpg') }}" class="card-img-top" alt="default pic" style="height: 200px; object-fit: cover;">
+                    <img src="{{ url_for('static', filename='post_image/default.jpg') }}" class="card-img-top" alt="Default Image" style="height: 200px; object-fit: cover;">
                     {% endif %}
                     <div class="card-body">
                         <h5 class="card-title">{{ post.title }}</h5>
-                        <p class="card-text">{{ post.description | truncate(80) }}</p>
+                        <p class="card-text">{{ post.description | truncate(40) }}</p> <!-- Truncate to limit the description if it's too long -->
                     </div>
                     <div class="card-footer d-flex justify-content-between">
                         <small class="text-muted"><i class='fas fa-heart' style='font-size:16px'></i> &nbsp;&nbsp; {{ post.likes }}</small>
