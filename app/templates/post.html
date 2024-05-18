@@ -36,9 +36,9 @@ This is a part of the Group assingment Group-->
             <img src="{{ url_for('static', filename='user_icon/default_user_icon.jpg') }}" alt="Default Author Icon" class="author-icon">
             {% endif %}
             <br>
-            <span class="author-name author-link">{{ post.author.details.name if post.author.details else post.author.username }}</span>
-            </a>
-        </div>
+            <span class="author-name author-link">{{ post.author.details.name if post.author.details and post.author.details.name else post.author.username }}</span>
+            </a> 
+        </div> 
 
         <div class="interaction-buttons">
             <!-- Like and Delete Buttons -->
@@ -85,8 +85,8 @@ This is a part of the Group assingment Group-->
                     {% endif %}
                 </a>
                 <a href="{{ url_for('main.channel', user_id=comment.author.id) }}" class="comment-text"> <!--Click on the username to jump to the user channel page.-->
-                    <strong>{{ comment.author.details.name if comment.author.details else comment.author.username }}</strong>
-                </a>
+                    <strong>{{ comment.author.details.name if comment.author.details and comment.author.details.name else comment.author.username }}</strong>
+                </a> 
             </div>
             <p class="time">{{ comment.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
             <p class="body">{{ comment.body }}</p>
