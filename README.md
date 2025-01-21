@@ -48,8 +48,9 @@ Ensure your computer has the following software installed:
 
 ## How to run
 - git clone https://github.com/Mingyu-Lian/CITS5505_Group.git
-- cd 'your-project-name'
-- python app.py
+- source venv/bin/activate
+- python app.py 
+- or flask run
 - Open a web browser and go to `http://127.0.0.1:5000` to view the app.
 
 ## Testing
